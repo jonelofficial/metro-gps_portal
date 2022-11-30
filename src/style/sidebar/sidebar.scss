@@ -1,0 +1,67 @@
+@use "../root/index.scss";
+
+.sidebar-wrapper {
+  background-color: index.$white;
+  height: 100%;
+  width: 100%;
+  max-width: 250px;
+  transition: all ease 0.2s;
+
+  @media screen and (max-width: index.$small) {
+    position: absolute;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-width: unset !important;
+    z-index: 999;
+  }
+
+  .sidebar {
+    height: 100%;
+
+    &__image {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      max-width: 250px;
+      background-color: transparent;
+      box-shadow: 0px -17px 20px 0px;
+
+      @media screen and (max-width: index.$small) {
+        justify-content: space-between;
+        max-width: unset;
+        padding: 0 20px;
+      }
+    }
+    &__title {
+      font-weight: bold;
+      white-space: nowrap;
+      padding-left: 10px;
+    }
+    .image {
+      height: auto;
+      max-width: 70px;
+      padding: 0 5px;
+    }
+    &__menu {
+      height: calc(100% - 64px);
+
+      .nav {
+        &__icon {
+          display: flex;
+          justify-content: center;
+        }
+        &__button {
+          padding: 0 10px;
+          min-height: 50px;
+        }
+      }
+    }
+
+    .dropdown-list {
+      &__button {
+        padding-left: 25px;
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+$primary: #f6a03d;
+$light: #f8d738;
+$dark: #e8673d;
+$white: #fff;
+$danger: #f56565;
+$warning: #eed202;
+$success: #48bb78;
+$background: #eef5f9;
+
+$large: 1260px;
+$medium: 960px;
+$small: 480px;
+
+.main {
+  height: 100vh;
+  background-color: $background;
+
+  &__wrapper {
+    display: flex;
+    height: 100%;
+    width: 100%;
+
+    .body-wrapper {
+      height: 100%;
+      width: 100%;
+
+      &__outlet {
+        height: 100%;
+        max-height: calc(100% - 95px);
+        padding: 15px;
+        overflow-y: scroll;
+      }
+    }
+  }
+}
