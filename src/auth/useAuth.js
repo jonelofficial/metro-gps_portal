@@ -1,3 +1,4 @@
+import { Alert } from "@mui/material";
 import jwtDecode from "jwt-decode";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -26,7 +27,10 @@ const useAuth = () => {
         localStorage.setItem("user", JSON.stringify(jwtDecode(res.data.token)));
         navigate("/");
       } else {
-        alert(res.data.message);
+        // return <Alert severity="error">{res.data.message}</Alert>;
+        // alert(res.data.message);
+        setLoading(false);
+        return res;
       }
       setLoading(false);
     } catch (e) {

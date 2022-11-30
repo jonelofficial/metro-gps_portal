@@ -6,14 +6,21 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIcon,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import {
+  closeSidebar,
+  openSidebar,
+} from "../../redux-toolkit/counter/sidebarCounter";
 
 const AccordionSidebar = ({ item }) => {
   const isOpen = useSelector((state) => state.sidebar.value);
   const user = useSelector((state) => state.token.userDetails);
+  const small = useMediaQuery("(max-width: 480px)");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     !isOpen && setOpen(false);
@@ -23,6 +30,10 @@ const AccordionSidebar = ({ item }) => {
 
   const handleClick = () => {
     isOpen ? setOpen(!open) : dispatch(openSidebar());
+  };
+
+  const handleClose = () => {
+    small && dispatch(closeSidebar());
   };
 
   if (!item.show && user?.role !== "admin") {
@@ -41,7 +52,7 @@ const AccordionSidebar = ({ item }) => {
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" className="dropdown-list" disablePadding>
           {item.accordion.map((accordion, index) => (
-            <NavLink to={accordion.path} key={index}>
+            <NavLink to={accordion.path} key={index} onClick={handleClose}>
               <ListItemButton className="dropdown-list__button">
                 <ListItemIcon className="nav__icon">
                   <SvgIcon component={accordion.icon} />
