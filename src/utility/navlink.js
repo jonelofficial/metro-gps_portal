@@ -23,27 +23,27 @@ export const navlink = [
     icon: ContentCopyIcon,
     accordion: [
       {
-        name: "User",
+        name: "Users",
         icon: PersonOutlineOutlinedIcon,
-        path: "/master-list/user",
+        path: "/masterlist/users",
       },
       {
         name: "Vehicles",
         icon: DirectionsCarOutlinedIcon,
-        path: "/master-list/vehicles",
+        path: "/masterlist/vehicles",
       },
       {
         name: "Gas Station",
         icon: LocalGasStationOutlinedIcon,
-        path: "/master-list/gas-station",
+        path: "/masterlist/gas-stations",
       },
       {
-        name: "Trip",
+        name: "Trips",
         icon: MapOutlinedIcon,
-        path: "/master-list/trip",
+        path: "/masterlist/trips",
       },
     ],
-    path: "/master-list",
+    path: "/masterlist",
     show: false,
   },
   {
@@ -51,7 +51,7 @@ export const navlink = [
     name: "Trip",
     icon: LocalActivityOutlinedIcon,
     accordion: [],
-    path: "/trip",
+    path: "/user-trip",
     show: true,
   },
   {

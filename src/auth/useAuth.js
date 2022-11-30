@@ -19,12 +19,14 @@ const useAuth = () => {
     try {
       setLoading(true);
       const res = await loginUser(data);
-      if (res.data.token) {
+      if (res.data?.token) {
         dispatch(addUser(jwtDecode(res.data.token)));
         dispatch(addToken(res.data));
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(jwtDecode(res.data.token)));
         navigate("/");
+      } else {
+        alert(res.data.message);
       }
       setLoading(false);
     } catch (e) {
