@@ -1,0 +1,15 @@
+.table {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  &__filter-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  &__button-wrapper {
+    display: flex;
+    align-items: center;
+  }
+}

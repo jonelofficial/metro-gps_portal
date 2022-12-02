@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   createBrowserRouter,
@@ -21,7 +21,11 @@ const Routing = () => {
   const token = useSelector((state) => state.token.value);
   const user = useSelector((state) => state.token.userDetails);
 
-  const [validUser, setValideUser] = useState(user?.role === "admin");
+  const [validUser, setValideUser] = useState();
+
+  useEffect(() => {
+    setValideUser(user?.role === "admin");
+  }, [user]);
 
   const AuthenticatedRoutes = () => {
     return token ? <RootLayout /> : <Navigate to="/login" />;

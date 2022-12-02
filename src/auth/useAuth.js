@@ -27,8 +27,6 @@ const useAuth = () => {
         localStorage.setItem("user", JSON.stringify(jwtDecode(res.data.token)));
         navigate("/");
       } else {
-        // return <Alert severity="error">{res.data.message}</Alert>;
-        // alert(res.data.message);
         setLoading(false);
         return res;
       }

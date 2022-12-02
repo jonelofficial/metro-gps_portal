@@ -25,6 +25,7 @@ $small: 480px;
     .body-wrapper {
       height: 100%;
       width: 100%;
+      overflow: hidden;
 
       &__outlet {
         height: 100%;

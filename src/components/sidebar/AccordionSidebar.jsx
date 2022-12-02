@@ -6,6 +6,7 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIcon,
+  Tooltip,
   useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -42,9 +43,17 @@ const AccordionSidebar = ({ item }) => {
   return (
     <>
       <ListItemButton onClick={handleClick} className="nav__button">
-        <ListItemIcon className="nav__icon">
-          <SvgIcon component={item.icon} />
-        </ListItemIcon>
+        {isOpen ? (
+          <ListItemIcon className="nav__icon">
+            <SvgIcon component={item.icon} />
+          </ListItemIcon>
+        ) : (
+          <Tooltip title={item.name}>
+            <ListItemIcon className="nav__icon">
+              <SvgIcon component={item.icon} />
+            </ListItemIcon>
+          </Tooltip>
+        )}
         <ListItemText primary={item.name} sx={{ display: !isOpen && "none" }} />
         {open && isOpen ? <ExpandLess /> : !open && isOpen && <ExpandMore />}
       </ListItemButton>

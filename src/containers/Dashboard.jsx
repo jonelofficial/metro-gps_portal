@@ -1,6 +1,19 @@
 import React from "react";
+import { useGetAllTripsQuery } from "../api/metroApi";
 
 const Dashboard = () => {
+  const { data, isLoading, isError } = useGetAllTripsQuery({ page: 1 });
+
+  if (isLoading) {
+    console.log("loading");
+  }
+  if (isError) {
+    console.log("error");
+  }
+  if (data) {
+    console.log(data);
+  }
+
   return (
     <div>{`[
     {

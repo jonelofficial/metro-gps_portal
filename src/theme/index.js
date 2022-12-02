@@ -22,6 +22,14 @@ export const theme = createTheme({
       danger: "#f56565",
       warning: "#eed202",
       success: "#48bb78",
+      dark: "#fff",
+      mediumDark: "#000000db",
+    },
+    customSuccess: {
+      light: "#48bb78",
+      main: "#48bb78",
+      dark: "#3ca266",
+      contrastText: "#fff",
     },
   },
   typography: {

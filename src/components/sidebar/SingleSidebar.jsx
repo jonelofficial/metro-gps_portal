@@ -3,6 +3,7 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIcon,
+  Tooltip,
   useMediaQuery,
 } from "@mui/material";
 import React from "react";
@@ -27,9 +28,17 @@ const SingleSidebar = ({ item }) => {
   return (
     <NavLink to={item.path} onClick={handleClose}>
       <ListItemButton className="nav__button">
-        <ListItemIcon className="nav__icon">
-          <SvgIcon component={item.icon} />
-        </ListItemIcon>
+        {isOpen ? (
+          <ListItemIcon className="nav__icon">
+            <SvgIcon component={item.icon} />
+          </ListItemIcon>
+        ) : (
+          <Tooltip title={item.name}>
+            <ListItemIcon className="nav__icon">
+              <SvgIcon component={item.icon} />
+            </ListItemIcon>
+          </Tooltip>
+        )}
         <ListItemText primary={item.name} sx={{ display: !isOpen && "none" }} />{" "}
       </ListItemButton>
     </NavLink>
