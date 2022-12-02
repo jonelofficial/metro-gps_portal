@@ -3,8 +3,11 @@ import {
   Box,
   Button,
   createFilterOptions,
+  Drawer,
   IconButton,
   Paper,
+  Skeleton,
+  Stack,
   styled,
   SvgIcon,
   Table,
@@ -22,16 +25,22 @@ import React, { useState } from "react";
 import { useGetAllUsersQuery } from "../../api/metroApi";
 import TableUsers from "./users/TableUsers.jsx";
 import "../../style/outlet/users/users.scss";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import TableSkeleton from "../../components/skeleton/TableSkeleton";
+import TableError from "../../components/error/TableError";
+import SearchIcon from "@mui/icons-material/Search";
+import UserDrawer from "../../components/drawer/UserDrawer";
 
 const Users = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [drawer, setDrawer] = useState(false);
   const [filterVal, setFilterVal] = useState({
     id: "employee_id",
     label: "Employee Id",
   });
+
+  const { data, isLoading, isError } = useGetAllUsersQuery({ page: 1 });
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -41,14 +50,6 @@ const Users = () => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const { data, isLoading, isError } = useGetAllUsersQuery({ page: 1 });
-
-  if (isLoading) {
-    return <Box>Loading</Box>;
-  }
-  if (isError) {
-    return <Box>Error</Box>;
-  }
 
   const columns = [
     { id: "employee_id", label: "Employee Id" },
@@ -87,6 +88,10 @@ const Users = () => {
         }),
     },
     {
+      id: "status",
+      label: "Status",
+    },
+    {
       id: "action",
       label: "Action",
     },
@@ -96,6 +101,7 @@ const Users = () => {
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.custom.mediumDark,
       color: theme.palette.common.white,
+      textTransform: "uppercase",
     },
   }));
 
@@ -113,25 +119,41 @@ const Users = () => {
       : setFilterVal(data);
   };
 
+  if (isLoading) {
+    return <TableSkeleton />;
+  }
+
+  if (isError) {
+    return <TableError />;
+  }
+
   return (
     <Box className="table">
       <Box className="table__header">
         <Box className="table__filter-wrapper">
-          <SvgIcon component={FilterAltIcon} />
           <Autocomplete
             size="small"
             options={columns}
-            // defaultValue={filterVal}
             value={filterVal}
             isOptionEqualToValue={(option, value) =>
               option.label === option.label
             }
             getOptionLabel={(option) => option.label}
             filterOptions={filterOptions}
-            sx={{ width: 200, paddingLeft: "10px" }}
-            renderInput={(params) => <TextField {...params} label="Filter" />}
+            sx={{ width: 200, paddingRight: "10px" }}
+            renderInput={(params) => (
+              <TextField {...params} label="Search By" />
+            )}
             onChange={(event, value) => handleFilter(value)}
           />
+          <TextField size="small" sx={{ width: "180px" }} />
+          <Button
+            variant="contained"
+            startIcon={<SearchIcon />}
+            sx={{ marginLeft: "10px" }}
+          >
+            Search
+          </Button>
         </Box>
         <Box className="table__button-wrapper">
           <Tooltip title="Export">
@@ -139,7 +161,11 @@ const Users = () => {
               <FileDownloadIcon />
             </IconButton>
           </Tooltip>
-          <Button variant="contained" color="customSuccess">
+          <Button
+            variant="contained"
+            color="customSuccess"
+            onClick={() => setDrawer(true)}
+          >
             Create
           </Button>
         </Box>
@@ -173,6 +199,9 @@ const Users = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <Drawer anchor="right" open={drawer} onClose={() => setDrawer(false)}>
+        <UserDrawer />
+      </Drawer>
     </Box>
   );
 };

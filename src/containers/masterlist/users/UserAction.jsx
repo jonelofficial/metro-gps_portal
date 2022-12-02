@@ -36,12 +36,12 @@ const UserAction = ({ item }) => {
         onClose={handleClose}
       >
         <MenuItem onClick={() => console.log("DELETE")}>
-          <Button variant="contained" color="error" size="small">
+          <Button variant="outlined" color="error" size="small">
             Delete
           </Button>
         </MenuItem>
         <MenuItem onClick={() => console.log("EDIT")}>
-          <Button variant="contained" color="warning" size="small">
+          <Button variant="outlined" color="warning" size="small">
             Edit
           </Button>
         </MenuItem>
