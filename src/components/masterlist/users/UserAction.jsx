@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Button } from "@mui/material";
+import { Button, Drawer } from "@mui/material";
+import UserDrawer from "./UserDrawer";
 
-const UserAction = ({ item }) => {
+const UserAction = ({ item, handleOpen }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [drawer, setDrawer] = useState(false);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -35,19 +38,30 @@ const UserAction = ({ item }) => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={() => console.log("DELETE")}>
-          <Button variant="outlined" color="error" size="small">
-            Delete
-          </Button>
+        <MenuItem onClick={handleOpen} sx={{ color: "custom.danger" }}>
+          Delete
         </MenuItem>
-        <MenuItem onClick={() => console.log("EDIT")}>
-          <Button variant="outlined" color="warning" size="small">
-            Edit
-          </Button>
+        <MenuItem
+          onClick={() => {
+            setDrawer(true);
+            setAnchorEl(null);
+          }}
+          sx={{ color: "custom.warning" }}
+        >
+          Edit
         </MenuItem>
       </Menu>
+
+      <Drawer
+        className="main-drawer"
+        anchor="right"
+        open={drawer}
+        onClose={() => setDrawer(false)}
+      >
+        <UserDrawer open={setDrawer} item={item} />
+      </Drawer>
     </>
   );
 };
 
-export default UserAction;
+export default memo(UserAction);

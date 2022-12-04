@@ -1,17 +1,92 @@
+@use "../../root/index.scss";
+
 .table {
   width: 90%;
 
   &__header {
-    display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
+    flex-wrap: wrap;
   }
   &__filter-wrapper {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+
+    @media screen and (max-width: index.$medium) {
+      width: 100%;
+
+      .filter-button {
+        margin: unset;
+        margin-bottom: 10px;
+        width: 100%;
+      }
+      .filter {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: unset;
+      }
+      .filter-textfield {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
   }
   &__button-wrapper {
     display: flex;
     align-items: center;
+
+    @media screen and (max-width: index.$medium) {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+}
+
+.drawer {
+  width: 350px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (max-width: index.$small) {
+    width: 100%;
+  }
+
+  &__title-wrapper {
+    padding: 15px;
+
+    .drawer__title {
+      font-weight: bold;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex: 1;
+
+    &-wrapper {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+    }
+
+    &-image {
+      display: flex;
+      justify-content: center;
+    }
+
+    &-button {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+
+@media screen and (max-width: index.$small) {
+  .main-drawer div:nth-child(3) {
+    width: 100%;
   }
 }

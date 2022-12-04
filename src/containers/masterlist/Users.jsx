@@ -1,15 +1,15 @@
 import {
   Autocomplete,
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   createFilterOptions,
   Drawer,
   IconButton,
   Paper,
-  Skeleton,
   Stack,
   styled,
-  SvgIcon,
   Table,
   TableBody,
   TableCell,
@@ -23,18 +23,21 @@ import {
 import { tableCellClasses } from "@mui/material";
 import React, { useState } from "react";
 import { useGetAllUsersQuery } from "../../api/metroApi";
-import TableUsers from "./users/TableUsers.jsx";
-import "../../style/outlet/users/users.scss";
+import TableUsers from "../../components/masterlist/users/TableUsers.jsx";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import TableSkeleton from "../../components/skeleton/TableSkeleton";
 import TableError from "../../components/error/TableError";
 import SearchIcon from "@mui/icons-material/Search";
-import UserDrawer from "../../components/drawer/UserDrawer";
+import UserDrawer from "../../components/masterlist/users/UserDrawer";
+import "../../style/outlet/users/users.scss";
+import { memo } from "react";
 
 const Users = () => {
+  const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [drawer, setDrawer] = useState(false);
+  const [searchVal, setSearchVal] = useState(null);
   const [filterVal, setFilterVal] = useState({
     id: "employee_id",
     label: "Employee Id",
@@ -119,6 +122,17 @@ const Users = () => {
       : setFilterVal(data);
   };
 
+  const handleSearch = async () => {
+    console.log(`${filterVal.id} : ${searchVal}`);
+  };
+
+  const handleCloseExport = () => {
+    setOpen(false);
+  };
+  const handleToggleExport = () => {
+    setOpen(!open);
+  };
+
   if (isLoading) {
     return <TableSkeleton />;
   }
@@ -129,9 +143,10 @@ const Users = () => {
 
   return (
     <Box className="table">
-      <Box className="table__header">
+      <Stack direction="row" className="table__header">
         <Box className="table__filter-wrapper">
           <Autocomplete
+            className="filter"
             size="small"
             options={columns}
             value={filterVal}
@@ -146,18 +161,29 @@ const Users = () => {
             )}
             onChange={(event, value) => handleFilter(value)}
           />
-          <TextField size="small" sx={{ width: "180px" }} />
+          <TextField
+            className="filter-textfield"
+            size="small"
+            sx={{ width: "180px" }}
+            onChange={(e) => setSearchVal(e.currentTarget.value)}
+          />
           <Button
+            className="filter-button"
             variant="contained"
             startIcon={<SearchIcon />}
             sx={{ marginLeft: "10px" }}
+            onClick={handleSearch}
           >
             Search
           </Button>
         </Box>
+
         <Box className="table__button-wrapper">
           <Tooltip title="Export">
-            <IconButton sx={{ marginRight: "15px" }}>
+            <IconButton
+              sx={{ marginRight: "15px" }}
+              onClick={handleToggleExport}
+            >
               <FileDownloadIcon />
             </IconButton>
           </Tooltip>
@@ -169,7 +195,8 @@ const Users = () => {
             Create
           </Button>
         </Box>
-      </Box>
+      </Stack>
+
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -190,7 +217,7 @@ const Users = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
+          rowsPerPageOptions={[25, 50, 100]}
           component="div"
           count={data.data.length}
           rowsPerPage={rowsPerPage}
@@ -199,11 +226,25 @@ const Users = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <Drawer anchor="right" open={drawer} onClose={() => setDrawer(false)}>
-        <UserDrawer />
+
+      <Drawer
+        className="main-drawer"
+        anchor="right"
+        open={drawer}
+        onClose={() => setDrawer(false)}
+      >
+        <UserDrawer open={setDrawer} item={null} />
       </Drawer>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+        onClick={handleCloseExport}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Box>
   );
 };
 
-export default Users;
+export default memo(Users);
