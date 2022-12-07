@@ -55,6 +55,7 @@
 
   &__title-wrapper {
     padding: 15px;
+    min-height: 35px;
 
     .drawer__title {
       font-weight: bold;
@@ -64,6 +65,8 @@
   &__form {
     display: flex;
     flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
 
     &-wrapper {
       padding: 15px;
@@ -81,6 +84,7 @@
     &-button {
       display: flex;
       justify-content: flex-end;
+      margin: 10px 0;
     }
   }
 }

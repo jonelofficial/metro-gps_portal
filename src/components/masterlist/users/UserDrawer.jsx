@@ -6,28 +6,38 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  TextField,
   Typography,
 } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import React, { memo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import InputField from "../../form/InputField";
 import ImageUploader from "react-image-upload/dist";
 import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
 import "react-image-upload/dist/index.css";
-import { useEffect } from "react";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { userSchema, userUpdateSchema } from "../../../utility/schema";
 
 const UserDrawer = ({ open, item }) => {
   const [trip, setTrip] = useState(item ? item.trip_template : "");
   const [role, setRole] = useState(item ? item.role : "");
   const [status, setStatus] = useState(item ? item?.status || "" : "");
   const [image, setImage] = useState();
+  const [value, setValue] = useState(dayjs());
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(item ? userUpdateSchema : userSchema),
+    mode: "onSubmit",
+  });
 
   // useEffect(() => {
   //   (async () => {
@@ -36,6 +46,7 @@ const UserDrawer = ({ open, item }) => {
   // }, []);
 
   const onSubmit = async (data) => {
+    console.log(data.license_exp.$d);
     const form = new FormData();
 
     form.append("image", {
@@ -173,6 +184,41 @@ const UserDrawer = ({ open, item }) => {
               sx={{ width: "100%" }}
             />
 
+            <Controller
+              name="license_exp"
+              control={control}
+              defaultValue={value}
+              render={({ field: { onChange } }) => (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    value={value}
+                    label="License Expiration"
+                    onChange={(newValue) => {
+                      onChange(newValue);
+                      setValue(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField size="small" {...params} />
+                    )}
+                  />
+                </LocalizationProvider>
+              )}
+            />
+            {errors["license_exp"] && (
+              <Typography
+                variant="p"
+                sx={{
+                  fontFamily: "Roboto",
+                  fontSize: 12,
+                  marginBottom: 1,
+                  marginLeft: 1,
+                  color: "custom.danger",
+                }}
+              >
+                {errors["license_exp"].message}
+              </Typography>
+            )}
+
             <Box>
               <FormControl fullWidth size="small">
                 <InputLabel id="select-label">Trip Template</InputLabel>
@@ -192,6 +238,21 @@ const UserDrawer = ({ open, item }) => {
               </FormControl>
             </Box>
 
+            {errors["trip_template"] && (
+              <Typography
+                variant="p"
+                sx={{
+                  fontFamily: "Roboto",
+                  fontSize: 12,
+                  marginBottom: 1,
+                  marginLeft: 1,
+                  color: "custom.danger",
+                }}
+              >
+                {errors["trip_template"].message}
+              </Typography>
+            )}
+
             <Box>
               <FormControl fullWidth size="small">
                 <InputLabel id="select-label">Role</InputLabel>
@@ -210,6 +271,21 @@ const UserDrawer = ({ open, item }) => {
               </FormControl>
             </Box>
 
+            {errors["role"] && (
+              <Typography
+                variant="p"
+                sx={{
+                  fontFamily: "Roboto",
+                  fontSize: 12,
+                  marginBottom: 1,
+                  marginLeft: 1,
+                  color: "custom.danger",
+                }}
+              >
+                {errors["role"].message}
+              </Typography>
+            )}
+
             <Box>
               <FormControl fullWidth size="small">
                 <InputLabel id="select-label">Status</InputLabel>
@@ -226,6 +302,20 @@ const UserDrawer = ({ open, item }) => {
                 </Select>
               </FormControl>
             </Box>
+            {errors["status"] && (
+              <Typography
+                variant="p"
+                sx={{
+                  fontFamily: "Roboto",
+                  fontSize: 12,
+                  marginBottom: 1,
+                  marginLeft: 1,
+                  color: "custom.danger",
+                }}
+              >
+                {errors["status"].message}
+              </Typography>
+            )}
           </Stack>
 
           <Box className="drawer__form-button">
