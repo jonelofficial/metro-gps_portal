@@ -23,7 +23,7 @@ export const theme = createTheme({
       warning: "#eed202",
       success: "#48bb78",
       dark: "#fff",
-      mediumDark: "#000000db",
+      mediumDark: "#2a2a2a",
     },
     customSuccess: {
       light: "#48bb78",

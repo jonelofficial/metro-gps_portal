@@ -31,27 +31,47 @@ import SearchIcon from "@mui/icons-material/Search";
 import UserDrawer from "../../components/masterlist/users/UserDrawer";
 import "../../style/outlet/users/users.scss";
 import { memo } from "react";
+import InputField from "../../components/form/InputField";
+import { useForm } from "react-hook-form";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import PublishIcon from "@mui/icons-material/Publish";
+import AddIcon from "@mui/icons-material/Add";
+import * as XLSX from "xlsx";
+import dayjs from "dayjs";
 
 const Users = () => {
   const [open, setOpen] = useState(false);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [drawer, setDrawer] = useState(false);
-  const [searchVal, setSearchVal] = useState(null);
+  const [searchVal, setSearchVal] = useState({ item: "", filter: null });
   const [filterVal, setFilterVal] = useState({
     id: "employee_id",
     label: "Employee Id",
   });
 
-  const { data, isLoading, isError } = useGetAllUsersQuery({ page: 1 });
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+    control,
+  } = useForm();
+
+  const { data, isLoading, isError, isFetching } = useGetAllUsersQuery({
+    page: page,
+    limit: rowsPerPage,
+    search: searchVal.item,
+    searchBy: searchVal.filter,
+  });
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setPage(newPage + 1);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
+    setRowsPerPage(event.target.value);
+    setPage(1);
   };
 
   const columns = [
@@ -83,12 +103,6 @@ const Users = () => {
     {
       id: "createdAt",
       label: "Created",
-      format: (value) =>
-        new Date(value).toLocaleDateString("en-us", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }),
     },
     {
       id: "status",
@@ -97,6 +111,34 @@ const Users = () => {
     {
       id: "action",
       label: "Action",
+    },
+  ];
+
+  const dropData = [
+    { id: "employee_id", label: "Employee Id" },
+    {
+      id: "first_name",
+      label: "First Name",
+    },
+    {
+      id: "last_name",
+      label: "Last Name",
+    },
+    {
+      id: "username",
+      label: "Username",
+    },
+    {
+      id: "trip_template",
+      label: "Trip Template",
+    },
+    {
+      id: "role",
+      label: "Role",
+    },
+    {
+      id: "status",
+      label: "Status",
     },
   ];
 
@@ -122,15 +164,50 @@ const Users = () => {
       : setFilterVal(data);
   };
 
-  const handleSearch = async () => {
-    console.log(`${filterVal.id} : ${searchVal}`);
+  const handleSearch = async (data) => {
+    setSearchVal({ item: data.search, filter: filterVal.id });
   };
 
-  const handleCloseExport = () => {
-    setOpen(false);
+  const handleRefresh = () => {
+    setFilterVal({
+      id: "employee_id",
+      label: "Employee Id",
+    });
+    setSearchVal({ item: "", filter: null });
+    setPage(1);
+    setRowsPerPage(10);
+    reset();
   };
-  const handleToggleExport = () => {
-    setOpen(!open);
+
+  const handleToggleExport = async () => {
+    setOpen(true);
+
+    let newObj = [];
+
+    await data.data.map((item) => {
+      newObj.push({
+        ID: item._id,
+        "EMPLOYEE ID": item.employee_id,
+        "FIRST NAME": item.first_name,
+        "LAST NAME": item.last_name,
+        USERNAME: item.username,
+        "TRIP TEMPLATE": item.trip_template,
+        ROLE: item.role,
+        STATUS: item.status,
+        "CREATED AT": dayjs(item.createdAt).format("MMM-DD-YYYY"),
+      });
+    });
+
+    const workbook = XLSX.utils.book_new(),
+      worksheet = XLSX.utils.json_to_sheet(newObj);
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.writeFile(
+      workbook,
+      `METRO-USER-MASTERLIST ${dayjs().format("MMM-DD-YYYY")}.xlsx`
+    );
+
+    setOpen(false);
   };
 
   if (isLoading) {
@@ -148,7 +225,7 @@ const Users = () => {
           <Autocomplete
             className="filter"
             size="small"
-            options={columns}
+            options={dropData}
             value={filterVal}
             isOptionEqualToValue={(option, value) =>
               option.label === option.label
@@ -161,24 +238,46 @@ const Users = () => {
             )}
             onChange={(event, value) => handleFilter(value)}
           />
-          <TextField
-            className="filter-textfield"
-            size="small"
-            sx={{ width: "180px" }}
-            onChange={(e) => setSearchVal(e.currentTarget.value)}
-          />
-          <Button
-            className="filter-button"
-            variant="contained"
-            startIcon={<SearchIcon />}
-            sx={{ marginLeft: "10px" }}
-            onClick={handleSearch}
+          <form
+            onSubmit={handleSubmit(handleSearch)}
+            style={{ display: "flex", alignItems: "center" }}
           >
-            Search
-          </Button>
+            <InputField
+              {...register("search")}
+              id="search"
+              label="Search"
+              autoComplete="off"
+              errors={errors}
+              className="filter-textfield"
+              size="small"
+              sx={{ width: "180px" }}
+            />
+            <Button
+              className="filter-button"
+              variant="contained"
+              startIcon={<SearchIcon />}
+              sx={{ marginLeft: "10px" }}
+              type="submit"
+            >
+              Search
+            </Button>
+          </form>
         </Box>
 
         <Box className="table__button-wrapper">
+          <Tooltip title="Refresh">
+            <IconButton sx={{ marginRight: "15px" }} onClick={handleRefresh}>
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Import">
+            <IconButton
+              sx={{ marginRight: "15px" }}
+              onClick={handleToggleExport}
+            >
+              <PublishIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Export">
             <IconButton
               sx={{ marginRight: "15px" }}
@@ -191,6 +290,7 @@ const Users = () => {
             variant="contained"
             color="customSuccess"
             onClick={() => setDrawer(true)}
+            endIcon={<AddIcon />}
           >
             Create
           </Button>
@@ -198,7 +298,7 @@ const Users = () => {
       </Stack>
 
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer sx={{ maxHeight: 440, minHeight: "10px" }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -215,13 +315,24 @@ const Users = () => {
               })}
             </TableBody>
           </Table>
+          {isFetching && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "10px 0",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          )}
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[25, 50, 100]}
+          rowsPerPageOptions={[10, 25, 50, 100]}
           component="div"
-          count={data.data.length}
+          count={data.pagination.totalItems}
           rowsPerPage={rowsPerPage}
-          page={page}
+          page={page - 1}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
@@ -239,7 +350,6 @@ const Users = () => {
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
-        onClick={handleCloseExport}
       >
         <CircularProgress color="inherit" />
       </Backdrop>

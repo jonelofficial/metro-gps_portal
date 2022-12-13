@@ -1,5 +1,5 @@
-import { LoadingButton } from "@mui/lab";
 import {
+  Button,
   Divider,
   FormControl,
   IconButton,
@@ -9,18 +9,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Box, Stack } from "@mui/system";
+import "react-image-upload/dist/index.css";
 import React, { memo, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
 import InputField from "../../form/InputField";
 import ImageUploader from "react-image-upload/dist";
 import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
-import "react-image-upload/dist/index.css";
+import dayjs from "dayjs";
+import { LoadingButton } from "@mui/lab";
+import { Box, Stack } from "@mui/system";
+import { Controller, useForm } from "react-hook-form";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { userSchema, userUpdateSchema } from "../../../utility/schema";
+import { useCreateUserMutation } from "../../../api/metroApi";
+import { useEffect } from "react";
 
 const UserDrawer = ({ open, item }) => {
   const [trip, setTrip] = useState(item ? item.trip_template : "");
@@ -28,6 +31,8 @@ const UserDrawer = ({ open, item }) => {
   const [status, setStatus] = useState(item ? item?.status || "" : "");
   const [image, setImage] = useState();
   const [value, setValue] = useState(dayjs());
+
+  const [createUser, { isLoading }] = useCreateUserMutation();
 
   const {
     register,
@@ -39,37 +44,34 @@ const UserDrawer = ({ open, item }) => {
     mode: "onSubmit",
   });
 
-  // useEffect(() => {
-  //   (async () => {
-  //     item && console.log(await bcrypt.compare("admin", item.password));
-  //   })();
-  // }, []);
-
   const onSubmit = async (data) => {
-    console.log(data.license_exp.$d);
-    const form = new FormData();
+    try {
+      const form = new FormData();
 
-    form.append("image", {
-      name: new Date() + "_profile",
-      uri: image.imageFile?.dataUrl,
-      type: image.imageFile.file?.type,
-    });
-    form.append("employee_id", data.employee_id);
-    form.append("first_name", data.first_name);
-    form.append("last_name", data.last_name);
-    form.append("username", data.username);
-    form.append("password", data.password.length > 0 ? data.password : null);
-    form.append("trip_template", data.trip_template);
-    form.append("role", data.role);
-    form.append("status", data.status);
+      form.append("image", image.imageFile.file);
+      form.append("employee_id", data.employee_id);
+      form.append("first_name", data.first_name);
+      form.append("last_name", data.last_name);
+      form.append("username", data.username);
+      form.append("password", data.password.length > 0 ? data.password : null);
+      form.append("trip_template", data.trip_template);
+      form.append("role", data.role);
+      form.append("status", data.status);
 
-    // for (var key of form.entries()) {
-    //   console.log(key[0] + ", " + key[1]);
-    // }
+      const res = await createUser(form);
+      if (res?.error) {
+        alert(res.error.data.error);
+      } else {
+        open(false);
+      }
+    } catch (e) {
+      console.log("ERROR CREATE USER: ", e);
+    }
   };
 
   function getImageFileObject(imageFile) {
     setImage({ imageFile });
+    console.log(imageFile);
   }
   function runAfterImageDelete(file) {
     // console.log({ file });
@@ -319,19 +321,19 @@ const UserDrawer = ({ open, item }) => {
           </Stack>
 
           <Box className="drawer__form-button">
-            <LoadingButton
+            <Button
               sx={{ marginRight: "20px" }}
-              variant="contained"
               color="customDanger"
               onClick={() => open(false)}
             >
               Cancel
-            </LoadingButton>
+            </Button>
 
             <LoadingButton
               variant="contained"
               type="submit"
               color={item ? "customWarning" : "customSuccess"}
+              loading={isLoading}
             >
               {item ? "Update" : "Create"}
             </LoadingButton>
