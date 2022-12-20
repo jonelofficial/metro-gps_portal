@@ -15,7 +15,7 @@ export const metroApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Trip", "User"],
+  tagTypes: ["Trip", "User", "Vehicles", "GasStation"],
   endpoints: (builder) => ({
     getAllTrips: builder.query({
       query: (params) => `/office/trips?page=${params.page}`,
@@ -34,6 +34,21 @@ export const metroApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    deleteUser: builder.mutation({
+      query: (payload) => ({
+        url: `/auth/delete-user/${payload}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
+    updateUser: builder.mutation({
+      query: (payload) => ({
+        url: `/auth/update-user/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -41,4 +56,6 @@ export const {
   useGetAllTripsQuery,
   useGetAllUsersQuery,
   useCreateUserMutation,
+  useDeleteUserMutation,
+  useUpdateUserMutation,
 } = metroApi;

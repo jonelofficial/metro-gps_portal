@@ -7,6 +7,7 @@ import {
   createFilterOptions,
   Drawer,
   IconButton,
+  Modal,
   Paper,
   Stack,
   styled,
@@ -19,6 +20,7 @@ import {
   TableRow,
   TextField,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material";
 import React, { useState } from "react";
@@ -38,18 +40,23 @@ import PublishIcon from "@mui/icons-material/Publish";
 import AddIcon from "@mui/icons-material/Add";
 import * as XLSX from "xlsx";
 import dayjs from "dayjs";
+import { LoadingButton } from "@mui/lab";
 
 const Users = () => {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [drawer, setDrawer] = useState(false);
+
   const [searchVal, setSearchVal] = useState({ item: "", filter: null });
   const [filterVal, setFilterVal] = useState({
     id: "employee_id",
     label: "Employee Id",
   });
 
+  const [excelFile, setExcelFile] = useState({});
+  const [excelJson, setExcelJson] = useState([]);
+  const [openImport, setOpenImport] = useState(false);
   const {
     register,
     formState: { errors },
@@ -64,7 +71,6 @@ const Users = () => {
     search: searchVal.item,
     searchBy: searchVal.filter,
   });
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage + 1);
   };
@@ -101,12 +107,20 @@ const Users = () => {
       label: "Profile",
     },
     {
-      id: "createdAt",
-      label: "Created",
+      id: "department",
+      label: "Department",
+    },
+    {
+      id: "license_exp",
+      label: "License Exp",
     },
     {
       id: "status",
       label: "Status",
+    },
+    {
+      id: "createdAt",
+      label: "Created",
     },
     {
       id: "action",
@@ -131,6 +145,10 @@ const Users = () => {
     {
       id: "trip_template",
       label: "Trip Template",
+    },
+    {
+      id: "department",
+      label: "Deparment",
     },
     {
       id: "role",
@@ -186,13 +204,13 @@ const Users = () => {
 
     await data.data.map((item) => {
       newObj.push({
-        ID: item._id,
         "EMPLOYEE ID": item.employee_id,
         "FIRST NAME": item.first_name,
         "LAST NAME": item.last_name,
         USERNAME: item.username,
         "TRIP TEMPLATE": item.trip_template,
         ROLE: item.role,
+        "LICENSE EXP": dayjs(item.license_exp).format("MMM-DD-YYYY"),
         STATUS: item.status,
         "CREATED AT": dayjs(item.createdAt).format("MMM-DD-YYYY"),
       });
@@ -210,6 +228,37 @@ const Users = () => {
     setOpen(false);
   };
 
+  const handleToggleImport = async () => {
+    setOpenImport(true);
+  };
+
+  const filterHeader = async (jsonData) => {
+    await jsonData.map((row) => {
+      Object.keys(row).map((key) => {
+        let newKey = key.trim().toLowerCase().replace(/ /g, "_");
+        if (key !== newKey) {
+          row[newKey] = row[key];
+          delete row[key];
+        }
+      });
+    });
+
+    return jsonData;
+  };
+
+  const handleImport = async (data) => {
+    setExcelFile(data);
+    const excelFile = await data.arrayBuffer();
+    const workbook = XLSX.readFile(excelFile);
+
+    const initialWorkSheet = workbook.Sheets[workbook.SheetNames[0]];
+    const jsonData = XLSX.utils.sheet_to_json(initialWorkSheet);
+    console.log(await filterHeader(jsonData));
+
+    setOpenImport(false);
+    setExcelFile();
+  };
+
   if (isLoading) {
     return <TableSkeleton />;
   }
@@ -220,6 +269,8 @@ const Users = () => {
 
   return (
     <Box className="table">
+      {/* TABLE HEADER */}
+
       <Stack direction="row" className="table__header">
         <Box className="table__filter-wrapper">
           <Autocomplete
@@ -273,7 +324,7 @@ const Users = () => {
           <Tooltip title="Import">
             <IconButton
               sx={{ marginRight: "15px" }}
-              onClick={handleToggleExport}
+              onClick={handleToggleImport}
             >
               <PublishIcon />
             </IconButton>
@@ -296,6 +347,8 @@ const Users = () => {
           </Button>
         </Box>
       </Stack>
+
+      {/* TABLE */}
 
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 440, minHeight: "10px" }}>
@@ -328,7 +381,7 @@ const Users = () => {
           )}
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 50, 100]}
+          rowsPerPageOptions={[10, 25, 50, 100, data?.pagination.totalItems]}
           component="div"
           count={data.pagination.totalItems}
           rowsPerPage={rowsPerPage}
@@ -337,6 +390,8 @@ const Users = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+
+      {/* CREATE & UPDATE DRAWER */}
 
       <Drawer
         className="main-drawer"
@@ -347,12 +402,54 @@ const Users = () => {
         <UserDrawer open={setDrawer} item={null} />
       </Drawer>
 
+      {/* EXPORT LOADING */}
+
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
+        onClick={() => setOpen(false)}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
+      {/* IMPORT MODAL */}
+      <Modal open={openImport}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            maxWidth: 620,
+            bgcolor: "white",
+            boxShadow: 24,
+            borderRadius: 3,
+            p: 4,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Typography>{excelFile?.name}</Typography>
+            <LoadingButton
+              component="label"
+              loading={excelFile?.name && excelJson.length <= 0}
+            >
+              Upload Excel File
+              <input
+                type="file"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                onChange={(e) => handleImport(e.target.files[0])}
+                hidden
+              />
+            </LoadingButton>
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 };

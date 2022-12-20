@@ -3,7 +3,7 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Box, Button, Drawer } from "@mui/material";
+import { Drawer } from "@mui/material";
 import UserDrawer from "./UserDrawer";
 
 const UserAction = ({ item, handleOpen }) => {

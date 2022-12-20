@@ -1,3 +1,4 @@
+import { LoadingButton } from "@mui/lab";
 import {
   Button,
   Modal,
@@ -9,11 +10,14 @@ import {
 import { Box } from "@mui/system";
 import dayjs from "dayjs";
 import React, { memo, useState } from "react";
+import { useDeleteUserMutation } from "../../../api/metroApi";
 import UserAction from "./UserAction";
 
 const TableUsers = ({ item, columns }) => {
   const [open, setOpen] = useState(false);
   const [showImg, setShowImg] = useState(false);
+
+  const [deleteUser, { isLoading }] = useDeleteUserMutation();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -45,7 +49,6 @@ const TableUsers = ({ item, columns }) => {
           return (
             <TableCell key={column.id} size="small">
               {column.id === "profile" && value != null ? (
-                // <a href={`${process.env.BASEURL}/${value}`} target="_blank">
                 <Button
                   onClick={() => {
                     setOpen(true);
@@ -54,11 +57,16 @@ const TableUsers = ({ item, columns }) => {
                 >
                   View
                 </Button>
-              ) : column.id === "profile" &&
-                value == null ? null : column.id === "createdAt" ? (
-                dayjs(value).format("MMM-DD-YYYY")
               ) : column.id === "action" ? (
                 <UserAction item={item} handleOpen={handleOpen} />
+              ) : column.id === "createdAt" ? (
+                value == null ? null : (
+                  dayjs(value).format("MMM-DD-YYYY")
+                )
+              ) : column.id === "license_exp" ? (
+                value == null ? null : (
+                  dayjs(value).format("MMM-DD-YYYY")
+                )
               ) : (
                 value
               )}
@@ -91,7 +99,7 @@ const TableUsers = ({ item, columns }) => {
                 component="img"
                 sx={{
                   height: "auto",
-                  maxWidth: 620,
+                  maxWidth: 420,
                   display: "block",
                   margin: "0 auto",
                 }}
@@ -110,7 +118,7 @@ const TableUsers = ({ item, columns }) => {
             !showImg && (
               <>
                 <Typography id="modal-modal-title" variant="h6">
-                  {` Are you sure you want to delete " ${item.first_name} " record ?`}
+                  {` Are you sure you want to delete the " ${item.first_name} " record ? This action cannot be undone.`}
                 </Typography>
                 <Box
                   sx={{
@@ -126,9 +134,17 @@ const TableUsers = ({ item, columns }) => {
                   >
                     Cancel
                   </Button>
-                  <Button variant="contained" color="customDanger">
+                  <LoadingButton
+                    onClick={() => {
+                      deleteUser(item._id);
+                      handleClose();
+                    }}
+                    variant="contained"
+                    color="customDanger"
+                    loading={isLoading}
+                  >
                     Delete
-                  </Button>
+                  </LoadingButton>
                 </Box>
               </>
             )

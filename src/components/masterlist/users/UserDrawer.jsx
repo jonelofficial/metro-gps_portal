@@ -1,5 +1,7 @@
 import {
+  Autocomplete,
   Button,
+  createFilterOptions,
   Divider,
   FormControl,
   IconButton,
@@ -22,17 +24,22 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { userSchema, userUpdateSchema } from "../../../utility/schema";
-import { useCreateUserMutation } from "../../../api/metroApi";
+import {
+  useCreateUserMutation,
+  useUpdateUserMutation,
+} from "../../../api/metroApi";
 import { useEffect } from "react";
+import { department } from "../../../utility/department";
 
 const UserDrawer = ({ open, item }) => {
   const [trip, setTrip] = useState(item ? item.trip_template : "");
   const [role, setRole] = useState(item ? item.role : "");
   const [status, setStatus] = useState(item ? item?.status || "" : "");
   const [image, setImage] = useState();
-  const [value, setValue] = useState(dayjs());
+  const [value, setValue] = useState(item ? item.license_exp : dayjs());
 
   const [createUser, { isLoading }] = useCreateUserMutation();
+  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
   const {
     register,
@@ -46,9 +53,11 @@ const UserDrawer = ({ open, item }) => {
 
   const onSubmit = async (data) => {
     try {
+      console.log(data);
+      let res;
       const form = new FormData();
-
-      form.append("image", image.imageFile.file);
+      (item?.profile != null || image?.imageFile.file != null) &&
+        form.append("image", image?.imageFile.file);
       form.append("employee_id", data.employee_id);
       form.append("first_name", data.first_name);
       form.append("last_name", data.last_name);
@@ -57,8 +66,19 @@ const UserDrawer = ({ open, item }) => {
       form.append("trip_template", data.trip_template);
       form.append("role", data.role);
       form.append("status", data.status);
-
-      const res = await createUser(form);
+      // form.append(
+      //   "department",
+      //   `${data.department?.id} - ${data.department?.label}`
+      // );
+      form.append("department", data.department);
+      form.append("license_exp", data.license_exp);
+      if (item) {
+        res = await updateUser({ id: item._id, obj: form });
+        console.log(res);
+      } else {
+        res = await createUser(form);
+        console.log(res);
+      }
       if (res?.error) {
         alert(res.error.data.error);
       } else {
@@ -71,7 +91,6 @@ const UserDrawer = ({ open, item }) => {
 
   function getImageFileObject(imageFile) {
     setImage({ imageFile });
-    console.log(imageFile);
   }
   function runAfterImageDelete(file) {
     // console.log({ file });
@@ -88,6 +107,8 @@ const UserDrawer = ({ open, item }) => {
   const handleChangeStatus = (event) => {
     setStatus(event.target.value);
   };
+
+  const [filterVal, setFilterVal] = useState();
 
   return (
     <Box className="drawer">
@@ -145,7 +166,6 @@ const UserDrawer = ({ open, item }) => {
               sx={{ width: "100%" }}
               defaultValue={item && item.employee_id}
             />
-
             <InputField
               {...register("first_name")}
               id="first_name"
@@ -155,7 +175,6 @@ const UserDrawer = ({ open, item }) => {
               sx={{ width: "100%" }}
               defaultValue={item && item.first_name}
             />
-
             <InputField
               {...register("last_name")}
               id="last_name"
@@ -165,7 +184,6 @@ const UserDrawer = ({ open, item }) => {
               sx={{ width: "100%" }}
               defaultValue={item && item.last_name}
             />
-
             <InputField
               {...register("username")}
               id="username"
@@ -175,7 +193,6 @@ const UserDrawer = ({ open, item }) => {
               sx={{ width: "100%" }}
               defaultValue={item && item.username}
             />
-
             <InputField
               {...register("password")}
               id="password"
@@ -185,7 +202,6 @@ const UserDrawer = ({ open, item }) => {
               type="password"
               sx={{ width: "100%" }}
             />
-
             <Controller
               name="license_exp"
               control={control}
@@ -220,7 +236,6 @@ const UserDrawer = ({ open, item }) => {
                 {errors["license_exp"].message}
               </Typography>
             )}
-
             <Box>
               <FormControl fullWidth size="small">
                 <InputLabel id="select-label">Trip Template</InputLabel>
@@ -239,7 +254,6 @@ const UserDrawer = ({ open, item }) => {
                 </Select>
               </FormControl>
             </Box>
-
             {errors["trip_template"] && (
               <Typography
                 variant="p"
@@ -254,7 +268,6 @@ const UserDrawer = ({ open, item }) => {
                 {errors["trip_template"].message}
               </Typography>
             )}
-
             <Box>
               <FormControl fullWidth size="small">
                 <InputLabel id="select-label">Role</InputLabel>
@@ -272,7 +285,6 @@ const UserDrawer = ({ open, item }) => {
                 </Select>
               </FormControl>
             </Box>
-
             {errors["role"] && (
               <Typography
                 variant="p"
@@ -287,7 +299,6 @@ const UserDrawer = ({ open, item }) => {
                 {errors["role"].message}
               </Typography>
             )}
-
             <Box>
               <FormControl fullWidth size="small">
                 <InputLabel id="select-label">Status</InputLabel>
@@ -333,7 +344,7 @@ const UserDrawer = ({ open, item }) => {
               variant="contained"
               type="submit"
               color={item ? "customWarning" : "customSuccess"}
-              loading={isLoading}
+              loading={item ? isUpdating : isLoading}
             >
               {item ? "Update" : "Create"}
             </LoadingButton>
