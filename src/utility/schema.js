@@ -18,7 +18,7 @@ export const userSchema = Yup.object().shape({
   trip_template: Yup.string().required().label("Trip template"),
   role: Yup.string().required().label("Role"),
   status: Yup.string().required().label("Status"),
-  department: Yup.string().required().label("Department"),
+  department: Yup.object().required().label("Department"),
 });
 
 export const userUpdateSchema = Yup.object().shape({
@@ -33,5 +33,5 @@ export const userUpdateSchema = Yup.object().shape({
   trip_template: Yup.string().required().label("Trip template"),
   role: Yup.string().required().label("Role"),
   status: Yup.string().required().label("Status"),
-  department: Yup.string().required().label("Department"),
+  department: Yup.object().required().label("Department"),
 });

@@ -46,10 +46,22 @@ const UserDrawer = ({ open, item }) => {
     handleSubmit,
     control,
     formState: { errors },
+    setValue: setFormValue,
   } = useForm({
     resolver: yupResolver(item ? userUpdateSchema : userSchema),
     mode: "onSubmit",
+    defaultValues: { department: null },
   });
+
+  useEffect(() => {
+    if (item?.department) {
+      setFormValue("department", item.department);
+    }
+
+    return () => {
+      null;
+    };
+  }, [item]);
 
   const onSubmit = async (data) => {
     try {
@@ -70,7 +82,7 @@ const UserDrawer = ({ open, item }) => {
       //   "department",
       //   `${data.department?.id} - ${data.department?.label}`
       // );
-      form.append("department", data.department);
+      form.append("department", JSON.stringify(data.department));
       form.append("license_exp", data.license_exp);
       if (item) {
         res = await updateUser({ id: item._id, obj: form });
@@ -156,6 +168,62 @@ const UserDrawer = ({ open, item }) => {
                 />
               )}
             </Box>
+
+            <Controller
+              control={control}
+              name="department"
+              render={({ field: { onChange, value } }) => (
+                <Autocomplete
+                  className="filter"
+                  size="small"
+                  options={department}
+                  value={value}
+                  // value={item && item?.department}
+                  isOptionEqualToValue={(option, value) =>
+                    `${option.id} - ${option.label}` ===
+                    `${option.id} - ${option.label}`
+                  }
+                  // getOptionLabel={(option) => `${option.id} - ${option.label}`}
+                  getOptionLabel={(option) => `${option.id} - ${option.label}`}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Deparment" />
+                  )}
+                  onChange={(e, value) => onChange(value)}
+                />
+              )}
+            />
+            {/* <Box>
+              <FormControl fullWidth size="small">
+                <InputLabel id="select-label">Department</InputLabel>
+                <Select
+                  {...register("department")}
+                  labelId="select-label"
+                  label="Trip Template"
+                  sx={{ width: "100%" }}
+                  value={trip}
+                  onChange={handleChangeTrip}
+                >
+                  <MenuItem value="office">Office</MenuItem>
+                  <MenuItem value="hauling">Hauling</MenuItem>
+                  <MenuItem value="delivery">Delivery</MenuItem>
+                  <MenuItem value="feeds_delivery">Feeds Delivery</MenuItem>
+                </Select>
+              </FormControl>
+            </Box> */}
+            {errors["department"] && (
+              <Typography
+                variant="p"
+                sx={{
+                  fontFamily: "Roboto",
+                  fontSize: 12,
+                  marginBottom: 1,
+                  marginLeft: 1,
+                  color: "custom.danger",
+                }}
+              >
+                {errors["department"].message}
+              </Typography>
+            )}
 
             <InputField
               {...register("employee_id")}

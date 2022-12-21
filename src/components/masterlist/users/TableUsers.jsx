@@ -67,6 +67,8 @@ const TableUsers = ({ item, columns }) => {
                 value == null ? null : (
                   dayjs(value).format("MMM-DD-YYYY")
                 )
+              ) : column.id === "department" ? (
+                value?.label
               ) : (
                 value
               )}

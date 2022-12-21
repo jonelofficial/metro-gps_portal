@@ -147,7 +147,7 @@ const Users = () => {
       label: "Trip Template",
     },
     {
-      id: "department",
+      id: "department.label",
       label: "Deparment",
     },
     {
@@ -184,6 +184,7 @@ const Users = () => {
 
   const handleSearch = async (data) => {
     setSearchVal({ item: data.search, filter: filterVal.id });
+    console.log({ item: data.search, filter: filterVal.id });
   };
 
   const handleRefresh = () => {
@@ -413,7 +414,12 @@ const Users = () => {
       </Backdrop>
 
       {/* IMPORT MODAL */}
-      <Modal open={openImport}>
+      <Modal
+        open={openImport}
+        onClose={() =>
+          !excelFile?.name && !excelJson.length && setOpenImport(false)
+        }
+      >
         <Box
           sx={{
             position: "absolute",
