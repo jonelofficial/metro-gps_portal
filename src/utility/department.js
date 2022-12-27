@@ -24,10 +24,6 @@ export const department = [
     label: "Office Administration",
   },
   {
-    id: 41,
-    label: "Office Administration",
-  },
-  {
     id: 42,
     label: "Community Relations",
   },
@@ -108,15 +104,7 @@ export const department = [
     label: "Treasury",
   },
   {
-    id: 310,
-    label: "Treasury",
-  },
-  {
     id: 400,
-    label: "Audit",
-  },
-  {
-    id: 410,
     label: "Audit",
   },
   {
@@ -141,10 +129,6 @@ export const department = [
   },
   {
     id: 600,
-    label: "Purchasing",
-  },
-  {
-    id: 610,
     label: "Purchasing",
   },
   {
@@ -189,10 +173,6 @@ export const department = [
   },
   {
     id: 800,
-    label: "Tax Documentation",
-  },
-  {
-    id: 810,
     label: "Tax Documentation",
   },
   {
@@ -252,10 +232,6 @@ export const department = [
     label: "Broiler Farms",
   },
   {
-    id: 3110,
-    label: "Broiler Farms",
-  },
-  {
     id: 3120,
     label: "Broiler Farms - Area 1",
   },
@@ -268,15 +244,7 @@ export const department = [
     label: "Hatchery Farms",
   },
   {
-    id: 3210,
-    label: "Hatchery Farms",
-  },
-  {
     id: 3300,
-    label: "Broiler Breeding Farms",
-  },
-  {
-    id: 3310,
     label: "Broiler Breeding Farms",
   },
   {
@@ -305,10 +273,6 @@ export const department = [
   },
   {
     id: 5000,
-    label: "Meatshop Administration",
-  },
-  {
-    id: 5001,
     label: "Meatshop Administration",
   },
   {

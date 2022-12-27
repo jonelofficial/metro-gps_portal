@@ -24,7 +24,7 @@ import {
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material";
 import React, { useState } from "react";
-import { useGetAllUsersQuery } from "../../api/metroApi";
+import { useGetAllUsersQuery, useImportUserMutation } from "../../api/metroApi";
 import TableUsers from "../../components/masterlist/users/TableUsers.jsx";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import TableSkeleton from "../../components/skeleton/TableSkeleton";
@@ -71,6 +71,9 @@ const Users = () => {
     search: searchVal.item,
     searchBy: searchVal.filter,
   });
+
+  const [importUser, { isLoading: isImporting }] = useImportUserMutation();
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage + 1);
   };
@@ -81,14 +84,16 @@ const Users = () => {
   };
 
   const columns = [
-    { id: "employee_id", label: "Employee Id" },
+    { id: "employee_id", label: "Employee Id", minWidth: 150 },
     {
       id: "first_name",
       label: "First Name",
+      minWidth: 100,
     },
     {
       id: "last_name",
       label: "Last Name",
+      minWidth: 100,
     },
     {
       id: "username",
@@ -97,6 +102,7 @@ const Users = () => {
     {
       id: "trip_template",
       label: "Trip Template",
+      minWidth: 110,
     },
     {
       id: "role",
@@ -113,6 +119,7 @@ const Users = () => {
     {
       id: "license_exp",
       label: "License Exp",
+      minWidth: 100,
     },
     {
       id: "status",
@@ -121,6 +128,7 @@ const Users = () => {
     {
       id: "createdAt",
       label: "Created",
+      minWidth: 90,
     },
     {
       id: "action",
@@ -184,7 +192,6 @@ const Users = () => {
 
   const handleSearch = async (data) => {
     setSearchVal({ item: data.search, filter: filterVal.id });
-    console.log({ item: data.search, filter: filterVal.id });
   };
 
   const handleRefresh = () => {
@@ -249,12 +256,19 @@ const Users = () => {
 
   const handleImport = async (data) => {
     setExcelFile(data);
+
     const excelFile = await data.arrayBuffer();
     const workbook = XLSX.readFile(excelFile);
-
     const initialWorkSheet = workbook.Sheets[workbook.SheetNames[0]];
-    const jsonData = XLSX.utils.sheet_to_json(initialWorkSheet);
-    console.log(await filterHeader(jsonData));
+    const jsonData = XLSX.utils.sheet_to_json(initialWorkSheet, { raw: true });
+    const filteredData = await filterHeader(jsonData);
+
+    if ("username" in filteredData[0]) {
+      const res = await importUser(filteredData);
+      res?.error && alert("ERROR IMPORTING USERS");
+    } else {
+      alert("Missing fields. Please make sure your importing the correct file");
+    }
 
     setOpenImport(false);
     setExcelFile();
@@ -357,7 +371,11 @@ const Users = () => {
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
-                  <StyledTableCell key={column.id} align={column.align}>
+                  <StyledTableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
                     {column.label}
                   </StyledTableCell>
                 ))}
@@ -443,7 +461,8 @@ const Users = () => {
             <Typography>{excelFile?.name}</Typography>
             <LoadingButton
               component="label"
-              loading={excelFile?.name && excelJson.length <= 0}
+              // loading={excelFile?.name && excelJson.length <= 0}
+              loading={excelFile?.name && excelJson.length <= 0 && isImporting}
             >
               Upload Excel File
               <input

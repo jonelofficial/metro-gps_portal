@@ -7,7 +7,7 @@ export const loginSchema = Yup.object().shape({
 
 export const userSchema = Yup.object().shape({
   employee_id: Yup.string()
-    .matches(/^[0-9]+$/, "Must be only digits")
+    // .matches(/^[0-9]+$/, "Must be only digits")
     .required()
     .label("Employee Id"),
   first_name: Yup.string().required().label("First name"),
@@ -23,7 +23,7 @@ export const userSchema = Yup.object().shape({
 
 export const userUpdateSchema = Yup.object().shape({
   employee_id: Yup.string()
-    .matches(/^[0-9]+$/, "Must be only digits")
+    // .matches(/^[0-9]+$/, "Must be only digits")
     .required()
     .label("Employee Id"),
   first_name: Yup.string().required().label("First name"),

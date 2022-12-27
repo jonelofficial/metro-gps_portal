@@ -47,7 +47,11 @@ const TableUsers = ({ item, columns }) => {
         {columns.map((column) => {
           const value = item[column.id];
           return (
-            <TableCell key={column.id} size="small">
+            <TableCell
+              key={column.id}
+              size="small"
+              style={{ whiteSpace: "nowrap" }}
+            >
               {column.id === "profile" && value != null ? (
                 <Button
                   onClick={() => {

@@ -21,6 +21,7 @@ export const metroApi = createApi({
       query: (params) => `/office/trips?page=${params.page}`,
       providesTags: ["Trip"],
     }),
+    // U S E R S
     getAllUsers: builder.query({
       query: (params) =>
         `/auth/users?page=${params.page}&limit=${params.limit}&search=${params.search}&searchBy=${params.searchBy}`,
@@ -49,6 +50,14 @@ export const metroApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    importUser: builder.mutation({
+      query: (payload) => ({
+        url: "/auth/import-user",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -58,4 +67,5 @@ export const {
   useCreateUserMutation,
   useDeleteUserMutation,
   useUpdateUserMutation,
+  useImportUserMutation,
 } = metroApi;
