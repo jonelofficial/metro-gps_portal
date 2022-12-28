@@ -15,7 +15,7 @@ import ImageFormPicker from "../../form/ImageFormPicker";
 import { useForm } from "react-hook-form";
 import DrawerWrapper from "../../drawer/DrawerWrapper";
 
-const UserDrawer = ({ open, item }) => {
+const UserDrawer = ({ onClose, item }) => {
   const [image, setImage] = useState();
 
   const [createUser, { isLoading }] = useCreateUserMutation();
@@ -77,7 +77,7 @@ const UserDrawer = ({ open, item }) => {
       if (res?.error) {
         alert(res.error.data.error);
       } else {
-        open(false);
+        onClose();
       }
     } catch (e) {
       console.log("ERROR CREATE USER: ", e);
@@ -90,6 +90,7 @@ const UserDrawer = ({ open, item }) => {
       color={item ? "customWarning" : "customSuccess"}
       loading={item ? isUpdating : isLoading}
       onSubmit={handleSubmit(onSubmit)}
+      onClose={onClose}
     >
       <ImageFormPicker item={item} image={image} setImage={setImage} />
 

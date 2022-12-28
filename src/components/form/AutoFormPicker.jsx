@@ -2,7 +2,15 @@ import { Autocomplete, TextField, Typography } from "@mui/material";
 import React from "react";
 import { Controller } from "react-hook-form";
 
-const AutoFormPicker = ({ control, name, options, label, errors }) => {
+const AutoFormPicker = ({
+  control,
+  name,
+  options,
+  label,
+  errors,
+  showId,
+  ...etc
+}) => {
   return (
     <>
       <Controller
@@ -15,12 +23,17 @@ const AutoFormPicker = ({ control, name, options, label, errors }) => {
             options={options}
             value={value}
             isOptionEqualToValue={(option, value) =>
-              `${option.id} - ${option.label}` ===
-              `${option.id} - ${option.label}`
+              showId
+                ? `${option.id} - ${option.label}` ===
+                  `${option.id} - ${option.label}`
+                : option.label === option.label
             }
-            getOptionLabel={(option) => `${option.id} - ${option.label}`}
+            getOptionLabel={(option) =>
+              showId ? `${option.id} - ${option.label}` : option.label
+            }
             renderInput={(params) => <TextField {...params} label={label} />}
             onChange={(e, value) => onChange(value)}
+            {...etc}
           />
         )}
       />

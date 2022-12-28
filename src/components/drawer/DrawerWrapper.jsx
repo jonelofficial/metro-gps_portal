@@ -1,13 +1,21 @@
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
 
-const DrawerWrapper = ({ children, title, onSubmit, loading, color }) => {
+const DrawerWrapper = ({
+  children,
+  title,
+  onSubmit,
+  loading,
+  color,
+  onClose,
+}) => {
   return (
     <Box className="drawer">
       <Box className="drawer__title-wrapper">
         <Typography variant="h6" className="drawer__title">
-          {title || null}
+          {title || "ADD TITLE"}
         </Typography>
       </Box>
       <Divider />
@@ -19,7 +27,7 @@ const DrawerWrapper = ({ children, title, onSubmit, loading, color }) => {
             <Button
               sx={{ marginRight: "20px" }}
               color="customDanger"
-              onClick={() => open(false)}
+              onClick={onClose}
             >
               Cancel
             </Button>
@@ -30,7 +38,7 @@ const DrawerWrapper = ({ children, title, onSubmit, loading, color }) => {
               color={color || customSuccess}
               loading={loading || null}
             >
-              {title || null}
+              {title || "ADD TITLE"}
             </LoadingButton>
           </Box>
         </Box>

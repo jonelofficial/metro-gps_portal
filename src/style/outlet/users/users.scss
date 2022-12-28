@@ -11,11 +11,10 @@
   &__filter-wrapper {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
 
     @media screen and (max-width: index.$medium) {
       width: 100%;
-
+      flex-wrap: wrap;
       .filter-button {
         margin: unset;
         margin-bottom: 10px;

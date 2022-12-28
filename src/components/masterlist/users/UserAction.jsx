@@ -5,10 +5,12 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Drawer } from "@mui/material";
 import UserDrawer from "./UserDrawer";
+import useDisclosure from "../../../hook/useDisclosure";
 
 const UserAction = ({ item, handleOpen }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [drawer, setDrawer] = useState(false);
+
+  const { isOpen, onClose, onToggle } = useDisclosure();
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -43,7 +45,7 @@ const UserAction = ({ item, handleOpen }) => {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            setDrawer(true);
+            onToggle(true);
             setAnchorEl(null);
           }}
           sx={{ color: "custom.warning" }}
@@ -52,13 +54,14 @@ const UserAction = ({ item, handleOpen }) => {
         </MenuItem>
       </Menu>
 
+      {/* UPDATE DRAWER */}
       <Drawer
         className="main-drawer"
         anchor="right"
-        open={drawer}
-        onClose={() => setDrawer(false)}
+        open={isOpen}
+        onClose={onClose}
       >
-        <UserDrawer open={setDrawer} item={item} />
+        <UserDrawer onClose={onClose} item={item} />
       </Drawer>
     </>
   );
