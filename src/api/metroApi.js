@@ -17,6 +17,7 @@ export const metroApi = createApi({
   }),
   tagTypes: ["Trip", "User", "Vehicles", "GasStation"],
   endpoints: (builder) => ({
+    // T R I P S
     getAllTrips: builder.query({
       query: (params) => `/office/trips?page=${params.page}`,
       providesTags: ["Trip"],

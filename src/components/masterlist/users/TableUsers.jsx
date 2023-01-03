@@ -12,6 +12,10 @@ import dayjs from "dayjs";
 import React, { memo, useState } from "react";
 import { useDeleteUserMutation } from "../../../api/metroApi";
 import UserAction from "./UserAction";
+import { QRCodeCanvas } from "qrcode.react";
+import { useRef } from "react";
+import { createRef } from "react";
+import { createElement } from "react";
 
 const TableUsers = ({ item, columns }) => {
   const [open, setOpen] = useState(false);
@@ -23,6 +27,33 @@ const TableUsers = ({ item, columns }) => {
   const handleClose = () => {
     setOpen(false);
     setShowImg(false);
+  };
+
+  const canvasRef = useRef();
+  const buttonRef = createRef();
+
+  const a = createElement("a", {
+    download: `${item.employee_id}.png`,
+    ref: buttonRef,
+  });
+
+  const qr = (
+    <Box ref={canvasRef} sx={{ display: "none" }}>
+      <QRCodeCanvas
+        value={JSON.stringify({
+          username: item.username,
+          password: item.password,
+        })}
+        size={1000}
+        includeMargin={true}
+      />
+    </Box>
+  );
+
+  const handleDownloadQr = () => {
+    const dataURL = canvasRef.current.children[0].toDataURL("image/png");
+    buttonRef.current.setAttribute("href", `${dataURL}`);
+    buttonRef.current.click();
   };
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -61,6 +92,11 @@ const TableUsers = ({ item, columns }) => {
                 >
                   View
                 </Button>
+              ) : column.id === "qrcode" ? (
+                <>
+                  {qr}
+                  <Button onClick={handleDownloadQr}>{a}Download</Button>
+                </>
               ) : column.id === "action" ? (
                 <UserAction item={item} handleOpen={handleOpen} />
               ) : column.id === "createdAt" ? (

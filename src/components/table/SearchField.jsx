@@ -6,12 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const SearchField = ({ onSubmit, control, errors, register, options }) => {
   return (
-    // <Box className="table__filter-wrapper">
-    <form
-      onSubmit={onSubmit}
-      // style={{ display: "flex", alignItems: "center" }}
-      className="table__filter-wrapper"
-    >
+    <form onSubmit={onSubmit} className="table__filter-wrapper">
       <AutoFormPicker
         control={control}
         options={options}
@@ -40,7 +35,6 @@ const SearchField = ({ onSubmit, control, errors, register, options }) => {
         Search
       </Button>
     </form>
-    // </Box>
   );
 };
 

@@ -72,7 +72,7 @@ const Users = () => {
 
   const handleSearch = async (data) => {
     dispatch(setSearch(data.search));
-    dispatch(setSearchBy(data.search_by.id));
+    dispatch(setSearchBy(data.search_by?.id || null));
   };
 
   const handleToggleExport = async () => {
