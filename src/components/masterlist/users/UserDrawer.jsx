@@ -14,12 +14,15 @@ import DateFormPicker from "../../form/DateFormPicker";
 import ImageFormPicker from "../../form/ImageFormPicker";
 import { useForm } from "react-hook-form";
 import DrawerWrapper from "../../drawer/DrawerWrapper";
+import useToast from "../../../hook/useToast";
 
 const UserDrawer = ({ onClose, item }) => {
   const [image, setImage] = useState();
 
   const [createUser, { isLoading }] = useCreateUserMutation();
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
+
+  const { toast } = useToast();
 
   const {
     register,
@@ -69,10 +72,16 @@ const UserDrawer = ({ onClose, item }) => {
       form.append("license_exp", data.license_exp);
       if (item) {
         res = await updateUser({ id: item._id, obj: form });
-        console.log(res);
+        toast({
+          severity: "success",
+          message: `Success updating user ${data.first_name}`,
+        });
       } else {
         res = await createUser(form);
-        console.log(res);
+        toast({
+          severity: "success",
+          message: `Success creating user ${data.first_name}`,
+        });
       }
       if (res?.error) {
         alert(res.error.data.error);

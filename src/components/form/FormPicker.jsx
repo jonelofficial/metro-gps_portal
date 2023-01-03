@@ -9,7 +9,7 @@ import { Box } from "@mui/system";
 import React from "react";
 import { Controller } from "react-hook-form";
 
-const FormPicker = ({ control, name, label, items, errors, ...etc }) => {
+const FormPicker = ({ control, name, label, items, errors, sx, ...etc }) => {
   return (
     <>
       <Controller
@@ -17,7 +17,16 @@ const FormPicker = ({ control, name, label, items, errors, ...etc }) => {
         control={control}
         render={({ field: { onChange, value } }) => (
           <Box>
-            <FormControl fullWidth size="small">
+            <FormControl
+              fullWidth
+              size="small"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& > fieldset": { borderColor: errors[name] && "error.main" },
+                },
+                ...sx,
+              }}
+            >
               <InputLabel id="select-label">{label}</InputLabel>
               <Select
                 labelId="select-label"

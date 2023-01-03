@@ -1,20 +1,16 @@
-import { Alert, Box, Container, Snackbar, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import logo from "../assets/images/logo-metro.png";
 import InputField from "../components/form/InputField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../utility/schema";
 import useAuth from "../auth/useAuth";
+import useToast from "../hook/useToast";
 
 const Login = () => {
-  const [response, setResponse] = useState();
-  const [open, setOpen] = useState(false);
-
-  const vertical = "bottom";
-  const horizontal = "center";
-
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -29,16 +25,11 @@ const Login = () => {
   const onSubmit = async (data) => {
     const res = await login(data);
     if (res) {
-      setOpen(true);
-      setResponse(res.data.message);
+      toast({
+        severity: "error",
+        message: res.data.message,
+      });
     }
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
   };
 
   return (
@@ -51,17 +42,6 @@ const Login = () => {
           alignItems: "center",
         }}
       >
-        <Snackbar
-          open={open}
-          anchorOrigin={{ vertical, horizontal }}
-          key={vertical + horizontal}
-          autoHideDuration={5000}
-          onClose={handleClose}
-        >
-          <Alert variant="filled" severity="error">
-            {response}
-          </Alert>
-        </Snackbar>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ marginBottom: 2 }}>
             <Box

@@ -5,12 +5,13 @@
 
   &__header {
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
     flex-wrap: wrap;
   }
   &__filter-wrapper {
     display: flex;
     align-items: center;
+    gap: 10px;
 
     @media screen and (max-width: index.$medium) {
       width: 100%;

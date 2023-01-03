@@ -14,7 +14,6 @@ const SearchField = ({ onSubmit, control, errors, register, options }) => {
         label="Search By"
         errors={errors}
         showId={false}
-        sx={{ marginRight: "10px", minWidth: "200px" }}
       />
       <InputField
         {...register("search")}
@@ -23,8 +22,6 @@ const SearchField = ({ onSubmit, control, errors, register, options }) => {
         autoComplete="off"
         errors={errors}
         className="filter-textfield"
-        size="small"
-        sx={{ marginRight: "10px" }}
       />
       <Button
         className="filter-button"

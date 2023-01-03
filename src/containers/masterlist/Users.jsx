@@ -1,9 +1,8 @@
 import { Drawer, Stack } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useGetAllUsersQuery, useImportUserMutation } from "../../api/metroApi";
 import TableSkeleton from "../../components/skeleton/TableSkeleton";
 import TableError from "../../components/error/TableError";
-import "../../style/outlet/users/users.scss";
 import { memo } from "react";
 import { useForm } from "react-hook-form";
 import TableWrapper from "../../components/table/TableWrapper";
@@ -23,17 +22,21 @@ import TableUI from "../../components/table/TableUI";
 import { columns, dropData } from "../../utility/table-columns/userColumns";
 import useRefresh from "../../hook/useRefresh";
 import useDisclosure from "../../hook/useDisclosure";
+import TableUsers from "../../components/masterlist/users/TableUsers";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { searchSchema } from "../../utility/schema";
+import "../../style/outlet/users/users.scss";
 
 const Users = () => {
-  const { excelExport, excelImport } = useExcel();
-
+  // RTK
   const { page, limit, search, searchBy } = useSelector(
     (state) => state.features.table
   );
   const dispatch = useDispatch();
 
+  // Custom Hooks
+  const { excelExport, excelImport } = useExcel();
   const { refresh } = useRefresh();
-
   const { isOpen, onClose, onToggle } = useDisclosure();
   const {
     isOpen: isOpenExport,
@@ -46,6 +49,7 @@ const Users = () => {
     onToggle: onToggleImport,
   } = useDisclosure();
 
+  // React Hook Form
   const {
     register,
     formState: { errors },
@@ -59,16 +63,28 @@ const Users = () => {
         label: "Employee Id",
       },
     },
+    resolver: yupResolver(searchSchema),
+    mode: "onChange",
   });
 
+  useEffect(() => {
+    refresh();
+    console.log("reset working");
+
+    return () => {
+      null;
+    };
+  }, []);
+
+  // RTK Query
   const { data, isLoading, isError, isFetching } = useGetAllUsersQuery({
     page: page,
     limit: limit,
     search: search,
     searchBy: searchBy,
   });
-
   const [importUser, { isLoading: isImporting }] = useImportUserMutation();
+  //
 
   const handleSearch = async (data) => {
     dispatch(setSearch(data.search));
@@ -145,7 +161,14 @@ const Users = () => {
         </Stack>
 
         {/* TABLE */}
-        <TableUI columns={columns} isFetching={isFetching} data={data} />
+        <TableUI
+          isFetching={isFetching}
+          data={data}
+          columns={columns}
+          rows={data.data.map((item, i) => {
+            return <TableUsers key={i} item={item} columns={columns} />;
+          })}
+        />
 
         {/* CREATE DRAWER */}
         <Drawer

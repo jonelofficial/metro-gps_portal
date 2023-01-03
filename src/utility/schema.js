@@ -5,11 +5,14 @@ export const loginSchema = Yup.object().shape({
   password: Yup.string().required().label("Password"),
 });
 
+export const searchSchema = Yup.object().shape({
+  search_by: Yup.object().required().label("Search"),
+  search: Yup.string().required().label("Search"),
+});
+
 export const userSchema = Yup.object().shape({
-  employee_id: Yup.string()
-    // .matches(/^[0-9]+$/, "Must be only digits")
-    .required()
-    .label("Employee Id"),
+  department: Yup.object().required().label("Department"),
+  employee_id: Yup.string().required().label("Employee Id"),
   first_name: Yup.string().required().label("First name"),
   last_name: Yup.string().required().label("Last name"),
   username: Yup.string().required().label("Username"),
@@ -18,14 +21,10 @@ export const userSchema = Yup.object().shape({
   trip_template: Yup.string().required().label("Trip template"),
   role: Yup.string().required().label("Role"),
   status: Yup.string().required().label("Status"),
-  department: Yup.object().required().label("Department"),
 });
 
 export const userUpdateSchema = Yup.object().shape({
-  employee_id: Yup.string()
-    // .matches(/^[0-9]+$/, "Must be only digits")
-    .required()
-    .label("Employee Id"),
+  employee_id: Yup.string().required().label("Employee Id"),
   first_name: Yup.string().required().label("First name"),
   last_name: Yup.string().required().label("Last name"),
   username: Yup.string().required().label("Username"),

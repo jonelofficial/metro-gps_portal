@@ -27,11 +27,7 @@ export const columns = [
     id: "profile",
     label: "Profile",
   },
-  {
-    id: "qrcode",
-    label: "QR Code",
-    minWidth: 70,
-  },
+
   {
     id: "department",
     label: "Department",
@@ -49,6 +45,11 @@ export const columns = [
     id: "createdAt",
     label: "Created",
     minWidth: 90,
+  },
+  {
+    id: "qrcode",
+    label: "QR Code",
+    minWidth: 70,
   },
   {
     id: "action",

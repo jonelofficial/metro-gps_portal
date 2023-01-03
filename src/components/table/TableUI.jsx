@@ -12,14 +12,11 @@ import {
   TableRow,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLimit, setPage } from "../../redux-toolkit/counter/featuresCounter";
-import TableUsers from "../masterlist/users/TableUsers";
 
-const TableUI = ({ columns, isFetching, data }) => {
-  //   const [page, setPage] = useState(1);
-  //   const [rowsPerPage, setRowsPerPage] = useState(10);
+const TableUI = ({ columns, isFetching, data, rows }) => {
   const { page, limit } = useSelector((state) => state.features.table);
   const dispatch = useDispatch();
 
@@ -56,11 +53,7 @@ const TableUI = ({ columns, isFetching, data }) => {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {data.data.map((item, i) => {
-              return <TableUsers key={i} item={item} columns={columns} />;
-            })}
-          </TableBody>
+          <TableBody>{rows}</TableBody>
         </Table>
         {isFetching && (
           <Box

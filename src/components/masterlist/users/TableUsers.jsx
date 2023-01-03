@@ -16,12 +16,15 @@ import { QRCodeCanvas } from "qrcode.react";
 import { useRef } from "react";
 import { createRef } from "react";
 import { createElement } from "react";
+import useToast from "../../../hook/useToast";
 
 const TableUsers = ({ item, columns }) => {
   const [open, setOpen] = useState(false);
   const [showImg, setShowImg] = useState(false);
 
   const [deleteUser, { isLoading }] = useDeleteUserMutation();
+
+  const { toast } = useToast();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -180,6 +183,10 @@ const TableUsers = ({ item, columns }) => {
                     onClick={() => {
                       deleteUser(item._id);
                       handleClose();
+                      toast({
+                        severity: "success",
+                        message: `Success deleting user  ${item.first_name}`,
+                      });
                     }}
                     variant="contained"
                     color="customDanger"

@@ -17,7 +17,18 @@ const DateFormPicker = ({ name, control, label, errors }) => {
               label={label}
               onChange={onChange}
               renderInput={(params) => (
-                <TextField size="small" {...params} label={label} />
+                <TextField
+                  size="small"
+                  {...params}
+                  label={label}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& > fieldset": {
+                        borderColor: errors[name] && "error.main",
+                      },
+                    },
+                  }}
+                />
               )}
             />
           </LocalizationProvider>
