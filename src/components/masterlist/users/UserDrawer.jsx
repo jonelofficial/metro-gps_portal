@@ -84,7 +84,10 @@ const UserDrawer = ({ onClose, item }) => {
         });
       }
       if (res?.error) {
-        alert(res.error.data.error);
+        toast({
+          severity: "error",
+          message: res.error.data.error,
+        });
       } else {
         onClose();
       }

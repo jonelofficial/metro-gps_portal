@@ -1,16 +1,12 @@
-import React, { memo, useState } from "react";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import { Drawer, IconButton, Menu, MenuItem } from "@mui/material";
+import React, { useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Drawer } from "@mui/material";
-import UserDrawer from "./UserDrawer";
-import useDisclosure from "../../../hook/useDisclosure";
+import useDisclosure from "../../hook/useDisclosure";
 
-const UserAction = ({ item, handleOpen }) => {
+const TableAction = ({ drawer, handleOpen, drawerDisclosure }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const { isOpen, onClose, onToggle } = useDisclosure();
+  const { isOpen, onClose, onToggle } = drawerDisclosure;
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -45,7 +41,7 @@ const UserAction = ({ item, handleOpen }) => {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            onToggle(true);
+            onToggle();
             setAnchorEl(null);
           }}
           sx={{ color: "custom.warning" }}
@@ -53,18 +49,16 @@ const UserAction = ({ item, handleOpen }) => {
           Edit
         </MenuItem>
       </Menu>
-
-      {/* UPDATE DRAWER */}
       <Drawer
         className="main-drawer"
         anchor="right"
         open={isOpen}
         onClose={onClose}
       >
-        <UserDrawer onClose={onClose} item={item} />
+        {drawer}
       </Drawer>
     </>
   );
 };
 
-export default memo(UserAction);
+export default TableAction;

@@ -24,6 +24,7 @@ export const userSchema = Yup.object().shape({
 });
 
 export const userUpdateSchema = Yup.object().shape({
+  department: Yup.object().required().label("Department"),
   employee_id: Yup.string().required().label("Employee Id"),
   first_name: Yup.string().required().label("First name"),
   last_name: Yup.string().required().label("Last name"),
@@ -32,5 +33,20 @@ export const userUpdateSchema = Yup.object().shape({
   trip_template: Yup.string().required().label("Trip template"),
   role: Yup.string().required().label("Role"),
   status: Yup.string().required().label("Status"),
+});
+
+export const vehicleSchema = Yup.object().shape({
   department: Yup.object().required().label("Department"),
+  plate_no: Yup.string()
+    .matches(/^\S*$/, "No space allowed")
+    .required()
+    .label("Plate Number"),
+  vehicle_type: Yup.string().required().label("Vehicle Type"),
+  name: Yup.string().required().label("Name"),
+  brand: Yup.string().required().label("Brand"),
+  fuel_type: Yup.string().required().label("Fuel Type"),
+  km_per_liter: Yup.string()
+    .matches(/^\d+\.?\d*$/, "Must be only digits")
+    .required()
+    .label("KMPL"),
 });

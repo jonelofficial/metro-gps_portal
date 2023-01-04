@@ -1,7 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import React from "react";
-import { useDispatch } from "react-redux";
 
 const DrawerWrapper = ({
   children,
@@ -35,7 +34,7 @@ const DrawerWrapper = ({
             <LoadingButton
               variant="contained"
               type="submit"
-              color={color || customSuccess}
+              color={color || "customSuccess"}
               loading={loading || null}
             >
               {title || "ADD TITLE"}

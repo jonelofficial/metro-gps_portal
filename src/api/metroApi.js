@@ -59,14 +59,58 @@ export const metroApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    // VEHICLES
+    getAllVehicles: builder.query({
+      query: (params) =>
+        `/vehicle/cars?page=${params.page}&limit=${params.limit}&search=${params.search}&searchBy=${params.searchBy}`,
+      providesTags: ["Vehicles"],
+    }),
+    createVehicle: builder.mutation({
+      query: (payload) => ({
+        url: "/vehicle/car",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["Vehicles"],
+    }),
+    updateVehicle: builder.mutation({
+      query: (payload) => ({
+        url: `/vehicle/car/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+      invalidatesTags: ["Vehicles"],
+    }),
+    deleteVehicle: builder.mutation({
+      query: (payload) => ({
+        url: `/vehicle/car/${payload}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Vehicles"],
+    }),
+    importVehicles: builder.mutation({
+      query: (payload) => ({
+        url: "",
+        method: "",
+        body: payload,
+      }),
+      invalidatesTags: ["Vehicles"],
+    }),
   }),
 });
 
 export const {
+  // TRIPS
   useGetAllTripsQuery,
+  // USERS
   useGetAllUsersQuery,
   useCreateUserMutation,
   useDeleteUserMutation,
   useUpdateUserMutation,
   useImportUserMutation,
+  // VEHICLES
+  useGetAllVehiclesQuery,
+  useCreateVehicleMutation,
+  useUpdateVehicleMutation,
+  useDeleteVehicleMutation,
 } = metroApi;

@@ -6,7 +6,11 @@
   &__header {
     justify-content: space-between;
     margin-bottom: 16px;
-    flex-wrap: wrap;
+    gap: 10px;
+    @media screen and (max-width: index.$medium) {
+      flex-wrap: wrap;
+      gap: 5px;
+    }
   }
   &__filter-wrapper {
     display: flex;
@@ -40,6 +44,18 @@
       width: 100%;
       justify-content: flex-end;
     }
+  }
+
+  &__modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 620px;
+    background-color: white;
+    box-shadow: 24px;
+    border-radius: 3px;
+    padding: 20px;
   }
 }
 

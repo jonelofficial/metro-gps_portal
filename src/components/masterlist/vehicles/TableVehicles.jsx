@@ -9,24 +9,18 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import dayjs from "dayjs";
-import React, { memo, useState } from "react";
-import { useDeleteUserMutation } from "../../../api/metroApi";
-import { QRCodeCanvas } from "qrcode.react";
-import { useRef } from "react";
-import { createRef } from "react";
-import { createElement } from "react";
-import useToast from "../../../hook/useToast";
-import TableAction from "../../table/TableAction";
+import React from "react";
+import { useDeleteVehicleMutation } from "../../../api/metroApi";
 import useDisclosure from "../../../hook/useDisclosure";
-import ImageViewer from "../../table/ImageViewer";
-import UserDrawer from "./UserDrawer";
 import useQrCode from "../../../hook/useQrCode";
+import useToast from "../../../hook/useToast";
+import ImageViewer from "../../table/ImageViewer";
+import TableAction from "../../table/TableAction";
+import VehicleDrawer from "./VehicleDrawer";
 
-const TableUsers = ({ item, columns }) => {
-  // RTK QUERY
-  const [deleteUser, { isLoading }] = useDeleteUserMutation();
+const TableVehicles = ({ item, columns }) => {
+  const { toast } = useToast();
 
-  // HOOKS
   const { isOpen, onClose, onToggle } = useDisclosure();
   const {
     isOpen: isOpenAction,
@@ -34,16 +28,15 @@ const TableUsers = ({ item, columns }) => {
     onToggle: onToggleAction,
   } = useDisclosure();
   const drawerDisclosure = useDisclosure();
-  const { toast } = useToast();
+
+  const [deleteVehicle, { isLoading }] = useDeleteVehicleMutation();
 
   // FUNCTION
-
   const { handleDownloadQr, qr, a } = useQrCode(
     {
-      username: item.username,
-      password: item.password,
+      vehicle_id: item.plate_no,
     },
-    item.employee_id
+    item.plate_no
   );
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -56,7 +49,6 @@ const TableUsers = ({ item, columns }) => {
       border: 0,
     },
   }));
-
   return (
     <>
       <StyledTableRow
@@ -70,37 +62,37 @@ const TableUsers = ({ item, columns }) => {
           return (
             <TableCell
               key={column.id}
-              size="small"
+              //   size="small"
               style={{ whiteSpace: "nowrap" }}
             >
-              {column.id === "profile" && value != null ? (
-                <Button onClick={onToggle}>View</Button>
-              ) : column.id === "qrcode" ? (
-                <>
-                  {qr}
-                  <Button onClick={handleDownloadQr}>{a}Download</Button>
-                </>
+              {column.id === "createdAt" ? (
+                value && dayjs(value).format("MMM-DD-YYYY")
               ) : column.id === "action" ? (
                 <TableAction
                   handleOpen={onToggleAction}
                   drawerDisclosure={drawerDisclosure}
                   drawer={
-                    <UserDrawer
+                    <VehicleDrawer
                       onClose={drawerDisclosure.onClose}
                       item={item}
                     />
                   }
                 />
-              ) : column.id === "createdAt" ? (
-                value == null ? null : (
-                  dayjs(value).format("MMM-DD-YYYY")
-                )
-              ) : column.id === "license_exp" ? (
-                value == null ? null : (
-                  dayjs(value).format("MMM-DD-YYYY")
-                )
               ) : column.id === "department" ? (
                 value?.label
+              ) : column.id === "profile" && value != null ? (
+                <Button
+                  onClick={() => {
+                    onToggle();
+                  }}
+                >
+                  View
+                </Button>
+              ) : column.id === "qrcode" ? (
+                <>
+                  {qr}
+                  <Button onClick={handleDownloadQr}>{a}Download</Button>
+                </>
               ) : (
                 value
               )}
@@ -119,7 +111,7 @@ const TableUsers = ({ item, columns }) => {
           ) : (
             <>
               <Typography id="modal-modal-title" variant="h6">
-                {` Are you sure you want to delete the " ${item.first_name} " record ? This action cannot be undone.`}
+                {` Are you sure you want to delete the " ${item.plate_no} " record ? This action cannot be undone.`}
               </Typography>
               <Box
                 sx={{
@@ -129,12 +121,12 @@ const TableUsers = ({ item, columns }) => {
                   gap: 2,
                 }}
               >
-                <Button onClick={onCloseAction} color="customDanger">
+                <Button onClick={() => onCloseAction()} color="customDanger">
                   Cancel
                 </Button>
                 <LoadingButton
                   onClick={() => {
-                    deleteUser(item._id);
+                    deleteVehicle(item._id);
                     onCloseAction();
                     toast({
                       severity: "success",
@@ -156,4 +148,4 @@ const TableUsers = ({ item, columns }) => {
   );
 };
 
-export default memo(TableUsers);
+export default TableVehicles;

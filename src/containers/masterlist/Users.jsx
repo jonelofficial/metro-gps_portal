@@ -26,6 +26,7 @@ import TableUsers from "../../components/masterlist/users/TableUsers";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { searchSchema } from "../../utility/schema";
 import "../../style/outlet/users/users.scss";
+import useToast from "../../hook/useToast";
 
 const Users = () => {
   // RTK
@@ -34,9 +35,10 @@ const Users = () => {
   );
   const dispatch = useDispatch();
 
-  // Custom Hooks
+  // HOOKS
   const { excelExport, excelImport } = useExcel();
   const { refresh } = useRefresh();
+  const { toast } = useToast();
   const { isOpen, onClose, onToggle } = useDisclosure();
   const {
     isOpen: isOpenExport,
@@ -49,7 +51,19 @@ const Users = () => {
     onToggle: onToggleImport,
   } = useDisclosure();
 
-  // React Hook Form
+  // RTK QUERY
+  const { data, isLoading, isError, isFetching } = useGetAllUsersQuery(
+    {
+      page: page,
+      limit: limit,
+      search: search,
+      searchBy: searchBy,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+  const [importUser, { isLoading: isImporting }] = useImportUserMutation();
+
+  //  REACT HOOK FORM
   const {
     register,
     formState: { errors },
@@ -69,23 +83,13 @@ const Users = () => {
 
   useEffect(() => {
     refresh();
-    console.log("reset working");
 
     return () => {
       null;
     };
   }, []);
 
-  // RTK Query
-  const { data, isLoading, isError, isFetching } = useGetAllUsersQuery({
-    page: page,
-    limit: limit,
-    search: search,
-    searchBy: searchBy,
-  });
-  const [importUser, { isLoading: isImporting }] = useImportUserMutation();
-  //
-
+  // FUNCTION
   const handleSearch = async (data) => {
     dispatch(setSearch(data.search));
     dispatch(setSearchBy(data.search_by?.id || null));
@@ -120,7 +124,11 @@ const Users = () => {
       const res = await importUser(filteredData);
       res?.error && alert("ERROR IMPORTING USERS");
     } else {
-      alert("Missing fields. Please make sure your importing the correct file");
+      toast({
+        severity: "error",
+        message:
+          "Missing fields. Please make sure your importing the correct file",
+      });
     }
 
     onCloseImport();
