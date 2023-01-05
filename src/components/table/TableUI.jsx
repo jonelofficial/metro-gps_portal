@@ -46,7 +46,7 @@ const TableUI = ({ columns, isFetching, data, rows }) => {
                 <StyledTableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, ...column?.style }}
                 >
                   {column.label}
                 </StyledTableCell>

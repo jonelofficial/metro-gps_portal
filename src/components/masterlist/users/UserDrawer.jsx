@@ -72,16 +72,18 @@ const UserDrawer = ({ onClose, item }) => {
       form.append("license_exp", data.license_exp);
       if (item) {
         res = await updateUser({ id: item._id, obj: form });
-        toast({
-          severity: "success",
-          message: `Success updating user ${data.first_name}`,
-        });
+        !res?.error &&
+          toast({
+            severity: "success",
+            message: `Success updating user ${data.first_name}`,
+          });
       } else {
         res = await createUser(form);
-        toast({
-          severity: "success",
-          message: `Success creating user ${data.first_name}`,
-        });
+        !res?.error &&
+          toast({
+            severity: "success",
+            message: `Success creating user ${data.first_name}`,
+          });
       }
       if (res?.error) {
         toast({
@@ -121,6 +123,13 @@ const UserDrawer = ({ onClose, item }) => {
         autoComplete="off"
         errors={errors}
         sx={{ width: "100%" }}
+        InputProps={{
+          inputProps: {
+            style: {
+              textTransform: "uppercase",
+            },
+          },
+        }}
         defaultValue={item && item.employee_id}
       />
       <InputField

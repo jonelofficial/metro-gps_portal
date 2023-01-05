@@ -1,6 +1,9 @@
 import { Drawer, Stack } from "@mui/material";
 import React, { useEffect } from "react";
-import { useGetAllUsersQuery, useImportUserMutation } from "../../api/metroApi";
+import {
+  useGetAllUsersQuery,
+  useImportUsersMutation,
+} from "../../api/metroApi";
 import TableSkeleton from "../../components/skeleton/TableSkeleton";
 import TableError from "../../components/error/TableError";
 import { memo } from "react";
@@ -61,7 +64,7 @@ const Users = () => {
     },
     { refetchOnMountOrArgChange: true }
   );
-  const [importUser, { isLoading: isImporting }] = useImportUserMutation();
+  const [importUsers, { isLoading: isImporting }] = useImportUsersMutation();
 
   //  REACT HOOK FORM
   const {
@@ -121,8 +124,12 @@ const Users = () => {
     const filteredData = await excelImport(data);
 
     if ("username" in filteredData[0]) {
-      const res = await importUser(filteredData);
-      res?.error && alert("ERROR IMPORTING USERS");
+      const res = await importUsers(filteredData);
+      res?.error &&
+        toast({
+          severity: "error",
+          message: "Error importing user",
+        });
     } else {
       toast({
         severity: "error",

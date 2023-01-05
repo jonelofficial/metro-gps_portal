@@ -67,16 +67,18 @@ const VehicleDrawer = ({ onClose, item }) => {
 
       if (item) {
         res = await updateVehicle({ id: item._id, obj: form });
-        toast({
-          severity: "success",
-          message: `Success updating vehicle ${data.plate_no.toUpperCase()}`,
-        });
+        !res?.error &&
+          toast({
+            severity: "success",
+            message: `Success updating vehicle ${data.plate_no.toUpperCase()}`,
+          });
       } else {
         res = await createVehicle(form);
-        toast({
-          severity: "success",
-          message: `Success creating vehicle ${data.plate_no.toUpperCase()}`,
-        });
+        !res?.error &&
+          toast({
+            severity: "success",
+            message: `Success creating vehicle ${data.plate_no.toUpperCase()}`,
+          });
       }
 
       if (res?.error) {

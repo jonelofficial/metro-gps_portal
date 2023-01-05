@@ -9,12 +9,8 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import dayjs from "dayjs";
-import React, { memo, useState } from "react";
+import React, { memo } from "react";
 import { useDeleteUserMutation } from "../../../api/metroApi";
-import { QRCodeCanvas } from "qrcode.react";
-import { useRef } from "react";
-import { createRef } from "react";
-import { createElement } from "react";
 import useToast from "../../../hook/useToast";
 import TableAction from "../../table/TableAction";
 import useDisclosure from "../../../hook/useDisclosure";

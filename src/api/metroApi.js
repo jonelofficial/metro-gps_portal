@@ -51,9 +51,9 @@ export const metroApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
-    importUser: builder.mutation({
+    importUsers: builder.mutation({
       query: (payload) => ({
-        url: "/auth/import-user",
+        url: "/auth/import-users",
         method: "POST",
         body: payload,
       }),
@@ -96,6 +96,43 @@ export const metroApi = createApi({
       }),
       invalidatesTags: ["Vehicles"],
     }),
+    // GAS STATION
+    getAllGasStations: builder.query({
+      query: (params) =>
+        `/gas-station/stations?page=${params.page}&limit=${params.limit}&search=${params.search}&searchBy=${params.searchBy}`,
+      providesTags: ["GasStation"],
+    }),
+    createGasStation: builder.mutation({
+      query: (payload) => ({
+        url: "/gas-station/station",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["GasStation"],
+    }),
+    updateGasStation: builder.mutation({
+      query: (payload) => ({
+        url: `/gas-station/station/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+      invalidatesTags: ["GasStation"],
+    }),
+    deleteGasStation: builder.mutation({
+      query: (payload) => ({
+        url: `/gas-station/station/${payload}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["GasStation"],
+    }),
+    importGasStations: builder.mutation({
+      query: (payload) => ({
+        url: "/gas-station/import-stations",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["GasStation"],
+    }),
   }),
 });
 
@@ -107,11 +144,17 @@ export const {
   useCreateUserMutation,
   useDeleteUserMutation,
   useUpdateUserMutation,
-  useImportUserMutation,
+  useImportUsersMutation,
   // VEHICLES
   useGetAllVehiclesQuery,
   useCreateVehicleMutation,
   useUpdateVehicleMutation,
   useDeleteVehicleMutation,
   useImportVehiclesMutation,
+  // GAS STATION
+  useGetAllGasStationsQuery,
+  useCreateGasStationMutation,
+  useUpdateGasStationMutation,
+  useDeleteGasStationMutation,
+  useImportGasStationsMutation,
 } = metroApi;

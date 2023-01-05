@@ -121,7 +121,8 @@ const Vehicles = () => {
 
     if ("plate_no" in filteredData[0]) {
       const res = await importVehicles(filteredData);
-      res?.error && alert("ERROR IMPORTING USERS");
+      res?.error &&
+        toast({ severity: "error", message: "Error importing vehicles" });
     } else {
       toast({
         severity: "error",

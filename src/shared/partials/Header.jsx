@@ -55,7 +55,10 @@ const Header = () => {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar src={profile} sx={{ width: 45, height: 45 }} />
+            <Avatar
+              src={user?.profile && profile}
+              sx={{ width: 45, height: 45 }}
+            />
           </IconButton>
         </Box>
       </Box>

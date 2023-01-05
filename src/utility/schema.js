@@ -50,3 +50,7 @@ export const vehicleSchema = Yup.object().shape({
     .required()
     .label("KMPL"),
 });
+
+export const gasStationSchema = Yup.object().shape({
+  label: Yup.string().required().label("Label"),
+});

@@ -62,7 +62,7 @@ const TableVehicles = ({ item, columns }) => {
           return (
             <TableCell
               key={column.id}
-              //   size="small"
+              size="small"
               style={{ whiteSpace: "nowrap" }}
             >
               {column.id === "createdAt" ? (
