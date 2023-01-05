@@ -90,8 +90,8 @@ export const metroApi = createApi({
     }),
     importVehicles: builder.mutation({
       query: (payload) => ({
-        url: "",
-        method: "",
+        url: "/vehicle/import-vehicles",
+        method: "POST",
         body: payload,
       }),
       invalidatesTags: ["Vehicles"],
@@ -113,4 +113,5 @@ export const {
   useCreateVehicleMutation,
   useUpdateVehicleMutation,
   useDeleteVehicleMutation,
+  useImportVehiclesMutation,
 } = metroApi;

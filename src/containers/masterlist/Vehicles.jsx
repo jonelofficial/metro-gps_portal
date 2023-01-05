@@ -1,7 +1,10 @@
 import { Stack } from "@mui/system";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetAllVehiclesQuery } from "../../api/metroApi";
+import {
+  useGetAllVehiclesQuery,
+  useImportVehiclesMutation,
+} from "../../api/metroApi";
 import TableError from "../../components/error/TableError";
 import TableVehicles from "../../components/masterlist/vehicles/TableVehicles";
 import TableSkeleton from "../../components/skeleton/TableSkeleton";
@@ -55,6 +58,9 @@ const Vehicles = () => {
     { page: page, limit: limit, search: search, searchBy: searchBy },
     { refetchOnMountOrArgChange: true }
   );
+
+  const [importVehicles, { isLoading: isImporting }] =
+    useImportVehiclesMutation();
 
   // REACT HOOK FORM
   const {
@@ -112,10 +118,9 @@ const Vehicles = () => {
 
   const handleImport = async (data) => {
     const filteredData = await excelImport(data);
-    console.log(filteredData);
 
-    if ("username" in filteredData[0]) {
-      // const res = await importUser(filteredData);
+    if ("plate_no" in filteredData[0]) {
+      const res = await importVehicles(filteredData);
       res?.error && alert("ERROR IMPORTING USERS");
     } else {
       toast({
@@ -187,7 +192,7 @@ const Vehicles = () => {
           isOpenImport={isOpenImport}
           onCloseImport={onCloseImport}
           func={handleImport}
-          isImporting={null}
+          isImporting={isImporting}
         />
       </TableWrapper>
     </>
