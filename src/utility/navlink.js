@@ -38,7 +38,7 @@ export const navlink = [
         path: "/masterlist/gas-stations",
       },
       {
-        name: "Trips",
+        name: "Trips SG",
         icon: MapOutlinedIcon,
         path: "/masterlist/trips",
       },

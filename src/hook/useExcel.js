@@ -4,8 +4,20 @@ import * as XLSX from "xlsx";
 
 const useExcel = () => {
   const excelExport = async (obj, title) => {
+    const options = {
+      header: Object.keys(obj[0]).map((key) => {
+        return {
+          v: key,
+          s: {
+            font: {
+              bold: true,
+            },
+          },
+        };
+      }),
+    };
     const workbook = XLSX.utils.book_new(),
-      worksheet = XLSX.utils.json_to_sheet(obj);
+      worksheet = XLSX.utils.json_to_sheet(obj, options);
 
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     XLSX.writeFile(workbook, `${title} ${dayjs().format("MMM-DD-YYYY")}.xlsx`);

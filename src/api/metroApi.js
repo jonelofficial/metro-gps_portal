@@ -22,6 +22,26 @@ export const metroApi = createApi({
       query: (params) => `/office/trips?page=${params.page}`,
       providesTags: ["Trip"],
     }),
+    createTrip: builder.mutation({
+      query: (payload) => ({
+        url: "/office/trip",
+        method: "POST",
+        body: payload,
+      }),
+    }),
+    updateTrip: builder.mutation({
+      query: (payload) => ({
+        url: `/office/trip/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+    }),
+    deleteTrip: builder.mutation({
+      query: (payload) => ({
+        url: `/office/trip/${payload.id}`,
+        method: "DELETE",
+      }),
+    }),
     // U S E R S
     getAllUsers: builder.query({
       query: (params) =>
@@ -139,6 +159,9 @@ export const metroApi = createApi({
 export const {
   // TRIPS
   useGetAllTripsQuery,
+  useCreateTripMutation,
+  useUpdateTripMutation,
+  useDeleteTripMutation,
   // USERS
   useGetAllUsersQuery,
   useCreateUserMutation,

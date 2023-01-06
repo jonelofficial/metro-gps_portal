@@ -42,6 +42,12 @@ const TableGasStation = ({ item, columns }) => {
       >
         {columns.map((column) => {
           const value = item[column.id];
+          if (
+            value === "Others" ||
+            (column.id === "action" && item["label"] === "Others")
+          ) {
+            return;
+          }
           return (
             <TableCell
               key={column.id}

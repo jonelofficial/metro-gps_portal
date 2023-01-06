@@ -1,5 +1,5 @@
 export const columns = [
-  { id: "plate_no", label: "Plate Number", minWidth: 110 },
+  { id: "plate_no", label: "Plate #", minWidth: 110 },
   { id: "vehicle_type", label: "Vehicle Type", minWidth: 100 },
   { id: "name", label: "Name" },
   { id: "brand", label: "Brand" },
