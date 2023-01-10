@@ -17,13 +17,17 @@ import DrawerWrapper from "../../drawer/DrawerWrapper";
 import useToast from "../../../hook/useToast";
 
 const UserDrawer = ({ onClose, item }) => {
+  // STATE
   const [image, setImage] = useState();
 
+  // RTK QUERY
   const [createUser, { isLoading }] = useCreateUserMutation();
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
+  // HOOKS
   const { toast } = useToast();
 
+  // REACT HOOK FORMS
   const {
     register,
     handleSubmit,
@@ -54,6 +58,7 @@ const UserDrawer = ({ onClose, item }) => {
     };
   }, [item]);
 
+  // FUNCTION
   const onSubmit = async (data) => {
     try {
       let res;

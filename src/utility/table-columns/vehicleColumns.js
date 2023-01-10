@@ -12,11 +12,11 @@ export const columns = [
     label: "QR Code",
     minWidth: 70,
   },
-  {
-    id: "createdAt",
-    label: "Created",
-    minWidth: 90,
-  },
+  // {
+  //   id: "createdAt",
+  //   label: "Created",
+  //   minWidth: 90,
+  // },
   {
     id: "action",
     label: "Action",

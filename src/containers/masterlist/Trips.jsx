@@ -17,9 +17,19 @@ import useExcel from "../../hook/useExcel";
 import ExportModal from "../../components/features/ExportModal";
 import useDisclosure from "../../hook/useDisclosure";
 import * as XLSX from "xlsx";
+import dayjs from "dayjs";
+import { useRef } from "react";
+import { useState } from "react";
+import {
+  setSearch,
+  setSearchBy,
+} from "../../redux-toolkit/counter/featuresCounter";
 
 const Trips = () => {
+  // STATE
+  const [date, setDate] = useState();
   // RTK
+
   const { page, limit, search, searchBy } = useSelector(
     (state) => state.features.table
   );
@@ -41,6 +51,7 @@ const Trips = () => {
     limit: limit,
     search: search,
     searchBy: searchBy,
+    date: date,
   });
 
   // REACT HOOK FORM
@@ -51,17 +62,21 @@ const Trips = () => {
     reset,
     handleSubmit,
     setValue: setFormValue,
+    watch,
   } = useForm({
     defaultValues: {
       search_by: {
         id: "_id",
         label: "Id",
       },
+      date: dayjs(),
     },
   });
 
   useEffect(() => {
-    refresh();
+    // refresh();
+    dispatch(setSearch(""));
+    dispatch(setSearchBy("_id"));
 
     return () => {
       null;
@@ -70,23 +85,41 @@ const Trips = () => {
 
   // FUNCTION
 
-  const handleSearch = () => {};
+  const handleSearch = (data) => {
+    setDate(dayjs(data.date).format("YYYY-MM-DD"));
+    dispatch(setSearch(data.search));
+    dispatch(setSearchBy(data.search_by?.id || null));
+  };
 
   const handleToggleExport = async () => {
     onToggleExport();
 
     const newObj = await data.data.map((item) => {
       const destination = item.locations.map((loc, i) => {
-        return `${i % 2 === 0 ? "LEFT =>" : " ARRIVED => "} ${
+        return `${i % 2 === 0 ? "Left =>" : " Arrived => "} ${
           loc.address[0].city
         }`;
+      });
+
+      const gas = item.diesels.map((diesel, i) => {
+        return `Gas Station: ${diesel.gas_station_name} Odometer: ${diesel.odometer} Liter: ${diesel.liter} Amount: ${diesel.amount}`;
+      });
+
+      const companion = item.companion.map((com, i) => {
+        return `${Object.values(com)[0]}`;
       });
 
       return {
         Id: item._id,
         User: `${item.user_id.first_name} ${item.user_id.last_name}`,
         Vehicle: item.vehicle_id.plate_no,
-        Locations: destination.join(""),
+        Locations: destination.join("\n"),
+        Diesels: gas.join("\n"),
+        Odmeter: item.odometer,
+        "Odmeter Done": item.odometer_done,
+        Companion: companion.join("\n"),
+        Others: item.others !== "null" ? item.others : "",
+        "Trip Date": dayjs(item.trip_date).format("MMM-DD-YYYY"),
       };
     });
 
@@ -112,13 +145,18 @@ const Trips = () => {
             errors={errors}
             register={register}
             options={dropData}
+            watch={watch}
           />
 
           <Box>
             <Tooltip title="Refresh">
               <IconButton
                 sx={{ marginRight: "15px" }}
-                onClick={() => refresh(reset)}
+                onClick={() => {
+                  dispatch(setSearch(""));
+                  dispatch(setSearchBy("_id"));
+                  reset();
+                }}
               >
                 <RefreshIcon />
               </IconButton>

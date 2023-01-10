@@ -1,9 +1,8 @@
 import { Drawer, IconButton, Menu, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import useDisclosure from "../../hook/useDisclosure";
 
-const TableAction = ({ drawer, handleOpen, drawerDisclosure }) => {
+const TableAction = ({ drawer, handleOpen, drawerDisclosure, hideDelete }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const { isOpen, onClose, onToggle } = drawerDisclosure;
@@ -36,9 +35,11 @@ const TableAction = ({ drawer, handleOpen, drawerDisclosure }) => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleOpen} sx={{ color: "custom.danger" }}>
-          Delete
-        </MenuItem>
+        {!hideDelete && (
+          <MenuItem onClick={handleOpen} sx={{ color: "custom.danger" }}>
+            Delete
+          </MenuItem>
+        )}
         <MenuItem
           onClick={() => {
             onToggle();

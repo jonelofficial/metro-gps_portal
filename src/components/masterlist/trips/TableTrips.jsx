@@ -17,6 +17,7 @@ import useDisclosure from "../../../hook/useDisclosure";
 import useToast from "../../../hook/useToast";
 import ImageViewer from "../../table/ImageViewer";
 import TableAction from "../../table/TableAction";
+import TripDrawer from "./TripDrawer";
 
 const TableTrips = ({ item, columns }) => {
   // RTK QUERY
@@ -62,7 +63,9 @@ const TableTrips = ({ item, columns }) => {
               style={{ whiteSpace: "nowrap" }}
             >
               {column.id === "user_id" ? (
-                <Tooltip title={`NAME: ${value.first_name} ${value.last_name}`}>
+                <Tooltip
+                  title={`NAME: ${value?.first_name} ${value?.last_name}`}
+                >
                   <Box>{value?.employee_id}</Box>
                 </Tooltip>
               ) : column.id === "vehicle_id" ? (
@@ -71,20 +74,38 @@ const TableTrips = ({ item, columns }) => {
                 value.map((loc, i) => {
                   return (
                     <Stack direction="row" gap={1} key={i}>
-                      <Box
-                        sx={{ minWidth: "90px" }}
-                      >{`${loc.status.toUpperCase()} =>`}</Box>
-                      <Box>{`${loc.address[0].subregion} ${loc.address[0].city} ${loc.address[0].street}`}</Box>
+                      <Box sx={{ minWidth: "90px" }}>{`${loc.status
+                        .toLowerCase()
+                        .replace(/\b\w/g, (l) => l.toUpperCase())} =>`}</Box>
+                      <Box>{`${loc.address[0].city}`}</Box>
+                      {/* <Box>{`${loc.address[0].subregion} ${loc.address[0].city} ${loc.address[0].street}`}</Box> */}
                     </Stack>
                   );
                 })
               ) : column.id === "diesels" ? (
                 value.map((loc, i) => {
-                  return loc.gas_station_name;
+                  return (
+                    <Stack direction="row" gap={1} key={i}>
+                      <Box
+                        sx={{ minWidth: "140px" }}
+                      >{`Gas Station: ${loc.gas_station_name} `}</Box>
+                      <Box
+                        sx={{ minWidth: "100px" }}
+                      >{`Odometer: ${loc.odometer} `}</Box>
+                      <Box
+                        sx={{ minWidth: "60px" }}
+                      >{`Liter: ${loc.liter} `}</Box>
+                      <Box>{`Amount: ${loc.amount} `}</Box>
+                    </Stack>
+                  );
                 })
               ) : column.id === "companion" ? (
-                value.map((loc) => {
-                  return;
+                value.map((el, i) => {
+                  return (
+                    <Stack direction="row" gap={1} key={i}>
+                      <Box>{el?.firstName}</Box>
+                    </Stack>
+                  );
                 })
               ) : column.id === "points" ? null : column.id === "createdAt" ? (
                 value !== null && dayjs(value).format("MMM-DD-YYYY")
@@ -96,7 +117,13 @@ const TableTrips = ({ item, columns }) => {
                 <TableAction
                   handleOpen={onToggleAction}
                   drawerDisclosure={drawerDisclosure}
-                  drawer={null}
+                  hideDelete={true}
+                  drawer={
+                    <TripDrawer
+                      onClose={drawerDisclosure.onClose}
+                      item={item}
+                    />
+                  }
                 />
               ) : column.id === "others" ? (
                 value !== "null" && value
