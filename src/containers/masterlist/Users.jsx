@@ -1,5 +1,5 @@
 import { Drawer, Stack } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useGetAllUsersQuery,
   useImportUsersMutation,
@@ -32,6 +32,7 @@ import "../../style/outlet/users/users.scss";
 import useToast from "../../hook/useToast";
 
 const Users = () => {
+  const [date, setDate] = useState();
   // RTK
   const { page, limit, search, searchBy } = useSelector(
     (state) => state.features.table
@@ -61,6 +62,7 @@ const Users = () => {
       limit: limit,
       search: search,
       searchBy: searchBy,
+      date: date,
     },
     { refetchOnMountOrArgChange: true }
   );
@@ -73,12 +75,14 @@ const Users = () => {
     handleSubmit,
     reset,
     control,
+    watch,
   } = useForm({
     defaultValues: {
       search_by: {
         id: "employee_id",
         label: "Employee Id",
       },
+      date: dayjs(),
     },
     resolver: yupResolver(searchSchema),
     mode: "onChange",
@@ -94,6 +98,7 @@ const Users = () => {
 
   // FUNCTION
   const handleSearch = async (data) => {
+    setDate(dayjs(data.date).format("YYYY-MM-DD"));
     dispatch(setSearch(data.search));
     dispatch(setSearchBy(data.search_by?.id || null));
   };
@@ -163,6 +168,7 @@ const Users = () => {
                 errors={errors}
                 register={register}
                 options={dropData}
+                watch={watch}
               />
 
               <ButtonField

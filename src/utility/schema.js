@@ -7,7 +7,9 @@ export const loginSchema = Yup.object().shape({
 
 export const searchSchema = Yup.object().shape({
   search_by: Yup.object().required().label("Search"),
-  search: Yup.string().required().label("Search"),
+  // .required()
+  search: Yup.string().label("Search"),
+  date: Yup.date().required().label("Date"),
 });
 
 export const userSchema = Yup.object().shape({

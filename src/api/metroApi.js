@@ -49,7 +49,7 @@ export const metroApi = createApi({
     // U S E R S
     getAllUsers: builder.query({
       query: (params) =>
-        `/auth/users?page=${params.page}&limit=${params.limit}&search=${params.search}&searchBy=${params.searchBy}`,
+        `/auth/users?page=${params.page}&limit=${params.limit}&search=${params.search}&searchBy=${params.searchBy}&date=${params.date}`,
       providesTags: ["User"],
     }),
     createUser: builder.mutation({

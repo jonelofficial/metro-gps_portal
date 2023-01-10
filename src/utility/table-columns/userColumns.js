@@ -41,11 +41,11 @@ export const columns = [
     id: "status",
     label: "Status",
   },
-  {
-    id: "createdAt",
-    label: "Created",
-    minWidth: 90,
-  },
+  // {
+  //   id: "createdAt",
+  //   label: "Created",
+  //   minWidth: 90,
+  // },
   {
     id: "qrcode",
     label: "QR Code",
@@ -78,6 +78,10 @@ export const dropData = [
   {
     id: "department.label",
     label: "Deparment",
+  },
+  {
+    id: "license_exp",
+    label: "License Exp",
   },
   {
     id: "role",

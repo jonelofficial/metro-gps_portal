@@ -38,11 +38,18 @@ const SearchField = ({
         showId={false}
       />
 
-      {value === "trip_date" || value === "createdAt" ? (
+      {value === "trip_date" ||
+      value === "createdAt" ||
+      value === "license_exp" ? (
         <DateFormPicker
+          views={
+            value === "license_exp"
+              ? ["month", "year"]
+              : ["month", "year", "day"]
+          }
           name="date"
           control={control}
-          label="Date"
+          label={value === "license_exp" ? "Select Month" : "Date"}
           errors={errors}
         />
       ) : (

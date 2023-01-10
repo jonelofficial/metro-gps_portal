@@ -24,6 +24,8 @@ import {
   setSearch,
   setSearchBy,
 } from "../../redux-toolkit/counter/featuresCounter";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { searchSchema } from "../../utility/schema";
 
 const Trips = () => {
   // STATE
@@ -71,6 +73,8 @@ const Trips = () => {
       },
       date: dayjs(),
     },
+    resolver: yupResolver(searchSchema),
+    mode: "onChanges",
   });
 
   useEffect(() => {

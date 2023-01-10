@@ -4,7 +4,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import React from "react";
 import { Controller } from "react-hook-form";
 
-const DateFormPicker = ({ name, control, label, errors }) => {
+const DateFormPicker = ({ name, control, label, errors, ...etc }) => {
   return (
     <>
       <Controller
@@ -30,6 +30,7 @@ const DateFormPicker = ({ name, control, label, errors }) => {
                   }}
                 />
               )}
+              {...etc}
             />
           </LocalizationProvider>
         )}
