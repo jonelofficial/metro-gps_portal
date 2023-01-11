@@ -7,6 +7,13 @@ import LocalGasStationOutlinedIcon from "@mui/icons-material/LocalGasStationOutl
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import LocalActivityOutlinedIcon from "@mui/icons-material/LocalActivityOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
+import { permission } from "./permission";
+
+// const filteredAcc = accordion.filter((accordionItem) => {
+//   return permission.find((dataItem) => {
+//     return dataItem.id === accordionItem.name.toLowerCase().replace(/ /g, "_");
+//   });
+// });
 
 export const navlink = [
   {
@@ -33,7 +40,7 @@ export const navlink = [
         path: "/masterlist/vehicles",
       },
       {
-        name: "Gas Station",
+        name: "Gas Stations",
         icon: LocalGasStationOutlinedIcon,
         path: "/masterlist/gas-stations",
       },

@@ -12,11 +12,18 @@ import FormPicker from "../../form/FormPicker";
 import AutoFormPicker from "../../form/AutoFormPicker";
 import DateFormPicker from "../../form/DateFormPicker";
 import ImageFormPicker from "../../form/ImageFormPicker";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import DrawerWrapper from "../../drawer/DrawerWrapper";
 import useToast from "../../../hook/useToast";
+import { Autocomplete, Checkbox, TextField } from "@mui/material";
+import { permission } from "../../../utility/permission";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 const UserDrawer = ({ onClose, item }) => {
+  //
+  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  const checkedIcon = <CheckBoxIcon fontSize="small" />;
   // STATE
   const [image, setImage] = useState();
 
@@ -34,6 +41,7 @@ const UserDrawer = ({ onClose, item }) => {
     control,
     formState: { errors },
     setValue: setFormValue,
+    watch,
   } = useForm({
     resolver: yupResolver(item ? userUpdateSchema : userSchema),
     mode: "onSubmit",
@@ -75,6 +83,7 @@ const UserDrawer = ({ onClose, item }) => {
       form.append("status", data.status);
       form.append("department", JSON.stringify(data.department));
       form.append("license_exp", data.license_exp);
+      form.append("permission", JSON.stringify(data.permission));
       if (item) {
         res = await updateUser({ id: item._id, obj: form });
         !res?.error &&
@@ -216,6 +225,38 @@ const UserDrawer = ({ onClose, item }) => {
         ]}
         errors={errors}
       />
+
+      {watch("role") === "admin" && (
+        <Controller
+          name="permission"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Autocomplete
+              multiple
+              defaultValue={item?.permission ? item.permission : []}
+              options={permission}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.label}
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.label}
+                </li>
+              )}
+              renderInput={(params) => (
+                <TextField {...params} label="Permission" />
+              )}
+              onChange={(e, value) => onChange(value)}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+            />
+          )}
+        />
+      )}
     </DrawerWrapper>
   );
 };

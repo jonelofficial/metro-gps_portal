@@ -97,6 +97,10 @@ const TableUsers = ({ item, columns }) => {
                 )
               ) : column.id === "department" ? (
                 value?.label
+              ) : column.id === "permission" ? (
+                value?.map((item, i) => {
+                  return <Box key={i}>{item.label}</Box>;
+                })
               ) : (
                 value
               )}

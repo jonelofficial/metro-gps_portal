@@ -51,6 +51,7 @@ const SearchField = ({
           control={control}
           label={value === "license_exp" ? "Select Month" : "Date"}
           errors={errors}
+          openTo={value === "license_exp" && "month"}
         />
       ) : (
         <InputField

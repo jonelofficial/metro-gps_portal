@@ -11,9 +11,23 @@ import SingleSidebar from "../../components/sidebar/SingleSidebar";
 
 const Sidebar = () => {
   const isOpen = useSelector((state) => state.sidebar.value);
+  const user = useSelector((state) => state.token.userDetails);
+
   const dispatch = useDispatch();
 
   const small = useMediaQuery("(max-width: 480px)");
+
+  const filteredNavlink = navlink.map((item) => {
+    if (item.name === "Masterlist") {
+      return {
+        ...item,
+        accordion: item.accordion.filter((accordionItem) =>
+          user.permission.some((p) => p.label === accordionItem.name)
+        ),
+      };
+    }
+    return item;
+  });
 
   return (
     <Box
@@ -43,7 +57,7 @@ const Sidebar = () => {
         </Box>
         <Box className="sidebar__menu">
           <List component="nav" className="nav">
-            {navlink.map((item, index) =>
+            {filteredNavlink.map((item, index) =>
               item.accordion.length > 0 ? (
                 <AccordionSidebar key={index} item={item} />
               ) : (

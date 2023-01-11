@@ -51,19 +51,42 @@ const Routing = () => {
 
         {
           path: "/masterlist/users",
-          element: validUser ? <Users /> : <NotFound />,
+          element:
+            validUser && user.permission?.some((el) => el?.id === "users") ? (
+              <Users />
+            ) : (
+              <NotFound />
+            ),
         },
         {
           path: "/masterlist/vehicles",
-          element: validUser ? <Vehicles /> : <NotFound />,
+          element:
+            validUser &&
+            user.permission?.some((el) => el?.id === "vehicles") ? (
+              <Vehicles />
+            ) : (
+              <NotFound />
+            ),
         },
         {
           path: "/masterlist/gas-stations",
-          element: validUser ? <GasStations /> : <NotFound />,
+          element:
+            validUser &&
+            user.permission?.some((el) => el?.id === "gas_stations") ? (
+              <GasStations />
+            ) : (
+              <NotFound />
+            ),
         },
         {
           path: "/masterlist/trips",
-          element: validUser ? <Trips /> : <NotFound />,
+          element:
+            validUser &&
+            user.permission?.some((el) => el?.id === "trips_sg") ? (
+              <Trips />
+            ) : (
+              <NotFound />
+            ),
         },
 
         {

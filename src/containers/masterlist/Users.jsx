@@ -82,7 +82,7 @@ const Users = () => {
         id: "employee_id",
         label: "Employee Id",
       },
-      date: dayjs(),
+      date: dayjs().format("YYYY-MM"),
     },
     resolver: yupResolver(searchSchema),
     mode: "onChange",
@@ -98,7 +98,7 @@ const Users = () => {
 
   // FUNCTION
   const handleSearch = async (data) => {
-    setDate(dayjs(data.date).format("YYYY-MM-DD"));
+    setDate(dayjs(data.date).format("YYYY-MM"));
     dispatch(setSearch(data.search));
     dispatch(setSearchBy(data.search_by?.id || null));
   };

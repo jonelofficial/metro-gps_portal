@@ -41,6 +41,10 @@ export const columns = [
     id: "status",
     label: "Status",
   },
+  {
+    id: "permission",
+    label: "Permission",
+  },
   // {
   //   id: "createdAt",
   //   label: "Created",
