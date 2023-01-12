@@ -53,14 +53,14 @@ export const navlink = [
     path: "/masterlist",
     show: false,
   },
-  {
-    id: 3,
-    name: "Trip",
-    icon: LocalActivityOutlinedIcon,
-    accordion: [],
-    path: "/user-trip",
-    show: true,
-  },
+  // {
+  //   id: 3,
+  //   name: "Trip",
+  //   icon: LocalActivityOutlinedIcon,
+  //   accordion: [],
+  //   path: "/user-trip",
+  //   show: true,
+  // },
   {
     id: 4,
     name: "Map",

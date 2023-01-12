@@ -27,14 +27,31 @@ export const columns = [
     id: "profile",
     label: "Profile",
   },
-
   {
     id: "department",
     label: "Department",
   },
   {
-    id: "license_exp",
-    label: "License Exp",
+    id: "sub_unit",
+    label: "Sub Unit",
+    minWidth: 70,
+  },
+  {
+    id: "location",
+    label: "Location",
+  },
+  {
+    id: "division",
+    label: "Division",
+  },
+  {
+    id: "division_category",
+    label: "Division Category",
+    minWidth: 140,
+  },
+  {
+    id: "company",
+    label: "Company",
     minWidth: 100,
   },
   {
@@ -94,5 +111,9 @@ export const dropData = [
   {
     id: "status",
     label: "Status",
+  },
+  {
+    id: "permission.label",
+    label: "Permission",
   },
 ];

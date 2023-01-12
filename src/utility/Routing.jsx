@@ -94,6 +94,10 @@ const Routing = () => {
           element: <UserTrip />,
         },
         {
+          path: "/map/:id",
+          element: <Map />,
+        },
+        {
           path: "/map",
           element: <Map />,
         },

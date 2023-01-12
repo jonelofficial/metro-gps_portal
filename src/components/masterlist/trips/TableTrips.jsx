@@ -12,6 +12,7 @@ import {
 import { Stack } from "@mui/system";
 import dayjs from "dayjs";
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDeleteTripMutation } from "../../../api/metroApi";
 import useDisclosure from "../../../hook/useDisclosure";
 import useToast from "../../../hook/useToast";
@@ -20,6 +21,9 @@ import TableAction from "../../table/TableAction";
 import TripDrawer from "./TripDrawer";
 
 const TableTrips = ({ item, columns }) => {
+  // REACT ROUTER DOM
+  const navigate = useNavigate();
+
   // RTK QUERY
   const [deleteTrip, { isLoading }] = useDeleteTripMutation();
 
@@ -48,11 +52,16 @@ const TableTrips = ({ item, columns }) => {
   }));
   return (
     <>
+      {/* <Link
+        to={{ pathname: "/map", state: { item } }}
+        style={{ textDecoration: "none" }}
+      ></Link> */}
       <StyledTableRow
         hover
         role="checkbox"
         tabIndex={-1}
-        sx={{ height: "10px" }}
+        sx={{ height: "10px", cursor: "pointer" }}
+        onClick={() => navigate(`/map/${item._id}`)}
       >
         {columns.map((column) => {
           const value = item[column.id];

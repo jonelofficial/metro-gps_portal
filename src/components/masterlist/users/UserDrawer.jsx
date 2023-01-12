@@ -7,7 +7,6 @@ import {
   useUpdateUserMutation,
 } from "../../../api/metroApi";
 import { useEffect } from "react";
-import { department } from "../../../utility/department";
 import FormPicker from "../../form/FormPicker";
 import AutoFormPicker from "../../form/AutoFormPicker";
 import DateFormPicker from "../../form/DateFormPicker";
@@ -19,6 +18,13 @@ import { Autocomplete, Checkbox, TextField } from "@mui/material";
 import { permission } from "../../../utility/permission";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+
+import { locations } from "../../../utility/user/locations";
+import { divisions } from "../../../utility/user/divisions";
+import { divisionCategory } from "../../../utility/user/divisionCategory";
+import { company } from "../../../utility/user/company";
+import { subUnit } from "../../../utility/user/subUnit";
+import { department } from "../../../utility/user/department";
 
 const UserDrawer = ({ onClose, item }) => {
   //
@@ -83,7 +89,8 @@ const UserDrawer = ({ onClose, item }) => {
       form.append("status", data.status);
       form.append("department", JSON.stringify(data.department));
       form.append("license_exp", data.license_exp);
-      form.append("permission", JSON.stringify(data.permission));
+      data?.permission &&
+        form.append("permission", JSON.stringify(data.permission));
       if (item) {
         res = await updateUser({ id: item._id, obj: form });
         !res?.error &&
@@ -121,14 +128,6 @@ const UserDrawer = ({ onClose, item }) => {
       onClose={onClose}
     >
       <ImageFormPicker item={item} image={image} setImage={setImage} />
-
-      <AutoFormPicker
-        control={control}
-        options={department}
-        name="department"
-        label="Department"
-        errors={errors}
-      />
 
       <InputField
         {...register("employee_id")}
@@ -183,6 +182,58 @@ const UserDrawer = ({ onClose, item }) => {
         sx={{ width: "100%" }}
       />
 
+      <AutoFormPicker
+        control={control}
+        options={department}
+        name="department"
+        label="Department"
+        errors={errors}
+      />
+
+      <AutoFormPicker
+        control={control}
+        options={subUnit}
+        name="sub_unit"
+        label="Sub Unit"
+        errors={errors}
+      />
+
+      <AutoFormPicker
+        control={control}
+        options={locations}
+        name="location"
+        label="Location"
+        errors={errors}
+        showId={false}
+      />
+
+      <AutoFormPicker
+        control={control}
+        options={divisions}
+        name="division"
+        label="Division"
+        errors={errors}
+        showId={false}
+      />
+
+      <AutoFormPicker
+        control={control}
+        options={divisionCategory}
+        name="division_category"
+        label="Division Category"
+        errors={errors}
+        showId={false}
+      />
+
+      <AutoFormPicker
+        control={control}
+        options={company}
+        name="company"
+        label="Company"
+        errors={errors}
+        showId={false}
+      />
+
       <DateFormPicker
         control={control}
         name="license_exp"
@@ -227,35 +278,46 @@ const UserDrawer = ({ onClose, item }) => {
       />
 
       {watch("role") === "admin" && (
-        <Controller
-          name="permission"
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <Autocomplete
-              multiple
-              defaultValue={item?.permission ? item.permission : []}
-              options={permission}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.label}
-              renderOption={(props, option, { selected }) => (
-                <li {...props}>
-                  <Checkbox
-                    icon={icon}
-                    checkedIcon={checkedIcon}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
-                  />
-                  {option.label}
-                </li>
-              )}
-              renderInput={(params) => (
-                <TextField {...params} label="Permission" />
-              )}
-              onChange={(e, value) => onChange(value)}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-            />
-          )}
-        />
+        <>
+          <Controller
+            name="permission"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Autocomplete
+                size="small"
+                multiple
+                defaultValue={item?.permission ? item.permission : []}
+                options={permission}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.label}
+                  </li>
+                )}
+                renderInput={(params) => (
+                  <TextField {...params} label="Permission" />
+                )}
+                onChange={(e, value) => onChange(value)}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                sx={{
+                  minWidth: name === "search_by" && "200px",
+                  "& .MuiOutlinedInput-root": {
+                    "& > fieldset": {
+                      borderColor: errors["permission"] && "error.main",
+                    },
+                  },
+                }}
+              />
+            )}
+          />
+        </>
       )}
     </DrawerWrapper>
   );
