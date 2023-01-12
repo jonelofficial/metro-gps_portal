@@ -189,7 +189,7 @@ const Map = () => {
     <Box sx={{ width: "100%" }}>
       <GoogleMapReact
         bootstrapURLKeys={{
-          key: "AIzaSyD9ntruAi6lA1kQfxFP7-1GdrfZfViJG9M",
+          key: process.env.GOOGLEAPIKEY,
         }}
         center={{
           lat: data.locations[0].lat,
