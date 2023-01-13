@@ -53,6 +53,11 @@ const UserDrawer = ({ onClose, item }) => {
     mode: "onSubmit",
     defaultValues: {
       department: null,
+      sub_unit: null,
+      location: null,
+      division: null,
+      division_category: null,
+      company: null,
       trip_template: "",
       role: "",
       status: "",
@@ -62,6 +67,11 @@ const UserDrawer = ({ onClose, item }) => {
 
   useEffect(() => {
     setFormValue("department", item?.department);
+    setFormValue("sub_unit", item?.sub_unit);
+    setFormValue("location", item?.location);
+    setFormValue("division", item?.division);
+    setFormValue("division_category", item?.division_category);
+    setFormValue("company", item?.company);
     setFormValue("trip_template", item?.trip_template);
     setFormValue("role", item?.role);
     setFormValue("status", item?.status);
@@ -79,6 +89,8 @@ const UserDrawer = ({ onClose, item }) => {
       const form = new FormData();
       (item?.profile != null || image?.imageFile.file != null) &&
         form.append("image", image?.imageFile.file);
+      data?.permission &&
+        form.append("permission", JSON.stringify(data.permission));
       form.append("employee_id", data.employee_id);
       form.append("first_name", data.first_name);
       form.append("last_name", data.last_name);
@@ -87,10 +99,14 @@ const UserDrawer = ({ onClose, item }) => {
       form.append("trip_template", data.trip_template);
       form.append("role", data.role);
       form.append("status", data.status);
-      form.append("department", JSON.stringify(data.department));
       form.append("license_exp", data.license_exp);
-      data?.permission &&
-        form.append("permission", JSON.stringify(data.permission));
+      form.append("department", JSON.stringify(data.department));
+      form.append("sub_unit", JSON.stringify(data.sub_unit));
+      form.append("location", JSON.stringify(data.location));
+      form.append("division", JSON.stringify(data.division));
+      form.append("division_category", JSON.stringify(data.division_category));
+      form.append("company", JSON.stringify(data.company));
+
       if (item) {
         res = await updateUser({ id: item._id, obj: form });
         !res?.error &&
@@ -106,6 +122,7 @@ const UserDrawer = ({ onClose, item }) => {
             message: `Success creating user ${data.first_name}`,
           });
       }
+
       if (res?.error) {
         toast({
           severity: "error",
@@ -204,7 +221,6 @@ const UserDrawer = ({ onClose, item }) => {
         name="location"
         label="Location"
         errors={errors}
-        showId={false}
       />
 
       <AutoFormPicker

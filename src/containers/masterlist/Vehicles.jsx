@@ -96,19 +96,18 @@ const Vehicles = () => {
 
   const handleToggleExport = async () => {
     onToggleExport();
-    let newObj = [];
 
-    await data.data.map((item) => {
-      newObj.push({
-        "PLATE NUMBER": item.plate_no,
-        "VEHICLE TYPE": item.vehicle_type,
-        NAME: item.name,
-        BRAND: item.brand,
-        "FUEL TYPE": item.fuel_type,
-        KMPL: item.km_per_liter,
-        DEPARTMENT: item.department?.label,
-        "CREATED AT": dayjs(item.createdAt).format("MMM-DD-YYYY"),
-      });
+    const newObj = await data.data.map((item) => {
+      return {
+        "Plate Number": item.plate_no,
+        "Vehicle Type": item.vehicle_type,
+        Name: item.name,
+        Brand: item.brand,
+        "Fuel Type": item.fuel_type,
+        "KM Per Liter": item.km_per_liter,
+        Department: item.department?.label,
+        Created: dayjs(item.createdAt).format("MMM-DD-YYYY"),
+      };
     });
 
     await excelExport(newObj, "METRO-VEHICLES-MASTERLIST");

@@ -14,5 +14,6 @@ export default defineConfig({
   define: {
     "process.env.PORT": `${process.env.PORT}`,
     "process.env.BASEURL": `"${process.env.BASEURL}"`,
+    "process.env.GOOGLEAPIKEY": `"${process.env.GOOGLEAPIKEY}"`,
   },
 });

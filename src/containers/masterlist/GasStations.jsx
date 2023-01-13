@@ -103,12 +103,11 @@ const GasStations = () => {
 
   const handleToggleExport = async () => {
     onToggleExport();
-    let newObj = [];
 
-    await data.data.map((item) => {
-      newObj.push({
-        label: item.label,
-      });
+    const newObj = await data.data.map((item) => {
+      return {
+        Label: item.label,
+      };
     });
 
     await excelExport(newObj, "METRO-GAS-STATION-MASTERLIST");

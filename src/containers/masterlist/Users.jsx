@@ -105,20 +105,33 @@ const Users = () => {
 
   const handleToggleExport = async () => {
     onToggleExport();
-    let newObj = [];
 
-    await data.data.map((item) => {
-      newObj.push({
-        "EMPLOYEE ID": item.employee_id,
-        "FIRST NAME": item.first_name,
-        "LAST NAME": item.last_name,
-        USERNAME: item.username,
-        "TRIP TEMPLATE": item.trip_template,
-        ROLE: item.role,
-        "LICENSE EXP": dayjs(item.license_exp).format("MMM-DD-YYYY"),
-        STATUS: item.status,
-        "CREATED AT": dayjs(item.createdAt).format("MMM-DD-YYYY"),
-      });
+    const newObj = await data.data.map((item) => {
+      const permisionObj =
+        item?.permission !== undefined &&
+        item.permission.map((el) => {
+          return `${el.label} `;
+        });
+
+      return {
+        "Employee Id": item?.employee_id,
+        "First Name": item?.first_name,
+        "Last Name": item?.last_name,
+        Username: item?.username,
+        "Trip Template": item?.trip_template,
+        Role: item?.role,
+        Department: item?.department?.label,
+        "Sub Unit": item?.sub_unit?.label,
+        Location: item?.location?.label,
+        Division: item?.division?.label,
+        "Division Category": item?.division_category?.label,
+        Company: item?.company?.label,
+        Status: item?.status,
+        Permission: permisionObj ? permisionObj.join("\n") : "",
+        "License Exp": dayjs(item?.license_exp).format("MMM-DD-YYYY"),
+        Status: item?.status,
+        Created: dayjs(item?.createdAt).format("MMM-DD-YYYY"),
+      };
     });
 
     await excelExport(newObj, "METRO-USER-MASTERLIST");
