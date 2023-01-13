@@ -26,7 +26,7 @@ import {
   setSearch,
   setSearchBy,
 } from "../../redux-toolkit/counter/featuresCounter";
-import { searchSchema } from "../../utility/schema";
+import { searchNoDateSchema, searchSchema } from "../../utility/schema";
 import {
   columns,
   dropData,
@@ -82,7 +82,7 @@ const GasStations = () => {
     defaultValues: {
       search_by: { id: "label", label: "Label" },
     },
-    resolver: yupResolver(searchSchema),
+    resolver: yupResolver(searchNoDateSchema),
     mode: "onChange",
   });
 
@@ -97,6 +97,7 @@ const GasStations = () => {
   // FUNCTION
 
   const handleSearch = (data) => {
+    console.log(data);
     dispatch(setSearch(data.search));
     dispatch(setSearchBy(data.search_by?.id || null));
   };

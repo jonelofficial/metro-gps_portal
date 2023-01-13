@@ -12,6 +12,12 @@ export const searchSchema = Yup.object().shape({
   date: Yup.date().required().label("Date"),
 });
 
+export const searchNoDateSchema = Yup.object().shape({
+  search_by: Yup.object().required().label("Search"),
+  // .required()
+  search: Yup.string().label("Search"),
+});
+
 export const userSchema = Yup.object().shape({
   department: Yup.object().required().label("Department"),
   employee_id: Yup.string().required().label("Employee Id"),

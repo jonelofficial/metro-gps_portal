@@ -22,7 +22,7 @@ import {
 import ButtonField from "../../components/table/ButtonField";
 import useDisclosure from "../../hook/useDisclosure";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { searchSchema } from "../../utility/schema";
+import { searchNoDateSchema, searchSchema } from "../../utility/schema";
 import ExportModal from "../../components/features/ExportModal";
 import ImportModal from "../../components/features/ImportModal";
 import { Drawer } from "@mui/material";
@@ -76,7 +76,7 @@ const Vehicles = () => {
         label: "Plate Number",
       },
     },
-    resolver: yupResolver(searchSchema),
+    resolver: yupResolver(searchNoDateSchema),
     mode: "onChange",
   });
 

@@ -42,6 +42,8 @@ const GasStationsDrawer = ({ onClose, item }) => {
             severity: "success",
             message: `Success updating gas station ${data.label}`,
           });
+
+        console.log(res);
       } else {
         res = await createGasStaion(data);
         !res?.error &&

@@ -19,6 +19,7 @@
     "@mui/x-date-pickers": "^5.0.9",
     "@reduxjs/toolkit": "^1.9.0",
     "axios": "^1.2.0",
+    "bson": "^4.7.2",
     "dayjs": "^1.11.6",
     "dotenv": "^16.0.3",
     "google-map-react": "^2.2.0",
