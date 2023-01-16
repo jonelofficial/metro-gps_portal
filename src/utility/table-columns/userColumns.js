@@ -62,6 +62,11 @@ export const columns = [
     id: "permission",
     label: "Permission",
   },
+  {
+    id: "license_exp",
+    label: "License Exp",
+    minWidth: 100,
+  },
   // {
   //   id: "createdAt",
   //   label: "Created",

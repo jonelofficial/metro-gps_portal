@@ -126,7 +126,6 @@ const Users = () => {
         Division: item?.division?.label,
         "Division Category": item?.division_category?.label,
         Company: item?.company?.label,
-        Status: item?.status,
         Permission: permisionObj ? permisionObj.join("\n") : "",
         "License Exp": dayjs(item?.license_exp).format("MMM-DD-YYYY"),
         Status: item?.status,

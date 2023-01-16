@@ -38,6 +38,7 @@ const TableUsers = ({ item, columns }) => {
     {
       username: item.username,
       password: item.password,
+      firstName: `${item.first_name} ${item.last_name}`,
     },
     item.employee_id
   );

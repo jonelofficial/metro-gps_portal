@@ -29,20 +29,11 @@ export const userSchema = Yup.object().shape({
   trip_template: Yup.string().required().label("Trip template"),
   role: Yup.string().required().label("Role"),
   status: Yup.string().required().label("Status"),
-});
-
-export const userAdminSchema = Yup.object().shape({
-  department: Yup.object().required().label("Department"),
-  employee_id: Yup.string().required().label("Employee Id"),
-  first_name: Yup.string().required().label("First name"),
-  last_name: Yup.string().required().label("Last name"),
-  username: Yup.string().required().label("Username"),
-  password: Yup.string().required().label("Password"),
-  license_exp: Yup.date().required().label("License expiration"),
-  trip_template: Yup.string().required().label("Trip template"),
-  role: Yup.string().required().label("Role"),
-  status: Yup.string().required().label("Status"),
-  permission: Yup.object().required().label("Status"),
+  sub_unit: Yup.object().required().label("Sub Unit"),
+  location: Yup.object().required().label("Location"),
+  division: Yup.object().required().label("Division"),
+  division_category: Yup.object().required().label("Division Category"),
+  company: Yup.object().required().label("Company"),
 });
 
 export const userUpdateSchema = Yup.object().shape({
@@ -55,6 +46,11 @@ export const userUpdateSchema = Yup.object().shape({
   trip_template: Yup.string().required().label("Trip template"),
   role: Yup.string().required().label("Role"),
   status: Yup.string().required().label("Status"),
+  sub_unit: Yup.object().required().label("Sub Unit"),
+  location: Yup.object().required().label("Location"),
+  division: Yup.object().required().label("Division"),
+  division_category: Yup.object().required().label("Division Category"),
+  company: Yup.object().required().label("Company"),
 });
 
 export const vehicleSchema = Yup.object().shape({

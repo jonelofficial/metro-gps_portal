@@ -1,0 +1,105 @@
+@use "../root/index.scss";
+.map {
+  width: 100%;
+  gap: 12px;
+  margin-bottom: 10px;
+
+  &__first {
+    width: 100%;
+    gap: 12px;
+
+    &__search-wrapper {
+      &--label {
+        margin-bottom: 10px;
+      }
+      &--form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+
+    &__trip-details {
+      max-height: 400px;
+      overflow: auto;
+      border: 1.5px solid index.$primary;
+      border-radius: 10px;
+      padding: 16px;
+      gap: 4px;
+      margin: 10px;
+    }
+
+    &-label {
+      display: grid;
+      grid-template-columns: 105px 1fr;
+    }
+    &-data {
+      font-weight: 600;
+    }
+  }
+
+  &__second {
+    width: 100%;
+    min-height: 300px;
+    position: relative;
+
+    @media screen and (max-width: index.$medium) {
+      padding-bottom: 25px;
+    }
+    &-google {
+      height: 91%;
+      width: 100%;
+    }
+
+    &-legend {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      &__label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      &__left {
+        color: index.$danger;
+        background-color: index.$danger;
+        border-radius: 5px;
+      }
+
+      &__arrived {
+        color: index.$success;
+        background-color: index.$success;
+        border-radius: 5px;
+      }
+
+      &__interval {
+        color: index.$interval;
+        background-color: index.$interval;
+        border-radius: 5px;
+      }
+
+      &__diesel {
+        color: index.$primary;
+        background-color: index.$primary;
+        border-radius: 5px;
+      }
+
+      &__path {
+        color: index.$path;
+        background-color: index.$path;
+        border-radius: 5px;
+      }
+    }
+
+    &-error {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: index.$danger;
+    }
+  }
+}
