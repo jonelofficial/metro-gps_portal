@@ -52,17 +52,7 @@ const TableTrips = ({ item, columns }) => {
   }));
   return (
     <>
-      {/* <Link
-        to={{ pathname: "/map", state: { item } }}
-        style={{ textDecoration: "none" }}
-      ></Link> */}
-      <StyledTableRow
-        hover
-        role="checkbox"
-        tabIndex={-1}
-        sx={{ height: "10px", cursor: "pointer" }}
-        onClick={() => navigate(`/map/${item._id}`)}
-      >
+      <StyledTableRow hover role="checkbox" tabIndex={-1}>
         {columns.map((column) => {
           const value = item[column.id];
           return (
@@ -136,6 +126,13 @@ const TableTrips = ({ item, columns }) => {
                 />
               ) : column.id === "others" ? (
                 value !== "null" && value
+              ) : column.id === "_id" ? (
+                <Box
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/map/${item._id}`)}
+                >
+                  {value}
+                </Box>
               ) : (
                 value
               )}

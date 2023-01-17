@@ -174,48 +174,48 @@ const Map = () => {
               Locations:
               <Box className="map__first-data">
                 {data.data[0]?.locations.map((item, i) => {
-                  if (item.status == "left" || item.status == "arrived") {
-                    return (
-                      <Fragment key={i}>
-                        <Box
-                          sx={{
-                            color:
-                              item.status == "left"
-                                ? theme.palette.custom.danger
-                                : item.status == "arrived" &&
-                                  theme.palette.custom.success,
+                  // if (item.status == "left" || item.status == "arrived") {
+                  //   return (
+                  //     <Fragment key={i}>
+                  //       <Box
+                  //         sx={{
+                  //           color:
+                  //             item.status == "left"
+                  //               ? theme.palette.custom.danger
+                  //               : item.status == "arrived" &&
+                  //                 theme.palette.custom.success,
 
-                            textTransform: "capitalize",
-                          }}
-                        >{`${item.status} :`}</Box>
-                        {item.address[0].city} {item.address[0].subregion}
-                        <br />
-                        Date: {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
-                        <br />
-                        <br />
-                      </Fragment>
-                    );
-                  }
-                  // return (
-                  //   <Fragment key={i}>
-                  //     <Box
-                  //       sx={{
-                  //         color:
-                  //           item.status == "left"
-                  //             ? theme.palette.custom.danger
-                  //             : item.status == "arrived"
-                  //             ? theme.palette.custom.success
-                  //             : theme.palette.customBlue.main,
-                  //         textTransform: "capitalize",
-                  //       }}
-                  //     >{`${item.status} :`}</Box>
-                  //     {item.address[0].city} {item.address[0].subregion}
-                  //     <br />
-                  //     Date: {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
-                  //     <br />
-                  //     <br />
-                  //   </Fragment>
-                  // );
+                  //           textTransform: "capitalize",
+                  //         }}
+                  //       >{`${item.status} :`}</Box>
+                  //       {item.address[0].city} {item.address[0].subregion}
+                  //       <br />
+                  //       Date: {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
+                  //       <br />
+                  //       <br />
+                  //     </Fragment>
+                  //   );
+                  // }
+                  return (
+                    <Fragment key={i}>
+                      <Box
+                        sx={{
+                          color:
+                            item.status == "left"
+                              ? theme.palette.custom.danger
+                              : item.status == "arrived"
+                              ? theme.palette.custom.success
+                              : theme.palette.customBlue.main,
+                          textTransform: "capitalize",
+                        }}
+                      >{`${item.status} :`}</Box>
+                      {item.address[0].city} {item.address[0].subregion}
+                      <br />
+                      Date: {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
+                      <br />
+                      <br />
+                    </Fragment>
+                  );
                 })}
               </Box>
             </Box>
@@ -295,29 +295,31 @@ const Map = () => {
 
       {/* MAP */}
       <Box className="map__second">
-        <Box className="map__second-legend">
-          Legend:
-          <Box className="map__second-legend__label">
-            Left
-            <CheckBoxOutlineBlankIcon className="map__second-legend__left" />
+        {data.data.length > 0 && (
+          <Box className="map__second-legend">
+            Legend:
+            <Box className="map__second-legend__label">
+              Left
+              <CheckBoxOutlineBlankIcon className="map__second-legend__left" />
+            </Box>
+            <Box className="map__second-legend__label">
+              Arrived
+              <CheckBoxOutlineBlankIcon className="map__second-legend__arrived" />
+            </Box>
+            <Box className="map__second-legend__label">
+              Interval
+              <CheckBoxOutlineBlankIcon className="map__second-legend__interval" />
+            </Box>
+            <Box className="map__second-legend__label">
+              Diesel
+              <CheckBoxOutlineBlankIcon className="map__second-legend__diesel" />
+            </Box>
+            <Box className="map__second-legend__label">
+              Path
+              <CheckBoxOutlineBlankIcon className="map__second-legend__path" />
+            </Box>
           </Box>
-          <Box className="map__second-legend__label">
-            Arrived
-            <CheckBoxOutlineBlankIcon className="map__second-legend__arrived" />
-          </Box>
-          <Box className="map__second-legend__label">
-            Interval
-            <CheckBoxOutlineBlankIcon className="map__second-legend__interval" />
-          </Box>
-          <Box className="map__second-legend__label">
-            Diesel
-            <CheckBoxOutlineBlankIcon className="map__second-legend__diesel" />
-          </Box>
-          <Box className="map__second-legend__label">
-            Path
-            <CheckBoxOutlineBlankIcon className="map__second-legend__path" />
-          </Box>
-        </Box>
+        )}
         {data.data.length > 0 ? (
           <Box className="map__second-google">
             <GoogleMapReact

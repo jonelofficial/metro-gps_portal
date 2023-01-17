@@ -1,11 +1,12 @@
 import { Drawer, IconButton, Menu, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Fragment } from "react";
 
 const TableAction = ({ drawer, handleOpen, drawerDisclosure, hideDelete }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const { isOpen, onClose, onToggle } = drawerDisclosure;
+  const { isOpen, onClose, onToggle, ...etc } = drawerDisclosure;
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -15,7 +16,7 @@ const TableAction = ({ drawer, handleOpen, drawerDisclosure, hideDelete }) => {
     setAnchorEl(null);
   };
   return (
-    <>
+    <Fragment {...etc}>
       <IconButton
         aria-label="more"
         id="long-button"
@@ -58,7 +59,7 @@ const TableAction = ({ drawer, handleOpen, drawerDisclosure, hideDelete }) => {
       >
         {drawer}
       </Drawer>
-    </>
+    </Fragment>
   );
 };
 

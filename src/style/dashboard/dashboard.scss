@@ -1,0 +1,60 @@
+@use "../root/index.scss";
+.dashboard {
+  width: 100%;
+
+  &__total {
+    display: grid;
+    grid-template-columns: repeat(4, 200px);
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 26px;
+
+    @media screen and (max-width: index.$medium) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (max-width: index.$small) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      background-color: index.$white;
+      padding: 20px 10px;
+      gap: 6px;
+    }
+
+    &-label {
+      font-size: 15px !important;
+    }
+
+    &-data {
+      font-weight: 600;
+      color: index.$success;
+    }
+  }
+
+  &__column {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    gap: 16px;
+
+    &-one {
+      padding: 20px;
+      background-color: index.$white;
+    }
+    &-two {
+      padding: 20px;
+      background-color: index.$white;
+    }
+
+    &-label {
+      font-size: 15px !important;
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

@@ -49,7 +49,7 @@ export const metroApi = createApi({
     // U S E R S
     getAllUsers: builder.query({
       query: (params) =>
-        `/auth/users?page=${params.page}&limit=${params.limit}&search=${params.search}&searchBy=${params.searchBy}&date=${params.date}`,
+        `/auth/users?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}&date=${params?.date}`,
       providesTags: ["User"],
     }),
     createUser: builder.mutation({
@@ -86,7 +86,7 @@ export const metroApi = createApi({
     // VEHICLES
     getAllVehicles: builder.query({
       query: (params) =>
-        `/vehicle/cars?page=${params.page}&limit=${params.limit}&search=${params.search}&searchBy=${params.searchBy}`,
+        `/vehicle/cars?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}`,
       providesTags: ["Vehicles"],
     }),
     createVehicle: builder.mutation({
@@ -123,7 +123,7 @@ export const metroApi = createApi({
     // GAS STATION
     getAllGasStations: builder.query({
       query: (params) =>
-        `/gas-station/stations?page=${params.page}&limit=${params.limit}&search=${params.search}&searchBy=${params.searchBy}`,
+        `/gas-station/stations?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}`,
       providesTags: ["GasStation"],
     }),
     createGasStation: builder.mutation({

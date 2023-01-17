@@ -100,9 +100,11 @@ const Trips = () => {
 
     const newObj = await data.data.map((item) => {
       const destination = item.locations.map((loc, i) => {
-        return `${i % 2 === 0 ? "Left =>" : " Arrived => "} ${
-          loc.address[0].city
-        }`;
+        if (loc.status == "left") {
+          return `Left => ${loc.address[0].city} | `;
+        } else if (loc.status == "arrived") {
+          return `Arrived => ${loc.address[0].city}`;
+        }
       });
 
       const gas = item.diesels.map((diesel, i) => {
