@@ -157,6 +157,12 @@ export const metroApi = createApi({
       }),
       invalidatesTags: ["GasStation"],
     }),
+    // DASHBOARD
+    getTVDTdeparment: builder.query({
+      query: (params) => ({
+        url: `/dashboard/tvdt-department?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}`,
+      }),
+    }),
   }),
 });
 
@@ -184,4 +190,6 @@ export const {
   useUpdateGasStationMutation,
   useDeleteGasStationMutation,
   useImportGasStationsMutation,
+  // DASHBOARD
+  useGetTVDTdeparmentQuery,
 } = metroApi;

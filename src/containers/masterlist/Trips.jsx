@@ -48,13 +48,16 @@ const Trips = () => {
   } = useDisclosure();
 
   // RTK QUERY
-  const { data, isLoading, isError, isFetching } = useGetAllTripsQuery({
-    page: page,
-    limit: limit,
-    search: search,
-    searchBy: searchBy,
-    date: date,
-  });
+  const { data, isLoading, isError, isFetching } = useGetAllTripsQuery(
+    {
+      page: page,
+      limit: limit,
+      search: search,
+      searchBy: searchBy,
+      date: date,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
 
   // REACT HOOK FORM
   const {

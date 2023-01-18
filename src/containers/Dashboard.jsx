@@ -8,6 +8,8 @@ import {
 import { Box, Typography } from "@mui/material";
 import "../style/dashboard/dashboard.scss";
 import DailyTravelDuration from "../components/dashboard/DailyTravelDuration";
+import DailyTravelKilometerRun from "../components/dashboard/DailyTravelKilometerRun";
+import TVDTdeparment from "../components/dashboard/TVDTdeparment";
 
 const Dashboard = () => {
   const [drivers, setDrivers] = useState();
@@ -94,27 +96,35 @@ const Dashboard = () => {
       </Box>
 
       <Box className="dashboard__column">
-        <Box className="dashboard__column-one">
+        {/* 1st COLUMN */}
+        <Box className="dashboard__column-wrapper">
           <Typography className="dashboard__column-label">
             Daily Service Vehicle Kilometer Run
           </Typography>
-          {vehicleData && tripData && (
-            <DailyTravelDuration
-              vehicleData={vehicleData}
-              tripData={tripData}
-            />
-          )}
+          {tripData && <DailyTravelKilometerRun tripData={tripData} />}
         </Box>
-        <Box className="dashboard__column-two">
+
+        {/* 2nd COLUMN */}
+        <Box className="dashboard__column-wrapper">
           <Typography className="dashboard__column-label">
             Daily Service Vehicle Travel Duration
           </Typography>
-          {vehicleData && tripData && (
-            <DailyTravelDuration
-              vehicleData={vehicleData}
-              tripData={tripData}
-            />
-          )}
+          {tripData && <DailyTravelDuration tripData={tripData} />}
+        </Box>
+
+        {/* 3rd COLUMN */}
+        <Box className="dashboard__column-wrapper">
+          <Typography className="dashboard__column-label">
+            Highest KM Run
+          </Typography>
+        </Box>
+
+        {/* 4th COLUMN */}
+        <Box className="dashboard__column-wrapper">
+          <Typography className="dashboard__column-label">
+            Total Vehicles , Drivers & Trips per Department
+          </Typography>
+          <TVDTdeparment userData={userData} vehicleData={vehicleData} />
         </Box>
       </Box>
     </Box>

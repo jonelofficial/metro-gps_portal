@@ -46,7 +46,7 @@ const Routing = () => {
       children: [
         {
           path: "/",
-          element: <Dashboard />,
+          element: validUser && <Dashboard />,
         },
 
         {

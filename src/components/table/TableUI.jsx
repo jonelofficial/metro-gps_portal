@@ -67,15 +67,17 @@ const TableUI = ({ columns, isFetching, data, rows }) => {
           </Box>
         )}
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 50, 100, data?.pagination.totalItems]}
-        component="div"
-        count={data.pagination.totalItems}
-        rowsPerPage={limit}
-        page={page - 1}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      {data?.pagination && (
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50, 100, data?.pagination.totalItems]}
+          component="div"
+          count={data?.pagination.totalItems}
+          rowsPerPage={limit}
+          page={page - 1}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      )}
     </Paper>
   );
 };
