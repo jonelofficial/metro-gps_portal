@@ -163,6 +163,11 @@ export const metroApi = createApi({
         url: `/dashboard/tvdt-department?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}`,
       }),
     }),
+    getHighestKm: builder.query({
+      query: (params) => ({
+        url: `/dashboard/highest-km?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}`,
+      }),
+    }),
   }),
 });
 
@@ -192,4 +197,5 @@ export const {
   useImportGasStationsMutation,
   // DASHBOARD
   useGetTVDTdeparmentQuery,
+  useGetHighestKmQuery,
 } = metroApi;

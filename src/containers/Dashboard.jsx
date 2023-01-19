@@ -10,6 +10,7 @@ import "../style/dashboard/dashboard.scss";
 import DailyTravelDuration from "../components/dashboard/DailyTravelDuration";
 import DailyTravelKilometerRun from "../components/dashboard/DailyTravelKilometerRun";
 import TVDTdeparment from "../components/dashboard/TVDTdeparment";
+import HighestKMrun from "../components/dashboard/HighestKMrun";
 
 const Dashboard = () => {
   const [drivers, setDrivers] = useState();
@@ -38,6 +39,8 @@ const Dashboard = () => {
     limit: 0,
     page: 0,
   });
+
+  console.log(tripData);
 
   useEffect(() => {
     userData?.data &&
@@ -117,6 +120,7 @@ const Dashboard = () => {
           <Typography className="dashboard__column-label">
             Highest KM Run
           </Typography>
+          <HighestKMrun />
         </Box>
 
         {/* 4th COLUMN */}

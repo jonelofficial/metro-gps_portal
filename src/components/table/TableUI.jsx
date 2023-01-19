@@ -16,7 +16,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLimit, setPage } from "../../redux-toolkit/counter/featuresCounter";
 
-const TableUI = ({ columns, isFetching, data, rows }) => {
+const TableUI = ({ columns, isFetching, data, rows, ...etc }) => {
   const { page, limit } = useSelector((state) => state.features.table);
   const dispatch = useDispatch();
 
@@ -38,7 +38,7 @@ const TableUI = ({ columns, isFetching, data, rows }) => {
   };
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: 440, minHeight: "10px" }}>
+      <TableContainer sx={{ maxHeight: 440, minHeight: "10px" }} {...etc}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

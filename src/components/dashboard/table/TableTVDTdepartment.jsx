@@ -1,7 +1,7 @@
 import { styled, TableCell, TableRow } from "@mui/material";
 import React from "react";
 
-const TableHighestKmRun = ({ item, columns }) => {
+const TableTVDTdepartment = ({ item, columns }) => {
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
@@ -23,11 +23,6 @@ const TableHighestKmRun = ({ item, columns }) => {
               size="small"
               style={{ whiteSpace: "nowrap" }}
             >
-              {/* {column.id === "department"
-                ? item["user_id"].department.label
-                : column.id === "vehicle_id"
-                ? value.plate_no
-                : column.id === "user_id" && value.first_name} */}
               {value}
             </TableCell>
           );
@@ -37,4 +32,4 @@ const TableHighestKmRun = ({ item, columns }) => {
   );
 };
 
-export default TableHighestKmRun;
+export default TableTVDTdepartment;

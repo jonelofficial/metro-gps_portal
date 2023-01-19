@@ -50,6 +50,9 @@
     &-wrapper {
       padding: 20px;
       background-color: index.$white;
+      // max-height: 300px;
+      // height: clamp(200px, 100%, 300px);
+      // overflow-y: auto;
     }
 
     &-label {
