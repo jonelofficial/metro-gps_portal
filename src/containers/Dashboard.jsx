@@ -11,6 +11,8 @@ import DailyTravelDuration from "../components/dashboard/DailyTravelDuration";
 import DailyTravelKilometerRun from "../components/dashboard/DailyTravelKilometerRun";
 import TVDTdeparment from "../components/dashboard/TVDTdeparment";
 import HighestKMrun from "../components/dashboard/HighestKMrun";
+import LongestTravelDuration from "../components/dashboard/LongestTravelDuration";
+import TotalTripDriver from "../components/dashboard/TotalTripDriver";
 
 const Dashboard = () => {
   const [drivers, setDrivers] = useState();
@@ -39,8 +41,6 @@ const Dashboard = () => {
     limit: 0,
     page: 0,
   });
-
-  console.log(tripData);
 
   useEffect(() => {
     userData?.data &&
@@ -129,6 +129,22 @@ const Dashboard = () => {
             Total Vehicles , Drivers & Trips per Department
           </Typography>
           <TVDTdeparment userData={userData} vehicleData={vehicleData} />
+        </Box>
+
+        {/* 5th COLUMN */}
+        <Box className="dashboard__column-wrapper">
+          <Typography className="dashboard__column-label">
+            Longest Travel Duration
+          </Typography>
+          <LongestTravelDuration />
+        </Box>
+
+        {/* 6th COLUMN */}
+        <Box className="dashboard__column-wrapper">
+          <Typography className="dashboard__column-label">
+            Total Trip per Driver
+          </Typography>
+          <TotalTripDriver />
         </Box>
       </Box>
     </Box>

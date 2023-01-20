@@ -16,7 +16,15 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLimit, setPage } from "../../redux-toolkit/counter/featuresCounter";
 
-const TableUI = ({ columns, isFetching, data, rows, ...etc }) => {
+const TableUI = ({
+  columns,
+  isFetching,
+  data,
+  rows,
+  state,
+  setState,
+  ...etc
+}) => {
   const { page, limit } = useSelector((state) => state.features.table);
   const dispatch = useDispatch();
 
@@ -30,11 +38,18 @@ const TableUI = ({ columns, isFetching, data, rows, ...etc }) => {
 
   const handleChangePage = (event, newPage) => {
     dispatch(setPage(newPage + 1));
+    state && setState((prevState) => ({ ...prevState, page: newPage + 1 }));
   };
 
   const handleChangeRowsPerPage = (event) => {
     dispatch(setLimit(event.target.value));
     dispatch(setPage(1));
+    state &&
+      setState((prevState) => ({
+        ...prevState,
+        page: 1,
+        limit: event.target.value,
+      }));
   };
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -72,8 +87,8 @@ const TableUI = ({ columns, isFetching, data, rows, ...etc }) => {
           rowsPerPageOptions={[10, 25, 50, 100, data?.pagination.totalItems]}
           component="div"
           count={data?.pagination.totalItems}
-          rowsPerPage={limit}
-          page={page - 1}
+          rowsPerPage={state ? state.limit : limit}
+          page={state ? state.page - 1 : page - 1}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />

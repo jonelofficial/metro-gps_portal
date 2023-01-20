@@ -168,6 +168,16 @@ export const metroApi = createApi({
         url: `/dashboard/highest-km?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}`,
       }),
     }),
+    getLongestDuration: builder.query({
+      query: (params) => ({
+        url: `/dashboard/longest-duration?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}`,
+      }),
+    }),
+    getTotalTripDriver: builder.query({
+      query: (params) => ({
+        url: `/dashboard/total-trip-driver?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}`,
+      }),
+    }),
   }),
 });
 
@@ -198,4 +208,6 @@ export const {
   // DASHBOARD
   useGetTVDTdeparmentQuery,
   useGetHighestKmQuery,
+  useGetLongestDurationQuery,
+  useGetTotalTripDriverQuery,
 } = metroApi;

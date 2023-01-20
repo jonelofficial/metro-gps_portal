@@ -2,14 +2,13 @@ import { Box, Stack } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useGetTVDTdeparmentQuery } from "../../api/metroApi";
-
+import { useGetTotalTripDriverQuery } from "../../api/metroApi";
 import SearchField from "../table/SearchField";
 import TableUI from "../table/TableUI";
 import TableWrapper from "../table/TableWrapper";
-import TableTVDTdepartment from "./table/TableTVDTdepartment";
+import TableTotalTripDriver from "./table/TableTotalTripDriver";
 
-const TVDTdeparment = () => {
+const TotalTripDriver = () => {
   const [state, setState] = useState({
     page: 1,
     limit: 10,
@@ -17,7 +16,7 @@ const TVDTdeparment = () => {
     searchBy: null,
   });
 
-  const { data, isLoading, isError, isFetching } = useGetTVDTdeparmentQuery({
+  const { data, isLoading, isError, isFetching } = useGetTotalTripDriverQuery({
     page: state.page,
     limit: state.limit,
     search: state.search,
@@ -27,13 +26,13 @@ const TVDTdeparment = () => {
   const {
     control,
     register,
-    formState: { errors },
     handleSubmit,
+    formState: { errors },
   } = useForm({
     defaultValues: {
       search_by: {
-        id: "department",
-        label: "Department",
+        id: "employee_id",
+        label: "Employee Id",
       },
     },
   });
@@ -66,9 +65,10 @@ const TVDTdeparment = () => {
                 errors={errors}
                 register={register}
                 options={[
-                  { id: "department", label: "Department" },
-                  { id: "vehiclesCount", label: "Vehicles" },
-                  { id: "driversCount", label: "Drivers" },
+                  { id: "employee_id", label: "Employee Id" },
+                  { id: "driver", label: "Driver" },
+                  { id: "trip", label: "Trip" },
+                  { id: "department.label", label: "Department" },
                 ]}
               />
             </>
@@ -80,22 +80,23 @@ const TVDTdeparment = () => {
           isFetching={isFetching}
           data={data}
           columns={[
+            { id: "employee_id", label: "Employee Id" },
+            { id: "driver", label: "Driver" },
+            { id: "trip", label: "Trip" },
             { id: "department", label: "Department" },
-            { id: "vehiclesCount", label: "Vehicles" },
-            { id: "driversCount", label: "Drivers" },
           ]}
           rows={data.data.map((item, i) => (
-            <TableTVDTdepartment
+            <TableTotalTripDriver
               key={i}
               item={item}
               columns={[
+                { id: "employee_id", label: "Employee Id" },
+                { id: "driver", label: "Driver" },
+                { id: "trip", label: "Trip" },
                 { id: "department", label: "Department" },
-                { id: "vehiclesCount", label: "Vehicles" },
-                { id: "driversCount", label: "Drivers" },
               ]}
             />
           ))}
-          //   rows={null}
           sx={{ maxHeight: "300px" }}
         />
       </TableWrapper>
@@ -103,4 +104,4 @@ const TVDTdeparment = () => {
   );
 };
 
-export default TVDTdeparment;
+export default TotalTripDriver;

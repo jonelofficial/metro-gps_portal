@@ -1,23 +1,22 @@
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
+import { Stack } from "@mui/system";
 import React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useGetTVDTdeparmentQuery } from "../../api/metroApi";
-
+import { useGetLongestDurationQuery } from "../../api/metroApi";
 import SearchField from "../table/SearchField";
 import TableUI from "../table/TableUI";
 import TableWrapper from "../table/TableWrapper";
-import TableTVDTdepartment from "./table/TableTVDTdepartment";
+import TableLongestDuration from "./table/TableLongestDuration";
 
-const TVDTdeparment = () => {
+const LongestTravelDuration = () => {
   const [state, setState] = useState({
     page: 1,
     limit: 10,
     search: "",
     searchBy: null,
   });
-
-  const { data, isLoading, isError, isFetching } = useGetTVDTdeparmentQuery({
+  const { data, isLoading, isError, isFetching } = useGetLongestDurationQuery({
     page: state.page,
     limit: state.limit,
     search: state.search,
@@ -27,13 +26,13 @@ const TVDTdeparment = () => {
   const {
     control,
     register,
-    formState: { errors },
     handleSubmit,
+    formState: { errors },
   } = useForm({
     defaultValues: {
       search_by: {
-        id: "department",
-        label: "Department",
+        id: "_id",
+        label: "Id",
       },
     },
   });
@@ -60,15 +59,15 @@ const TVDTdeparment = () => {
         <Stack direction="row" className="table__header">
           {data && (
             <>
+              {" "}
               <SearchField
                 onSubmit={handleSubmit(handleSearch)}
                 control={control}
                 errors={errors}
                 register={register}
                 options={[
-                  { id: "department", label: "Department" },
-                  { id: "vehiclesCount", label: "Vehicles" },
-                  { id: "driversCount", label: "Drivers" },
+                  { id: "_id", label: "Id" },
+                  { id: "plate_no", label: "Plate #" },
                 ]}
               />
             </>
@@ -80,22 +79,25 @@ const TVDTdeparment = () => {
           isFetching={isFetching}
           data={data}
           columns={[
-            { id: "department", label: "Department" },
-            { id: "vehiclesCount", label: "Vehicles" },
-            { id: "driversCount", label: "Drivers" },
+            { id: "_id", label: "Id" },
+            { id: "duration", label: "Duration" },
+            { id: "plate_no", label: "Plate #" },
+            { id: "departure", label: "Departure" },
+            { id: "arrival", label: "Arrival" },
           ]}
           rows={data.data.map((item, i) => (
-            <TableTVDTdepartment
+            <TableLongestDuration
               key={i}
               item={item}
               columns={[
-                { id: "department", label: "Department" },
-                { id: "vehiclesCount", label: "Vehicles" },
-                { id: "driversCount", label: "Drivers" },
+                { id: "_id", label: "Id" },
+                { id: "duration", label: "Duration" },
+                { id: "plate_no", label: "Plate #" },
+                { id: "departure", label: "Departure" },
+                { id: "arrival", label: "Arrival" },
               ]}
             />
           ))}
-          //   rows={null}
           sx={{ maxHeight: "300px" }}
         />
       </TableWrapper>
@@ -103,4 +105,4 @@ const TVDTdeparment = () => {
   );
 };
 
-export default TVDTdeparment;
+export default LongestTravelDuration;
