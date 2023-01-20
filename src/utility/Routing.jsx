@@ -10,7 +10,6 @@ import Dashboard from "../containers/Dashboard";
 import Login from "../containers/Login";
 import Map from "../containers/Map";
 import NotFound from "../containers/NotFound";
-import UserTrip from "../containers/UserTrip";
 import Users from "../containers/masterlist/Users";
 import Vehicles from "../containers/masterlist/Vehicles";
 import GasStations from "../containers/masterlist/GasStations";
@@ -89,10 +88,10 @@ const Routing = () => {
             ),
         },
 
-        {
-          path: "/user-trip",
-          element: <UserTrip />,
-        },
+        // {
+        //   path: "/consumption",
+        //   element: <Consumption />,
+        // },
         {
           path: "/map/:id",
           element: <Map />,

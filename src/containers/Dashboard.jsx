@@ -13,6 +13,8 @@ import TVDTdeparment from "../components/dashboard/TVDTdeparment";
 import HighestKMrun from "../components/dashboard/HighestKMrun";
 import LongestTravelDuration from "../components/dashboard/LongestTravelDuration";
 import TotalTripDriver from "../components/dashboard/TotalTripDriver";
+import Consumption from "../components/dashboard/Consumption";
+import EstimatedOdo from "../components/dashboard/EstimatedOdo";
 
 const Dashboard = () => {
   const [drivers, setDrivers] = useState();
@@ -98,6 +100,13 @@ const Dashboard = () => {
         </Box>
       </Box>
 
+      {/* <Box className="dashboard__consumption">
+        <Typography className="dashboard__consumption-label">
+          Consumption
+        </Typography>
+        {tripData && <Consumption tripData={tripData} />}
+      </Box> */}
+
       <Box className="dashboard__column">
         {/* 1st COLUMN */}
         <Box className="dashboard__column-wrapper">
@@ -118,12 +127,28 @@ const Dashboard = () => {
         {/* 3rd COLUMN */}
         <Box className="dashboard__column-wrapper">
           <Typography className="dashboard__column-label">
+            Done Odo vs Estimated Odo
+          </Typography>
+          {tripData && <EstimatedOdo tripData={tripData} />}
+        </Box>
+
+        {/* 4th COLUMN */}
+        <Box className="dashboard__column-wrapper">
+          <Typography className="dashboard__column-label">
+            Daily Trip Estimated Fuel Consumption
+          </Typography>
+          {tripData && <Consumption tripData={tripData} />}
+        </Box>
+
+        {/* 5th COLUMN */}
+        <Box className="dashboard__column-wrapper">
+          <Typography className="dashboard__column-label">
             Highest KM Run
           </Typography>
           <HighestKMrun />
         </Box>
 
-        {/* 4th COLUMN */}
+        {/* 6th COLUMN */}
         <Box className="dashboard__column-wrapper">
           <Typography className="dashboard__column-label">
             Total Vehicles , Drivers & Trips per Department
@@ -131,7 +156,7 @@ const Dashboard = () => {
           <TVDTdeparment userData={userData} vehicleData={vehicleData} />
         </Box>
 
-        {/* 5th COLUMN */}
+        {/* 7th COLUMN */}
         <Box className="dashboard__column-wrapper">
           <Typography className="dashboard__column-label">
             Longest Travel Duration
@@ -139,7 +164,7 @@ const Dashboard = () => {
           <LongestTravelDuration />
         </Box>
 
-        {/* 6th COLUMN */}
+        {/* 8th COLUMN */}
         <Box className="dashboard__column-wrapper">
           <Typography className="dashboard__column-label">
             Total Trip per Driver

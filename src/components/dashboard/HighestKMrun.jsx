@@ -66,9 +66,9 @@ const HighestKMrun = () => {
                 register={register}
                 options={[
                   { id: "_id", label: "Id" },
-                  { id: "driver", label: "Driver" },
                   { id: "km", label: "KM" },
                   { id: "plate_no", label: "Plate #" },
+                  { id: "driver", label: "Driver" },
                   { id: "locations", label: "Locations" },
                 ]}
               />
@@ -82,9 +82,9 @@ const HighestKMrun = () => {
           data={data}
           columns={[
             { id: "_id", label: "Id" },
-            { id: "driver", label: "Driver" },
             { id: "km", label: "KM" },
             { id: "plate_no", label: "Plate #" },
+            { id: "driver", label: "Driver" },
             { id: "locations", label: "Locations" },
           ]}
           rows={data.data.map((item, i) => (
@@ -93,9 +93,9 @@ const HighestKMrun = () => {
               item={item}
               columns={[
                 { id: "_id", label: "Id" },
-                { id: "driver", label: "Driver" },
                 { id: "km", label: "KM" },
                 { id: "plate_no", label: "Plate #" },
+                { id: "driver", label: "Driver" },
                 { id: "locations", label: "Locations" },
               ]}
             />

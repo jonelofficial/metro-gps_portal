@@ -7,7 +7,7 @@ import LocalGasStationOutlinedIcon from "@mui/icons-material/LocalGasStationOutl
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import LocalActivityOutlinedIcon from "@mui/icons-material/LocalActivityOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
-import { permission } from "./permission";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 // const filteredAcc = accordion.filter((accordionItem) => {
 //   return permission.find((dataItem) => {
@@ -55,10 +55,10 @@ export const navlink = [
   },
   // {
   //   id: 3,
-  //   name: "Trip",
-  //   icon: LocalActivityOutlinedIcon,
+  //   name: "Consumption",
+  //   icon: FilterAltIcon,
   //   accordion: [],
-  //   path: "/user-trip",
+  //   path: "/consumption",
   //   show: true,
   // },
   {
