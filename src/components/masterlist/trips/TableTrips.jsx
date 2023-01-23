@@ -76,7 +76,11 @@ const TableTrips = ({ item, columns }) => {
                       <Box sx={{ minWidth: "90px" }}>{`${loc.status
                         .toLowerCase()
                         .replace(/\b\w/g, (l) => l.toUpperCase())} =>`}</Box>
-                      <Box>{`${loc.address[0].city}`}</Box>
+                      <Box>
+                        {loc.address[0]?.city
+                          ? `${loc.address[0]?.city}`
+                          : "No Address Detected"}
+                      </Box>
                       {/* <Box>{`${loc.address[0].subregion} ${loc.address[0].city} ${loc.address[0].street}`}</Box> */}
                     </Stack>
                   );

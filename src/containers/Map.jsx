@@ -68,7 +68,7 @@ const Map = () => {
           <Box
             sx={{ textTransform: "capitalize" }}
           >{`${item.status}: ${queue}`}</Box>
-          {item.address[0].city} {item.address[0].subregion}
+          {item.address[0]?.city} {item.address[0]?.subregion}
           <br />
           Date: {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
         </>
@@ -209,7 +209,7 @@ const Map = () => {
                           textTransform: "capitalize",
                         }}
                       >{`${item.status} :`}</Box>
-                      {item.address[0].city} {item.address[0].subregion}
+                      {item.address[0]?.city} {item.address[0]?.subregion}
                       <br />
                       Date: {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
                       <br />

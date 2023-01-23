@@ -20,8 +20,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-const DailyTravelKilometerRun = ({ tripData }) => {
+const Odometer = ({ tripData }) => {
   const options = {
     responsive: true,
   };
@@ -35,6 +34,7 @@ const DailyTravelKilometerRun = ({ tripData }) => {
   const plateNumbers = {};
   filteredData?.forEach((item) => {
     const plateNumber = item.vehicle_id.plate_no;
+    // console.log(item.odometer_done);
     if (!plateNumbers[plateNumber]) {
       plateNumbers[plateNumber] = {
         plate_no: plateNumber,
@@ -46,23 +46,25 @@ const DailyTravelKilometerRun = ({ tripData }) => {
       plateNumbers[plateNumber].odo =
         plateNumbers[plateNumber].odo + item.odometer_done;
     }
+    console.log(item.odometer_done);
+    // console.log(plateNumbers[plateNumber].odo);
   });
 
-  const combinedData = Object.values(plateNumbers);
+  const obj = Object.values(plateNumbers);
 
   const data = {
-    labels: combinedData?.map((item) => item.plate_no),
+    labels: obj?.map((item) => item.plate_no),
     datasets: [
       {
-        label: "Odometer KM",
-        data: combinedData.map((item) => {
+        label: "Odometer",
+        data: obj.map((item) => {
           return parseFloat(item.odo).toFixed(1);
         }),
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
-        label: "Estimated Odo KM",
-        data: combinedData?.map((item) => {
+        label: "Estimated Odometer",
+        data: obj.map((item) => {
           const meter = getPathLength(item.points);
           const km = meter / 1000;
           return parseFloat(km.toFixed(1));
@@ -71,8 +73,7 @@ const DailyTravelKilometerRun = ({ tripData }) => {
       },
     ],
   };
-
   return <Bar options={options} data={data} />;
 };
 
-export default DailyTravelKilometerRun;
+export default Odometer;

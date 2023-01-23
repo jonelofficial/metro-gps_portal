@@ -37,7 +37,7 @@ const TableHighestKmrun = ({ item, columns }) => {
                         <Box>{`${loc.status
                           .toLowerCase()
                           .replace(/\b\w/g, (l) => l.toUpperCase())} =>`}</Box>
-                        <Box>{`${loc.address[0].city}`}</Box>
+                        <Box>{`${loc.address[0]?.city}`}</Box>
                       </Box>
                     );
                   })
