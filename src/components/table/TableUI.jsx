@@ -84,7 +84,13 @@ const TableUI = ({
       </TableContainer>
       {data?.pagination && (
         <TablePagination
-          rowsPerPageOptions={[10, 25, 50, 100, data?.pagination.totalItems]}
+          rowsPerPageOptions={[
+            10,
+            25,
+            50,
+            100,
+            { label: "All", value: data?.pagination.totalItems },
+          ]}
           component="div"
           count={data?.pagination.totalItems}
           rowsPerPage={state ? state.limit : limit}

@@ -20,41 +20,40 @@ ChartJS.register(
   Legend
 );
 
-const DailyTravelDuration = ({ tripData }) => {
+const DailyUserDuration = ({ tripData }) => {
   const options = {
     responsive: true,
   };
 
+  // COMPUTE ALL DURATION
   const filteredData = tripData?.data.filter((item) => {
     return (
       dayjs(item.createdAt).format("MMM-DD-YY") == dayjs().format("MMM-DD-YY")
     );
   });
 
-  let plateNos = {};
+  let users = {};
 
-  filteredData.forEach((trip, index) => {
-    let plateNo = trip.vehicle_id.plate_no;
-    if (!plateNos[plateNo]) {
-      plateNos[plateNo] = {
+  filteredData?.forEach((trip, index) => {
+    let user = trip.user_id.first_name;
+    if (!users[user]) {
+      users[user] = {
         totalDuration: 0,
-        // locations: [],
-        plate_no: plateNo,
+        user_id: user,
       };
     }
-
     const startDate = dayjs(trip.locations[0].date);
     const endDate = dayjs(trip.locations[trip.locations.length - 1].date);
     const duration = endDate.diff(startDate);
-    plateNos[plateNo].totalDuration += duration;
-    // plateNos[plateNo].locations.push(location);
+    users[user].totalDuration += duration;
   });
 
-  const obj = Object.values(plateNos);
+  const obj = Object.values(users);
   console.log(obj);
+  // ENDS
 
   const data = {
-    labels: obj?.map((item) => item.plate_no),
+    labels: obj?.map((item) => item.user_id),
     datasets: [
       {
         label: "Hours",
@@ -80,4 +79,4 @@ const DailyTravelDuration = ({ tripData }) => {
   return <Bar options={options} data={data} />;
 };
 
-export default DailyTravelDuration;
+export default DailyUserDuration;

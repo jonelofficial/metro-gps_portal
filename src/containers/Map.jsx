@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 
 import "../style/map/map.scss";
+import { Divider } from "@mui/material";
 
 const Map = () => {
   let { id } = useParams();
@@ -159,7 +160,7 @@ const Map = () => {
             <Box className="map__first-label">
               User:
               <Box className="map__first-data">
-                {`${data.data[0].user_id.employee_id} - ${data.data[0].user_id.first_name} ${data.data[0].user_id.last_name}`}
+                {`${data.data[0].user_id?.employee_id} - ${data.data[0].user_id?.first_name} ${data.data[0].user_id?.last_name}`}
               </Box>
             </Box>
 
@@ -214,6 +215,10 @@ const Map = () => {
                       Date: {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
                       <br />
                       <br />
+                      {data.data[0]?.locations.length - 1 !== i && (
+                        <Divider sx={{ width: "40px" }} />
+                      )}
+                      <br />
                     </Fragment>
                   );
                 })}
@@ -238,6 +243,11 @@ const Map = () => {
                           Liter: <Box>{item.liter}</Box>
                           Amount: <Box>{item.amount}</Box>
                         </Box>
+                        <br />
+                        <br />
+                        {data.data[0]?.diesels.length - 1 !== i && (
+                          <Divider sx={{ width: "40px" }} />
+                        )}
                         <br />
                       </Fragment>
                     );

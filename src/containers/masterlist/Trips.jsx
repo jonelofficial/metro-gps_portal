@@ -16,9 +16,7 @@ import TableTrips from "../../components/masterlist/trips/TableTrips";
 import useExcel from "../../hook/useExcel";
 import ExportModal from "../../components/features/ExportModal";
 import useDisclosure from "../../hook/useDisclosure";
-import * as XLSX from "xlsx";
 import dayjs from "dayjs";
-import { useRef } from "react";
 import { useState } from "react";
 import {
   setSearch,
@@ -30,6 +28,7 @@ import { searchSchema } from "../../utility/schema";
 const Trips = () => {
   // STATE
   const [date, setDate] = useState();
+  const [obj, setObj] = useState([]);
   // RTK
 
   const { page, limit, search, searchBy } = useSelector(
@@ -92,6 +91,35 @@ const Trips = () => {
 
   // FUNCTION
 
+  // COMPUTE ALL DURATION
+  useEffect(() => {
+    let users = {};
+
+    data?.data.forEach((trip, index) => {
+      let user = trip.user_id._id;
+      if (!users[user]) {
+        users[user] = {
+          totalDuration: 0,
+          user_id: user,
+          name: trip.user_id.first_name,
+          employee_id: trip.user_id.employee_id,
+        };
+      }
+      const startDate = dayjs(trip.locations[0].date);
+      const endDate = dayjs(trip.locations[trip.locations.length - 1].date);
+      const duration = endDate.diff(startDate);
+      users[user].totalDuration += duration;
+    });
+
+    setObj(Object.values(users));
+
+    return () => {
+      null;
+    };
+  }, [data?.data]);
+
+  // ENDS
+
   const handleSearch = (data) => {
     setDate(dayjs(data.date).format("YYYY-MM-DD"));
     dispatch(setSearch(data.search));
@@ -104,9 +132,9 @@ const Trips = () => {
     const newObj = await data.data.map((item) => {
       const destination = item.locations.map((loc, i) => {
         if (loc.status == "left") {
-          return `Left => ${loc.address[0].city} | `;
+          return `Left → ${loc.address[0].city} | `;
         } else if (loc.status == "arrived") {
-          return `Arrived => ${loc.address[0].city}`;
+          return `Arrived → ${loc.address[0].city}`;
         }
       });
 
@@ -118,10 +146,25 @@ const Trips = () => {
         return `${Object.values(com)[0]}`;
       });
 
+      const startDate = dayjs(item.locations[0].date);
+      const endDate = dayjs(item.locations[item.locations.length - 1].date);
+      const duration = endDate.diff(startDate);
+      const totalMinutes = Math.floor(duration / (1000 * 60));
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      const hour = `${hours.toFixed(0)}.${minutes == 0 ? "00" : minutes}`;
+
       return {
         Id: item._id,
         User: `${item.user_id.first_name} ${item.user_id.last_name}`,
         Vehicle: item.vehicle_id.plate_no,
+        Duration: `${hours == 0 ? `${minutes}` : `${hour}`} ${
+          hours >= 2 ? "hours." : hours == 0 ? "" : "hour."
+        } ${minutes > 1 ? "minutes" : minutes == 0 ? "" : "minute"}`,
+        Start: dayjs(item.locations[0].date).format("MMM-DD-YY hh:mm a"),
+        End: dayjs(item.locations[item.locations.length - 1].date).format(
+          "MMM-DD-YY hh:mm a"
+        ),
         Locations: destination.join("\n"),
         Diesels: gas.join("\n"),
         Odmeter: item.odometer,
@@ -132,7 +175,23 @@ const Trips = () => {
       };
     });
 
+    const dailyDuration = obj.map((item) => {
+      const totalMinutes = Math.floor(item.totalDuration / (1000 * 60));
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      const hour = `${hours.toFixed(0)}.${minutes == 0 ? "00" : minutes}`;
+      return {
+        "User Id": item.user_id,
+        "Employee Id": item.employee_id,
+        Name: item.name,
+        "Total Duration": `${hours == 0 ? `${minutes}` : `${hour}`} ${
+          hours >= 2 ? "hours." : hours == 0 ? "" : "hour."
+        } ${minutes > 1 ? "minutes" : minutes == 0 ? "" : "minute"}`,
+      };
+    });
+
     await excelExport(newObj, "METRO-USER-MASTERLIST");
+    await excelExport(dailyDuration, "METRO-USER-DURATION-MASTERLIST");
 
     onCloseExport();
   };

@@ -15,6 +15,7 @@ import LongestTravelDuration from "../components/dashboard/LongestTravelDuration
 import TotalTripDriver from "../components/dashboard/TotalTripDriver";
 import Consumption from "../components/dashboard/Consumption";
 import Odometer from "../components/dashboard/Odometer";
+import DailyUserDuration from "../components/dashboard/DailyUserDuration";
 
 const Dashboard = () => {
   const [drivers, setDrivers] = useState();
@@ -125,12 +126,12 @@ const Dashboard = () => {
         </Box>
 
         {/* 3rd COLUMN */}
-        {/* <Box className="dashboard__column-wrapper">
+        <Box className="dashboard__column-wrapper">
           <Typography className="dashboard__column-label">
-            Done Odo vs Estimated Odo
+            Daily Service User Travel Duration
           </Typography>
-          {tripData && <Odometer tripData={tripData} />}
-        </Box> */}
+          {tripData && <DailyUserDuration tripData={tripData} />}
+        </Box>
 
         {/* 4th COLUMN */}
         <Box className="dashboard__column-wrapper">

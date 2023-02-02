@@ -16,11 +16,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDeleteTripMutation } from "../../../api/metroApi";
 import useDisclosure from "../../../hook/useDisclosure";
 import useToast from "../../../hook/useToast";
+import { theme } from "../../../theme";
 import ImageViewer from "../../table/ImageViewer";
 import TableAction from "../../table/TableAction";
 import TripDrawer from "./TripDrawer";
 
 const TableTrips = ({ item, columns }) => {
+  // const [duration, setDuration] = useState(0);
   // REACT ROUTER DOM
   const navigate = useNavigate();
 
@@ -37,6 +39,24 @@ const TableTrips = ({ item, columns }) => {
   } = useDisclosure();
 
   const { toast } = useToast();
+
+  // COMPUTE DURATION
+
+  const startDate = dayjs(item.locations[0].date);
+  const endDate = dayjs(item.locations[item.locations.length - 1].date);
+  const duration = endDate.diff(startDate);
+  const totalMinutes = Math.floor(duration / (1000 * 60));
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  const hour = `${hours.toFixed(0)}.${minutes == 0 ? "00" : minutes}`;
+
+  const leftTime = 480 - totalMinutes;
+  const leftHours = Math.floor(leftTime / 60);
+  const leftMinutes = leftTime % 60;
+  const leftHour = `${leftHours.toFixed(0)}.${
+    leftMinutes == 0 ? "00" : leftMinutes
+  }`;
 
   //   FUNCTION
 
@@ -73,9 +93,19 @@ const TableTrips = ({ item, columns }) => {
                 value.map((loc, i) => {
                   return (
                     <Stack direction="row" gap={1} key={i}>
-                      <Box sx={{ minWidth: "90px" }}>{`${loc.status
+                      <Box
+                        sx={{
+                          minWidth: "90px",
+                          color:
+                            loc.status === "left"
+                              ? theme.palette.custom.danger
+                              : loc.status === "arrived"
+                              ? theme.palette.custom.success
+                              : theme.palette.customBlue.main,
+                        }}
+                      >{`${loc.status
                         .toLowerCase()
-                        .replace(/\b\w/g, (l) => l.toUpperCase())} =>`}</Box>
+                        .replace(/\b\w/g, (l) => l.toUpperCase())} →`}</Box>
                       <Box>
                         {loc.address[0]?.city
                           ? `${loc.address[0]?.city}`
@@ -137,6 +167,38 @@ const TableTrips = ({ item, columns }) => {
                 >
                   {value}
                 </Box>
+              ) : column.id === "duration" ? (
+                <Stack flexDirection="row">
+                  <Box>
+                    {hours == 0 ? `${minutes}` : `${hour}`}
+                    &nbsp;
+                  </Box>
+                  <Box>
+                    {hours >= 2 ? "hours." : hours == 0 ? "" : "hour."}
+                    {minutes > 1 ? "minutes" : minutes == 0 ? "" : "minute"}
+                  </Box>
+                </Stack>
+              ) : column.id === "start" ? (
+                dayjs(item.locations[0].date).format("MMM-DD-YY hh:mm:ss a")
+              ) : column.id === "end" ? (
+                dayjs(item.locations[item.locations.length - 1].date).format(
+                  "MMM-DD-YY hh:mm:ss a"
+                )
+              ) : column.id === "left_time" ? (
+                <Stack flexDirection="row">
+                  <Box>
+                    {leftHours == 0 ? `${leftMinutes}` : `${leftHour}`}
+                    &nbsp;
+                  </Box>
+                  <Box>
+                    {leftHours >= 2 ? "hours." : leftHours == 0 ? "" : "hour."}
+                    {leftMinutes > 1
+                      ? "minutes"
+                      : leftMinutes == 0
+                      ? ""
+                      : "minute"}
+                  </Box>
+                </Stack>
               ) : (
                 value
               )}

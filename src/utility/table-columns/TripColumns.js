@@ -2,6 +2,11 @@ export const columns = [
   { id: "_id", label: "Id" },
   { id: "user_id", label: "User Id", minWidth: 80 },
   { id: "vehicle_id", label: "Plate #", minWidth: 80 },
+  { id: "duration", label: "Duration", minWidth: 80 },
+  { id: "start", label: "Start", minWidth: 80 },
+  { id: "end", label: "End", minWidth: 80 },
+  // { id: "left_time", label: "Left Time", minWidth: 80 },
+
   { id: "locations", label: "Locations" },
   { id: "diesels", label: "Diesels" },
   { id: "odometer", label: "Odometer" },
@@ -11,7 +16,6 @@ export const columns = [
     label: "Odometer Image",
     minWidth: 130,
   },
-
   { id: "companion", label: "Companion" },
   { id: "others", label: "Others" },
   { id: "trip_date", label: "Trip Date", minWidth: 80 },

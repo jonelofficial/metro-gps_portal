@@ -5,7 +5,7 @@ export const featuresSlice = createSlice({
   initialState: {
     table: {
       page: 1,
-      limit: 10,
+      limit: 25,
       search: "",
       searchBy: null,
     },
