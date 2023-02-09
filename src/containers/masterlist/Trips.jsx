@@ -129,25 +129,25 @@ const Trips = () => {
   const handleToggleExport = async () => {
     onToggleExport();
 
-    const newObj = await data.data.map((item) => {
-      const destination = item.locations.map((loc, i) => {
+    const newObj = await data?.data?.map((item) => {
+      const destination = item?.locations?.map((loc, i) => {
         if (loc.status == "left") {
-          return `Left → ${loc.address[0].city} | `;
+          return `Left → ${loc?.address[0]?.city} | `;
         } else if (loc.status == "arrived") {
-          return `Arrived → ${loc.address[0].city}`;
+          return `Arrived → ${loc?.address[0]?.city}`;
         }
       });
 
-      const gas = item.diesels.map((diesel, i) => {
-        return `Gas Station: ${diesel.gas_station_name} Odometer: ${diesel.odometer} Liter: ${diesel.liter} Amount: ${diesel.amount}`;
+      const gas = item?.diesels?.map((diesel, i) => {
+        return `Gas Station: ${diesel?.gas_station_name} Odometer: ${diesel?.odometer} Liter: ${diesel?.liter} Amount: ${diesel?.amount}`;
       });
 
-      const companion = item.companion.map((com, i) => {
+      const companion = item?.companion?.map((com, i) => {
         return `${Object.values(com)[0]}`;
       });
 
-      const startDate = dayjs(item.locations[0].date);
-      const endDate = dayjs(item.locations[item.locations.length - 1].date);
+      const startDate = dayjs(item.locations[0]?.date);
+      const endDate = dayjs(item.locations[item.locations.length - 1]?.date);
       const duration = endDate.diff(startDate);
       const totalMinutes = Math.floor(duration / (1000 * 60));
       const hours = Math.floor(totalMinutes / 60);
@@ -156,22 +156,22 @@ const Trips = () => {
 
       return {
         Id: item._id,
-        User: `${item.user_id.first_name} ${item.user_id.last_name}`,
-        Vehicle: item.vehicle_id.plate_no,
+        User: `${item?.user_id?.first_name} ${item?.user_id?.last_name}`,
+        Vehicle: item?.vehicle_id?.plate_no,
         Duration: `${hours == 0 ? `${minutes}` : `${hour}`} ${
           hours >= 2 ? "hours." : hours == 0 ? "" : "hour."
         } ${minutes > 1 ? "minutes" : minutes == 0 ? "" : "minute"}`,
-        Start: dayjs(item.locations[0].date).format("MMM-DD-YY hh:mm a"),
-        End: dayjs(item.locations[item.locations.length - 1].date).format(
+        Start: dayjs(item.locations[0]?.date).format("MMM-DD-YY hh:mm a"),
+        End: dayjs(item.locations[item.locations.length - 1]?.date).format(
           "MMM-DD-YY hh:mm a"
         ),
         Locations: destination.join("\n"),
         Diesels: gas.join("\n"),
-        Odmeter: item.odometer,
-        "Odmeter Done": item.odometer_done,
+        Odmeter: item?.odometer,
+        "Odmeter Done": item?.odometer_done,
         Companion: companion.join("\n"),
-        Others: item.others !== "null" ? item.others : "",
-        "Trip Date": dayjs(item.trip_date).format("MMM-DD-YYYY"),
+        Others: item?.others !== "null" ? item?.others : "",
+        "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY"),
       };
     });
 

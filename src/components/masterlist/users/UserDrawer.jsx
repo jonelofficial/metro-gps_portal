@@ -85,6 +85,7 @@ const UserDrawer = ({ onClose, item }) => {
   // FUNCTION
   const onSubmit = async (data) => {
     try {
+      console.log(data);
       let res;
       const form = new FormData();
       (item?.profile != null || image?.imageFile.file != null) &&
@@ -109,6 +110,7 @@ const UserDrawer = ({ onClose, item }) => {
 
       if (item) {
         res = await updateUser({ id: item._id, obj: form });
+        console.log(res);
         !res?.error &&
           toast({
             severity: "success",

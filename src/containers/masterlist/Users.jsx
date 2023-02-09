@@ -106,10 +106,10 @@ const Users = () => {
   const handleToggleExport = async () => {
     onToggleExport();
 
-    const newObj = await data.data.map((item) => {
+    const newObj = await data?.data?.map((item) => {
       const permisionObj =
         item?.permission !== undefined &&
-        item.permission.map((el) => {
+        item?.permission?.map((el) => {
           return `${el.label} `;
         });
 

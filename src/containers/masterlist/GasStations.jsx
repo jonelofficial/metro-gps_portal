@@ -105,9 +105,9 @@ const GasStations = () => {
   const handleToggleExport = async () => {
     onToggleExport();
 
-    const newObj = await data.data.map((item) => {
+    const newObj = await data?.data?.map((item) => {
       return {
-        Label: item.label,
+        Label: item?.label,
       };
     });
 

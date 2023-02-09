@@ -97,16 +97,16 @@ const Vehicles = () => {
   const handleToggleExport = async () => {
     onToggleExport();
 
-    const newObj = await data.data.map((item) => {
+    const newObj = await data?.data?.map((item) => {
       return {
-        "Plate Number": item.plate_no,
-        "Vehicle Type": item.vehicle_type,
-        Name: item.name,
-        Brand: item.brand,
-        "Fuel Type": item.fuel_type,
-        "KM Per Liter": item.km_per_liter,
-        Department: item.department?.label,
-        Created: dayjs(item.createdAt).format("MMM-DD-YYYY"),
+        "Plate Number": item?.plate_no,
+        "Vehicle Type": item?.vehicle_type,
+        Name: item?.name,
+        Brand: item?.brand,
+        "Fuel Type": item?.fuel_type,
+        "KM Per Liter": item?.km_per_liter,
+        Department: item?.department?.label,
+        Created: dayjs(item?.createdAt).format("MMM-DD-YYYY"),
       };
     });
 
