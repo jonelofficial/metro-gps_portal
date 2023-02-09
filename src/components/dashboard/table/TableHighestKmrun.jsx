@@ -1,5 +1,6 @@
 import { Box, styled, TableCell, TableRow } from "@mui/material";
 import React from "react";
+import { theme } from "../../../theme";
 
 const TableHighestKmrun = ({ item, columns }) => {
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -34,9 +35,18 @@ const TableHighestKmrun = ({ item, columns }) => {
                           gridTemplateColumns: "90px 1fr",
                         }}
                       >
-                        <Box>{`${loc.status
+                        <Box
+                          sx={{
+                            color:
+                              loc.status === "left"
+                                ? theme.palette.custom.danger
+                                : loc.status === "arrived"
+                                ? theme.palette.custom.success
+                                : theme.palette.customBlue.main,
+                          }}
+                        >{`${loc.status
                           .toLowerCase()
-                          .replace(/\b\w/g, (l) => l.toUpperCase())} =>`}</Box>
+                          .replace(/\b\w/g, (l) => l.toUpperCase())} →`}</Box>
                         <Box>{`${loc.address[0]?.city}`}</Box>
                       </Box>
                     );
