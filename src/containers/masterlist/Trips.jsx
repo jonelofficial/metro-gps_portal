@@ -190,8 +190,8 @@ const Trips = () => {
       };
     });
 
-    await excelExport(newObj, "METRO-USER-MASTERLIST");
-    await excelExport(dailyDuration, "METRO-USER-DURATION-MASTERLIST");
+    await excelExport(newObj, "METRO-TRIP-REPORT");
+    await excelExport(dailyDuration, "METRO-USER-DURATION-REPORT");
 
     onCloseExport();
   };
