@@ -26,6 +26,7 @@ const Header = () => {
   const isOpen = useSelector((state) => state.sidebar.value);
   const user = useSelector((state) => state.token.userDetails);
   const profile = `${process.env.BASEURL}/${user?.profile}`;
+
   const dispatch = useDispatch();
 
   const handleClick = (e) => {
@@ -56,6 +57,7 @@ const Header = () => {
             aria-expanded={open ? "true" : undefined}
           >
             <Avatar
+              alt="Profile"
               src={user?.profile && profile}
               sx={{ width: 45, height: 45 }}
             />

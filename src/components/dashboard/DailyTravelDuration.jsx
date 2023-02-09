@@ -51,7 +51,6 @@ const DailyTravelDuration = ({ tripData }) => {
   });
 
   const obj = Object.values(plateNos);
-  console.log(obj);
 
   const data = {
     labels: obj?.map((item) => item.plate_no),

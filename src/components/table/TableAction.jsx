@@ -36,11 +36,11 @@ const TableAction = ({ drawer, handleOpen, drawerDisclosure, hideDelete }) => {
         open={open}
         onClose={handleClose}
       >
-        {!hideDelete && (
+        {/* {!hideDelete && (
           <MenuItem onClick={handleOpen} sx={{ color: "custom.danger" }}>
             Delete
           </MenuItem>
-        )}
+        )} */}
         <MenuItem
           onClick={() => {
             onToggle();

@@ -22,7 +22,7 @@ const Sidebar = () => {
       return {
         ...item,
         accordion: item.accordion.filter((accordionItem) =>
-          user.permission.some((p) => p.label === accordionItem.name)
+          user.permission?.some((p) => p.label === accordionItem.name)
         ),
       };
     }

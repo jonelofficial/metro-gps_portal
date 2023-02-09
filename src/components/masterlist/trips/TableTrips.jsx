@@ -211,6 +211,7 @@ const TableTrips = ({ item, columns }) => {
         <Box className="table__modal">
           {isOpen ? (
             <ImageViewer
+              alt="Odometer Image"
               onClose={onClose}
               img={`${process.env.BASEURL}/${item.odometer_image_path}`}
             />

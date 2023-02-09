@@ -250,7 +250,6 @@ const Trips = () => {
             return <TableTrips key={i} item={item} columns={columns} />;
           })}
         />
-
         {/* EXPORT LOADING */}
         <ExportModal isOpenExport={isOpenExport} />
       </TableWrapper>

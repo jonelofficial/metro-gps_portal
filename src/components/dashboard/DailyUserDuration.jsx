@@ -49,7 +49,6 @@ const DailyUserDuration = ({ tripData }) => {
   });
 
   const obj = Object.values(users);
-  console.log(obj);
   // ENDS
 
   const data = {
