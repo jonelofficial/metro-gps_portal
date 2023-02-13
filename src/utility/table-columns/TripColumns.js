@@ -1,6 +1,7 @@
 export const columns = [
   { id: "_id", label: "Id" },
   { id: "user_id", label: "User Id", minWidth: 80 },
+  { id: "department", label: "Department", minWidth: 80 },
   { id: "vehicle_id", label: "Plate #", minWidth: 80 },
   { id: "duration", label: "Duration", minWidth: 80 },
   { id: "start", label: "Start", minWidth: 80 },
@@ -34,6 +35,7 @@ export const columns = [
 export const dropData = [
   { id: "_id", label: "Id" },
   { id: "user_id.employee_id", label: "User Id" },
+  { id: "user_id.department.label", label: "Department", minWidth: 80 },
   { id: "vehicle_id.plate_no", label: "Plate #" },
   { id: "locations.address.city", label: "Locations" },
   { id: "diesels.gas_station_name", label: "Diesels Gas Station" },

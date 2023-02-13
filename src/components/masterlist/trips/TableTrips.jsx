@@ -199,6 +199,8 @@ const TableTrips = ({ item, columns }) => {
                       : "minute"}
                   </Box>
                 </Stack>
+              ) : column.id === "department" ? (
+                <Box>{item?.user_id?.department?.label}</Box>
               ) : (
                 value
               )}
