@@ -5,15 +5,8 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import DirectionsCarOutlinedIcon from "@mui/icons-material/DirectionsCarOutlined";
 import LocalGasStationOutlinedIcon from "@mui/icons-material/LocalGasStationOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import LocalActivityOutlinedIcon from "@mui/icons-material/LocalActivityOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-
-// const filteredAcc = accordion.filter((accordionItem) => {
-//   return permission.find((dataItem) => {
-//     return dataItem.id === accordionItem.name.toLowerCase().replace(/ /g, "_");
-//   });
-// });
+import SummarizeIcon from "@mui/icons-material/Summarize";
 
 export const navlink = [
   {
@@ -44,23 +37,24 @@ export const navlink = [
         icon: LocalGasStationOutlinedIcon,
         path: "/masterlist/gas-stations",
       },
+    ],
+    path: "/masterlist",
+    show: false,
+  },
+  {
+    id: 2,
+    name: "Reports",
+    icon: SummarizeIcon,
+    accordion: [
       {
         name: "Trips SG",
         icon: MapOutlinedIcon,
-        path: "/masterlist/trips",
+        path: "/reports/trips",
       },
     ],
     path: "/masterlist",
     show: false,
   },
-  // {
-  //   id: 3,
-  //   name: "Consumption",
-  //   icon: FilterAltIcon,
-  //   accordion: [],
-  //   path: "/consumption",
-  //   show: true,
-  // },
   {
     id: 4,
     name: "Map",

@@ -29,6 +29,8 @@ const Sidebar = () => {
     return item;
   });
 
+  console.log(filteredNavlink);
+
   return (
     <Box
       component="aside"

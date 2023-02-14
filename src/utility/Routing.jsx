@@ -77,8 +77,19 @@ const Routing = () => {
               <NotFound />
             ),
         },
+        // {
+        //   path: "/masterlist/trips",
+        //   element:
+        //     validUser &&
+        //     user.permission?.some((el) => el?.id === "trips_sg") ? (
+        //       <Trips />
+        //     ) : (
+        //       <NotFound />
+        //     ),
+        // },
+
         {
-          path: "/masterlist/trips",
+          path: "/reports/trips",
           element:
             validUser &&
             user.permission?.some((el) => el?.id === "trips_sg") ? (
@@ -88,10 +99,6 @@ const Routing = () => {
             ),
         },
 
-        // {
-        //   path: "/consumption",
-        //   element: <Consumption />,
-        // },
         {
           path: "/map/:id",
           element: <Map />,
