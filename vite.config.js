@@ -15,5 +15,7 @@ export default defineConfig({
     "process.env.PORT": `${process.env.PORT}`,
     "process.env.BASEURL": `"${process.env.BASEURL}"`,
     "process.env.GOOGLEAPIKEY": `"${process.env.GOOGLEAPIKEY}"`,
+    "process.env.SEDAR_KEY": `"${process.env.SEDAR_KEY}"`,
+    "process.env.SEDAR_API": `"${process.env.SEDAR_API}"`,
   },
 });

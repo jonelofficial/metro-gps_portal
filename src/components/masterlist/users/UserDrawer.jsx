@@ -8,23 +8,26 @@ import {
 } from "../../../api/metroApi";
 import { useEffect } from "react";
 import FormPicker from "../../form/FormPicker";
-import AutoFormPicker from "../../form/AutoFormPicker";
 import DateFormPicker from "../../form/DateFormPicker";
 import ImageFormPicker from "../../form/ImageFormPicker";
 import { Controller, useForm } from "react-hook-form";
 import DrawerWrapper from "../../drawer/DrawerWrapper";
 import useToast from "../../../hook/useToast";
-import { Autocomplete, Checkbox, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Checkbox,
+  createFilterOptions,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { permission } from "../../../utility/permission";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
-import { locations } from "../../../utility/user/locations";
-import { divisions } from "../../../utility/user/divisions";
-import { divisionCategory } from "../../../utility/user/divisionCategory";
-import { company } from "../../../utility/user/company";
-import { subUnit } from "../../../utility/user/subUnit";
-import { department } from "../../../utility/user/department";
+import {
+  useGetEmployeeQuery,
+  useGetEmployeesQuery,
+} from "../../../api/sedarApi";
 
 const UserDrawer = ({ onClose, item }) => {
   //
@@ -33,9 +36,22 @@ const UserDrawer = ({ onClose, item }) => {
   // STATE
   const [image, setImage] = useState();
 
+  let singleEmployee, singleEmployeeLoading;
+
+  if (item?.employee_id) {
+    const prerix = item.employee_id.split("-")[0];
+    const id_number = item.employee_id.split("-")[1];
+    ({ data: singleEmployee, isLoading: singleEmployeeLoading } =
+      useGetEmployeeQuery({
+        prefix: prerix,
+        id_number: id_number,
+      }));
+  }
+
   // RTK QUERY
   const [createUser, { isLoading }] = useCreateUserMutation();
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
+  const { data = [], isLoading: employeeLoading } = useGetEmployeesQuery();
 
   // HOOKS
   const { toast } = useToast();
@@ -52,12 +68,7 @@ const UserDrawer = ({ onClose, item }) => {
     resolver: yupResolver(item ? userUpdateSchema : userSchema),
     mode: "onSubmit",
     defaultValues: {
-      department: null,
-      sub_unit: null,
-      location: null,
-      division: null,
-      division_category: null,
-      company: null,
+      employee_id: null,
       trip_template: "",
       role: "",
       status: "",
@@ -66,77 +77,91 @@ const UserDrawer = ({ onClose, item }) => {
   });
 
   useEffect(() => {
-    setFormValue("department", item?.department);
-    setFormValue("sub_unit", item?.sub_unit);
-    setFormValue("location", item?.location);
-    setFormValue("division", item?.division);
-    setFormValue("division_category", item?.division_category);
-    setFormValue("company", item?.company);
-    setFormValue("trip_template", item?.trip_template);
-    setFormValue("role", item?.role);
-    setFormValue("status", item?.status);
-    setFormValue("license_exp", item?.license_exp);
+    if (item?.employee_id && singleEmployee) {
+      setFormValue("employee_id", {
+        general_info: {
+          full_id_number: singleEmployee[0]?.general_info?.full_id_number,
+        },
+      });
+      setFormValue("first_name", singleEmployee[0]?.general_info?.first_name);
+      setFormValue("last_name", singleEmployee[0]?.general_info?.last_name);
+      setFormValue("department", singleEmployee[0]?.unit_info?.department_name);
+      setFormValue("sub_unit", singleEmployee[0]?.unit_info?.subunit_name);
+      setFormValue("location", singleEmployee[0]?.unit_info?.location_name);
+      setFormValue("division", singleEmployee[0]?.unit_info?.division_name);
+      setFormValue(
+        "division_category",
+        singleEmployee[0]?.unit_info?.category_name
+      );
+      setFormValue("company", singleEmployee[0]?.unit_info?.company_name);
+      setFormValue("trip_template", item?.trip_template);
+      setFormValue("role", item?.role);
+      setFormValue("status", item?.status);
+      setFormValue("license_exp", item?.license_exp);
+      setFormValue("permission", item?.permission);
+    }
 
     return () => {
       null;
     };
-  }, [item]);
+  }, [singleEmployee]);
 
   // FUNCTION
   const onSubmit = async (data) => {
-    try {
-      console.log(data);
-      let res;
-      const form = new FormData();
-      (item?.profile != null || image?.imageFile.file != null) &&
-        form.append("image", image?.imageFile.file);
-      data?.permission &&
-        form.append("permission", JSON.stringify(data.permission));
-      form.append("employee_id", data.employee_id);
-      form.append("first_name", data.first_name);
-      form.append("last_name", data.last_name);
-      form.append("username", data.username);
-      form.append("password", data.password.length > 0 ? data.password : null);
-      form.append("trip_template", data.trip_template);
-      form.append("role", data.role);
-      form.append("status", data.status);
-      form.append("license_exp", data.license_exp);
-      form.append("department", JSON.stringify(data.department));
-      form.append("sub_unit", JSON.stringify(data.sub_unit));
-      form.append("location", JSON.stringify(data.location));
-      form.append("division", JSON.stringify(data.division));
-      form.append("division_category", JSON.stringify(data.division_category));
-      form.append("company", JSON.stringify(data.company));
-
-      if (item) {
-        res = await updateUser({ id: item._id, obj: form });
-        console.log(res);
-        !res?.error &&
-          toast({
-            severity: "success",
-            message: `Success updating user ${data.first_name}`,
-          });
-      } else {
-        res = await createUser(form);
-        !res?.error &&
-          toast({
-            severity: "success",
-            message: `Success creating user ${data.first_name}`,
-          });
-      }
-
-      if (res?.error) {
-        toast({
-          severity: "error",
-          message: res.error.data.error,
-        });
-      } else {
-        onClose();
-      }
-    } catch (e) {
-      console.log("ERROR CREATE USER: ", e);
-    }
+    console.log(data);
+    // try {
+    //   let res;
+    //   const form = new FormData();
+    //   (item?.profile != null || image?.imageFile.file != null) &&
+    //     form.append("image", image?.imageFile.file);
+    //   data?.permission &&
+    //     form.append("permission", JSON.stringify(data.permission));
+    //   form.append("employee_id", data.employee_id);
+    //   form.append("first_name", data.first_name);
+    //   form.append("last_name", data.last_name);
+    //   form.append("username", data.username);
+    //   form.append("password", data.password.length > 0 ? data.password : null);
+    //   form.append("trip_template", data.trip_template);
+    //   form.append("role", data.role);
+    //   form.append("status", data.status);
+    //   form.append("license_exp", data.license_exp);
+    //   form.append("department", JSON.stringify(data.department));
+    //   form.append("sub_unit", JSON.stringify(data.sub_unit));
+    //   form.append("location", JSON.stringify(data.location));
+    //   form.append("division", JSON.stringify(data.division));
+    //   form.append("division_category", JSON.stringify(data.division_category));
+    //   form.append("company", JSON.stringify(data.company));
+    //   if (item) {
+    //     res = await updateUser({ id: item._id, obj: form });
+    //     !res?.error &&
+    //       toast({
+    //         severity: "success",
+    //         message: `Success updating user ${data.first_name}`,
+    //       });
+    //   } else {
+    //     res = await createUser(form);
+    //     !res?.error &&
+    //       toast({
+    //         severity: "success",
+    //         message: `Success creating user ${data.first_name}`,
+    //       });
+    //   }
+    //   if (res?.error) {
+    //     toast({
+    //       severity: "error",
+    //       message: res.error.data.error,
+    //     });
+    //   } else {
+    //     onClose();
+    //   }
+    // } catch (e) {
+    //   console.log("ERROR CREATE USER: ", e);
+    // }
   };
+  const filterOptions = createFilterOptions({
+    limit: 50,
+    matchFrom: "any",
+  });
 
   return (
     <DrawerWrapper
@@ -148,31 +173,81 @@ const UserDrawer = ({ onClose, item }) => {
     >
       <ImageFormPicker item={item} image={image} setImage={setImage} />
 
-      <InputField
-        {...register("employee_id")}
-        id="employee_id"
-        label="Employee Id"
-        autoComplete="off"
-        errors={errors}
-        sx={{ width: "100%" }}
-        InputProps={{
-          inputProps: {
-            style: {
-              textTransform: "uppercase",
-            },
-          },
+      <Controller
+        control={control}
+        name="employee_id"
+        render={({ field: { onChange, value } }) => {
+          return (
+            <>
+              <Autocomplete
+                required
+                className="filter"
+                size="small"
+                loading={employeeLoading}
+                options={data}
+                value={value}
+                getOptionLabel={(option) => option.general_info?.full_id_number}
+                isOptionEqualToValue={(option, value) =>
+                  option.general_info?.full_id_number ===
+                  value.general_info?.full_id_number
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="Employee ID" />
+                )}
+                onChange={(e, value) => {
+                  onChange(value);
+
+                  setFormValue("first_name", value?.general_info?.first_name);
+                  setFormValue("last_name", value?.general_info?.last_name);
+                  setFormValue("department", value?.unit_info?.department_name);
+
+                  setFormValue("sub_unit", value?.unit_info?.subunit_name);
+                  setFormValue("location", value?.unit_info?.location_name);
+                  setFormValue("division", value?.unit_info?.division_name);
+                  setFormValue(
+                    "division_category",
+                    value?.unit_info?.category_name
+                  );
+                  setFormValue("company", value?.unit_info?.company_name);
+                }}
+                filterOptions={filterOptions}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& > fieldset": {
+                      borderColor: errors["employee_id"] && "error.main",
+                    },
+                  },
+                }}
+              />
+              {errors["employee_id"] && (
+                <Typography
+                  variant="p"
+                  sx={{
+                    fontFamily: "Roboto",
+                    fontSize: 12,
+                    marginBottom: 1,
+                    marginLeft: 1,
+                    color: "custom.danger",
+                  }}
+                >
+                  {errors["employee_id"].message}
+                </Typography>
+              )}
+            </>
+          );
         }}
-        defaultValue={item && item.employee_id}
       />
+
       <InputField
         {...register("first_name")}
         id="first_name"
         label="First Name"
         autoComplete="off"
         errors={errors}
-        sx={{ width: "100%" }}
-        defaultValue={item && item.first_name}
+        defaultValue={item ? item.first_name : "Auto Fill"}
+        disabled
       />
+
       <InputField
         {...register("last_name")}
         id="last_name"
@@ -180,8 +255,76 @@ const UserDrawer = ({ onClose, item }) => {
         autoComplete="off"
         errors={errors}
         sx={{ width: "100%" }}
-        defaultValue={item && item.last_name}
+        defaultValue={item ? item.last_name : "Auto Fill"}
+        disabled
       />
+
+      <InputField
+        {...register("department")}
+        id="department"
+        label="Department"
+        autoComplete="off"
+        errors={errors}
+        sx={{ width: "100%" }}
+        defaultValue={item ? item.department : "Auto Fill"}
+        disabled
+      />
+
+      <InputField
+        {...register("sub_unit")}
+        id="sub_unit"
+        label="Sub Unit"
+        autoComplete="off"
+        errors={errors}
+        sx={{ width: "100%" }}
+        defaultValue={item ? item.sub_unit : "Auto Fill"}
+        disabled
+      />
+
+      <InputField
+        {...register("location")}
+        id="location"
+        label="Location"
+        autoComplete="off"
+        errors={errors}
+        sx={{ width: "100%" }}
+        defaultValue={item ? item.location : "Auto Fill"}
+        disabled
+      />
+
+      <InputField
+        {...register("division")}
+        id="division"
+        label="Division"
+        autoComplete="off"
+        errors={errors}
+        sx={{ width: "100%" }}
+        defaultValue={item ? item.divisions : "Auto Fill"}
+        disabled
+      />
+
+      <InputField
+        {...register("division_category")}
+        id="division_category"
+        label="Division Category"
+        autoComplete="off"
+        errors={errors}
+        sx={{ width: "100%" }}
+        defaultValue={item ? item.division_category : "Auto Fill"}
+        disabled
+      />
+
+      <InputField
+        {...register("company")}
+        id="company"
+        label="Company"
+        autoComplete="off"
+        errors={errors}
+        sx={{ width: "100%" }}
+        defaultValue={item ? item.company : "Auto Fill"}
+        disabled
+      />
+
       <InputField
         {...register("username")}
         id="username"
@@ -199,57 +342,6 @@ const UserDrawer = ({ onClose, item }) => {
         errors={errors}
         type="password"
         sx={{ width: "100%" }}
-      />
-
-      <AutoFormPicker
-        control={control}
-        options={department}
-        name="department"
-        label="Department"
-        errors={errors}
-      />
-
-      <AutoFormPicker
-        control={control}
-        options={subUnit}
-        name="sub_unit"
-        label="Sub Unit"
-        errors={errors}
-      />
-
-      <AutoFormPicker
-        control={control}
-        options={locations}
-        name="location"
-        label="Location"
-        errors={errors}
-      />
-
-      <AutoFormPicker
-        control={control}
-        options={divisions}
-        name="division"
-        label="Division"
-        errors={errors}
-        showId={false}
-      />
-
-      <AutoFormPicker
-        control={control}
-        options={divisionCategory}
-        name="division_category"
-        label="Division Category"
-        errors={errors}
-        showId={false}
-      />
-
-      <AutoFormPicker
-        control={control}
-        options={company}
-        name="company"
-        label="Company"
-        errors={errors}
-        showId={false}
       />
 
       <DateFormPicker
