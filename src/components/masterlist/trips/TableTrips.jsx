@@ -134,9 +134,10 @@ const TableTrips = ({ item, columns }) => {
                 })
               ) : column.id === "companion" ? (
                 value.map((el, i) => {
+                  console.log(el);
                   return (
                     <Stack direction="row" gap={1} key={i}>
-                      <Box>{el?.firstName}</Box>
+                      <Box>{el?.firstName || el?.first_name}</Box>
                     </Stack>
                   );
                 })
