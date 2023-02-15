@@ -200,7 +200,10 @@ const TableTrips = ({ item, columns }) => {
                   </Box>
                 </Stack>
               ) : column.id === "department" ? (
-                <Box>{item?.user_id?.department?.label}</Box>
+                <Box>
+                  {item?.user_id?.department?.label ||
+                    item?.user_id?.department}
+                </Box>
               ) : (
                 value
               )}

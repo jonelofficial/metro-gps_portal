@@ -108,55 +108,54 @@ const UserDrawer = ({ onClose, item }) => {
 
   // FUNCTION
   const onSubmit = async (data) => {
-    console.log(data);
-    // try {
-    //   let res;
-    //   const form = new FormData();
-    //   (item?.profile != null || image?.imageFile.file != null) &&
-    //     form.append("image", image?.imageFile.file);
-    //   data?.permission &&
-    //     form.append("permission", JSON.stringify(data.permission));
-    //   form.append("employee_id", data.employee_id);
-    //   form.append("first_name", data.first_name);
-    //   form.append("last_name", data.last_name);
-    //   form.append("username", data.username);
-    //   form.append("password", data.password.length > 0 ? data.password : null);
-    //   form.append("trip_template", data.trip_template);
-    //   form.append("role", data.role);
-    //   form.append("status", data.status);
-    //   form.append("license_exp", data.license_exp);
-    //   form.append("department", JSON.stringify(data.department));
-    //   form.append("sub_unit", JSON.stringify(data.sub_unit));
-    //   form.append("location", JSON.stringify(data.location));
-    //   form.append("division", JSON.stringify(data.division));
-    //   form.append("division_category", JSON.stringify(data.division_category));
-    //   form.append("company", JSON.stringify(data.company));
-    //   if (item) {
-    //     res = await updateUser({ id: item._id, obj: form });
-    //     !res?.error &&
-    //       toast({
-    //         severity: "success",
-    //         message: `Success updating user ${data.first_name}`,
-    //       });
-    //   } else {
-    //     res = await createUser(form);
-    //     !res?.error &&
-    //       toast({
-    //         severity: "success",
-    //         message: `Success creating user ${data.first_name}`,
-    //       });
-    //   }
-    //   if (res?.error) {
-    //     toast({
-    //       severity: "error",
-    //       message: res.error.data.error,
-    //     });
-    //   } else {
-    //     onClose();
-    //   }
-    // } catch (e) {
-    //   console.log("ERROR CREATE USER: ", e);
-    // }
+    try {
+      let res;
+      const form = new FormData();
+      (item?.profile != null || image?.imageFile.file != null) &&
+        form.append("image", image?.imageFile.file);
+      data?.permission &&
+        form.append("permission", JSON.stringify(data.permission));
+      form.append("employee_id", data.employee_id);
+      form.append("first_name", data.first_name);
+      form.append("last_name", data.last_name);
+      form.append("username", data.username);
+      form.append("password", data.password.length > 0 ? data.password : null);
+      form.append("trip_template", data.trip_template);
+      form.append("role", data.role);
+      form.append("status", data.status);
+      form.append("license_exp", data.license_exp);
+      form.append("department", data.department);
+      form.append("sub_unit", data.sub_unit);
+      form.append("location", data.location);
+      form.append("division", data.division);
+      form.append("division_category", data.division_category);
+      form.append("company", data.company);
+      if (item) {
+        res = await updateUser({ id: item._id, obj: form });
+        !res?.error &&
+          toast({
+            severity: "success",
+            message: `Success updating user ${data.first_name}`,
+          });
+      } else {
+        res = await createUser(form);
+        !res?.error &&
+          toast({
+            severity: "success",
+            message: `Success creating user ${data.first_name}`,
+          });
+      }
+      if (res?.error) {
+        toast({
+          severity: "error",
+          message: res.error.data.error,
+        });
+      } else {
+        onClose();
+      }
+    } catch (e) {
+      console.log("ERROR CREATE USER: ", e);
+    }
   };
   const filterOptions = createFilterOptions({
     limit: 50,
@@ -299,7 +298,7 @@ const UserDrawer = ({ onClose, item }) => {
         autoComplete="off"
         errors={errors}
         sx={{ width: "100%" }}
-        defaultValue={item ? item.divisions : "Auto Fill"}
+        defaultValue={item ? item.division : "Auto Fill"}
         disabled
       />
 
@@ -355,11 +354,16 @@ const UserDrawer = ({ onClose, item }) => {
         control={control}
         name="trip_template"
         label="Trip Template"
+        // items={[
+        //   { value: "office", label: "Office" },
+        //   { value: "hauling", label: "Hauling" },
+        //   { value: "delivery", label: "Delivery" },
+        //   { value: "feeds_delivery", label: "Feeds Delivery" },
+        // ]}
         items={[
-          { value: "office", label: "Office" },
-          { value: "hauling", label: "Hauling" },
-          { value: "delivery", label: "Delivery" },
-          { value: "feeds_delivery", label: "Feeds Delivery" },
+          { value: "Service Vehicle", label: "Service Vehicle" },
+          { value: "Depot", label: "Depot" },
+          { value: "Live", label: "Live" },
         ]}
         errors={errors}
       />

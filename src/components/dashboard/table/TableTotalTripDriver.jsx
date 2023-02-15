@@ -24,7 +24,11 @@ const TableTotalTripDriver = ({ item, columns }) => {
               size="small"
               style={{ whiteSpace: "nowrap" }}
             >
-              {column.id === "department" ? <Box>{value.label}</Box> : value}
+              {column.id === "department" ? (
+                <Box>{value?.label || value}</Box>
+              ) : (
+                value
+              )}
             </TableCell>
           );
         })}

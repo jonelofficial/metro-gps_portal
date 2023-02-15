@@ -97,17 +97,17 @@ const TableUsers = ({ item, columns }) => {
                   dayjs(value).format("MMM-DD-YYYY")
                 )
               ) : column.id === "department" ? (
-                value?.label
+                value?.label || value
               ) : column.id === "sub_unit" ? (
-                value?.label
+                value?.label || value
               ) : column.id === "location" ? (
-                value?.label
+                value?.label || value
               ) : column.id === "division" ? (
-                value?.label
+                value?.label || value
               ) : column.id === "division_category" ? (
-                value?.label
+                value?.label || value
               ) : column.id === "company" ? (
-                value?.label
+                value?.label || value
               ) : column.id === "permission" ? (
                 value?.map((item, i) => {
                   return <Box key={i}>{item.label}</Box>;
