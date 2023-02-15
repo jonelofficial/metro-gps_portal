@@ -82,19 +82,17 @@ const Routing = () => {
         // REPORTS
         {
           path: "/reports",
-          children: [
-            {
-              path: "/reports/trips",
-              element:
-                validUser &&
-                user.permission?.some((el) => el?.id === "trips_sg") ? (
-                  <Trips />
-                ) : (
-                  <NotFound />
-                ),
-            },
-          ],
           element: null,
+        },
+        {
+          path: "/reports/trips",
+          element:
+            validUser &&
+            user.permission?.some((el) => el?.id === "trips_sg") ? (
+              <Trips />
+            ) : (
+              <NotFound />
+            ),
         },
 
         // MAP
