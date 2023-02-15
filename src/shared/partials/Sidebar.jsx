@@ -65,13 +65,15 @@ const Sidebar = () => {
         </Box>
         <Box className="sidebar__menu">
           <List component="nav" className="nav">
-            {filteredNavlink.map((item, index) =>
-              item.accordion.length > 0 ? (
+            {filteredNavlink.map((item, index) => {
+              return item.accordion.length > 0 && item.length !== 0 ? (
                 <AccordionSidebar key={index} item={item} />
               ) : (
-                <SingleSidebar key={index} item={item} />
-              )
-            )}
+                item?.show && item.length !== 0 && (
+                  <SingleSidebar key={index} item={item} />
+                )
+              );
+            })}
           </List>
         </Box>
       </Box>

@@ -52,7 +52,7 @@ export const navlink = [
         path: "/reports/trips",
       },
     ],
-    path: "/masterlist",
+    path: "/reports",
     show: false,
   },
   {

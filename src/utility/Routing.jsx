@@ -48,6 +48,7 @@ const Routing = () => {
           element: validUser ? <Dashboard /> : null,
         },
 
+        // MASTERLIST
         {
           path: "/masterlist/users",
           element:
@@ -77,28 +78,26 @@ const Routing = () => {
               <NotFound />
             ),
         },
-        // {
-        //   path: "/masterlist/trips",
-        //   element:
-        //     validUser &&
-        //     user.permission?.some((el) => el?.id === "trips_sg") ? (
-        //       <Trips />
-        //     ) : (
-        //       <NotFound />
-        //     ),
-        // },
 
+        // REPORTS
         {
-          path: "/reports/trips",
-          element:
-            validUser &&
-            user.permission?.some((el) => el?.id === "trips_sg") ? (
-              <Trips />
-            ) : (
-              <NotFound />
-            ),
+          path: "/reports",
+          children: [
+            {
+              path: "/reports/trips",
+              element:
+                validUser &&
+                user.permission?.some((el) => el?.id === "trips_sg") ? (
+                  <Trips />
+                ) : (
+                  <NotFound />
+                ),
+            },
+          ],
+          element: null,
         },
 
+        // MAP
         {
           path: "/map/:id",
           element: <Map />,
