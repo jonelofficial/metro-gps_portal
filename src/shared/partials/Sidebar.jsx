@@ -26,6 +26,14 @@ const Sidebar = () => {
         ),
       };
     }
+    if (item.name === "Reports") {
+      return {
+        ...item,
+        accordion: item.accordion.filter((accordionItem) =>
+          user.permission?.some((p) => p.label === accordionItem.name)
+        ),
+      };
+    }
     return item;
   });
 
