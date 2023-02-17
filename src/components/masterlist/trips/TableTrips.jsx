@@ -166,7 +166,7 @@ const TableTrips = ({ item, columns }) => {
                   sx={{ cursor: "pointer" }}
                   onClick={() => navigate(`/map/${item._id}`)}
                 >
-                  {value}
+                  {`${value.slice(20)}`}
                 </Box>
               ) : column.id === "duration" ? (
                 <Stack flexDirection="row">

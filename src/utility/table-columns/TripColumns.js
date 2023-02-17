@@ -1,4 +1,5 @@
 export const columns = [
+  { id: "trip_date", label: "Trip Date", minWidth: 80 },
   { id: "_id", label: "Id" },
   { id: "user_id", label: "User Id", minWidth: 80 },
   { id: "department", label: "Department", minWidth: 80 },
@@ -19,7 +20,6 @@ export const columns = [
   },
   { id: "companion", label: "Companion" },
   { id: "others", label: "Others" },
-  { id: "trip_date", label: "Trip Date", minWidth: 80 },
 
   {
     id: "createdAt",
