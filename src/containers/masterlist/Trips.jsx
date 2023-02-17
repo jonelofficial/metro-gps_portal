@@ -155,7 +155,8 @@ const Trips = () => {
       const hour = `${hours.toFixed(0)}.${minutes == 0 ? "00" : minutes}`;
 
       return {
-        Id: item._id,
+        "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY"),
+        Id: item._id.slice(20),
         User: `${item?.user_id?.first_name} ${item?.user_id?.last_name}`,
         Vehicle: item?.vehicle_id?.plate_no,
         Duration: `${hours == 0 ? `${minutes}` : `${hour}`} ${
@@ -171,7 +172,6 @@ const Trips = () => {
         "Odmeter Done": item?.odometer_done,
         Companion: companion.join("\n"),
         Others: item?.others !== "null" ? item?.others : "",
-        "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY"),
       };
     });
 
