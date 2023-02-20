@@ -277,7 +277,7 @@ const Map = () => {
                   {data.data[0]?.companion.map((item, i) => {
                     return (
                       <Fragment key={i}>
-                        {item.firstName}
+                        {item?.firstName || item?.first_name}
                         <br />
                       </Fragment>
                     );
