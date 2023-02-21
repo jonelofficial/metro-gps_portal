@@ -101,8 +101,12 @@ export const dropData = [
     id: "trip_template",
     label: "Trip Template",
   },
+  // {
+  //   id: "department.label",
+  //   label: "Deparment",
+  // },
   {
-    id: "department.label",
+    id: "department",
     label: "Deparment",
   },
   {

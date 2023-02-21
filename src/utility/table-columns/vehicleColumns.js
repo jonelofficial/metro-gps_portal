@@ -31,5 +31,5 @@ export const dropData = [
   { id: "fuel_type", label: "Fuel Type" },
   { id: "km_per_liter", label: "KMPL" },
   { id: "profile", label: "Profile" },
-  { id: "department", label: "Department" },
+  { id: "department.label", label: "Department" },
 ];

@@ -11,6 +11,7 @@ export const columns = [
 
   { id: "locations", label: "Locations" },
   { id: "diesels", label: "Diesels" },
+  { id: "estimated_odo", label: "Estimated Odometer", minWidth: 160 },
   { id: "odometer", label: "Odometer" },
   { id: "odometer_done", label: "Odometer Done", minWidth: 120 },
   {

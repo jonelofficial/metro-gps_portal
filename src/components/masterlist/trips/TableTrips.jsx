@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import dayjs from "dayjs";
+import { getPathLength } from "geolib";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDeleteTripMutation } from "../../../api/metroApi";
@@ -58,6 +59,11 @@ const TableTrips = ({ item, columns }) => {
     leftMinutes == 0 ? "00" : leftMinutes
   }`;
 
+  //COMPUTE ESTIMATED ODO
+  const km = item.points?.length > 0 && getPathLength(item.points) / 1000;
+  const odo = item?.odometer;
+  const estimatedOdo = odo + km;
+
   //   FUNCTION
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -70,6 +76,7 @@ const TableTrips = ({ item, columns }) => {
       border: 0,
     },
   }));
+
   return (
     <>
       <StyledTableRow hover role="checkbox" tabIndex={-1}>
@@ -204,6 +211,8 @@ const TableTrips = ({ item, columns }) => {
                   {item?.user_id?.department?.label ||
                     item?.user_id?.department}
                 </Box>
+              ) : column.id === "estimated_odo" ? (
+                <Box>{`${estimatedOdo} km`}</Box>
               ) : (
                 value
               )}

@@ -51,6 +51,8 @@ const TableHighestKmrun = ({ item, columns }) => {
                       </Box>
                     );
                   })
+                : column.id === "_id"
+                ? `${value.slice(20)}`
                 : value}
             </TableCell>
           );

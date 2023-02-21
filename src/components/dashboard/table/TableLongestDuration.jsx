@@ -36,6 +36,8 @@ const TableLongestDuration = ({ item, columns }) => {
                 ${minutes > 0 ? minutes + " minutes " : ""}`
                 : column.id === "departure" || column.id === "arrival"
                 ? dayjs(value).format("MMM-DD-YY hh:mm a")
+                : column.id === "_id"
+                ? `${value.slice(20)}`
                 : value}
             </TableCell>
           );
