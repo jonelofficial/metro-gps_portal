@@ -24,6 +24,7 @@ import {
 } from "../../redux-toolkit/counter/featuresCounter";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { searchSchema } from "../../utility/schema";
+import { getPathLength } from "geolib";
 
 const Trips = () => {
   // STATE
@@ -154,6 +155,10 @@ const Trips = () => {
       const minutes = totalMinutes % 60;
       const hour = `${hours.toFixed(0)}.${minutes == 0 ? "00" : minutes}`;
 
+      const km = item.points?.length > 0 && getPathLength(item.points) / 1000;
+      const odo = item?.odometer;
+      const estimatedOdo = odo + km;
+
       return {
         "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY"),
         Id: item._id.slice(20),
@@ -168,6 +173,7 @@ const Trips = () => {
         ),
         Locations: destination.join("\n"),
         Diesels: gas.join("\n"),
+        "Estimated Odometer": estimatedOdo,
         Odmeter: item?.odometer,
         "Odmeter Done": item?.odometer_done,
         Companion: companion.join("\n"),
