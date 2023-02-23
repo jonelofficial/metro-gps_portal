@@ -135,7 +135,9 @@ const Trips = () => {
         if (loc.status == "left") {
           return `Left → ${loc?.address[0]?.city} | `;
         } else if (loc.status == "arrived") {
-          return `Arrived → ${loc?.address[0]?.city}`;
+          return `Arrived → ${loc?.address[0]?.city} | `;
+        } else {
+          return `Interval → ${loc?.address[0]?.city} | `;
         }
       });
 
