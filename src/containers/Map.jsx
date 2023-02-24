@@ -210,7 +210,11 @@ const Map = () => {
                           textTransform: "capitalize",
                         }}
                       >{`${item.status} :`}</Box>
-                      {item.address[0]?.city} {item.address[0]?.subregion}
+                      {`${item?.address[0]?.name || "(No Name)"}  ${
+                        item?.address[0]?.district || "(No District)"
+                      } ${item?.address[0]?.city || "(No City)"}  ${
+                        item?.address[0]?.subregion || "(No Subregion)"
+                      }`}
                       <br />
                       Date: {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
                       <br />

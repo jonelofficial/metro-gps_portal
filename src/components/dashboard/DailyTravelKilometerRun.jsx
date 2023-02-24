@@ -35,16 +35,16 @@ const DailyTravelKilometerRun = ({ tripData }) => {
   const plateNumbers = {};
   filteredData?.forEach((item) => {
     const plateNumber = item.vehicle_id.plate_no;
+    const odo = item?.odometer_done - item?.odometer;
     if (!plateNumbers[plateNumber]) {
       plateNumbers[plateNumber] = {
         plate_no: plateNumber,
         points: [...item.points],
-        odo: item.odometer_done,
+        odo: odo,
       };
     } else {
       plateNumbers[plateNumber].points.push(...item.points);
-      plateNumbers[plateNumber].odo =
-        plateNumbers[plateNumber].odo + item.odometer_done;
+      plateNumbers[plateNumber].odo = plateNumbers[plateNumber].odo + odo;
     }
   });
 

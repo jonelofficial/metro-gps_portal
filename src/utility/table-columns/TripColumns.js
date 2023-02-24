@@ -1,4 +1,5 @@
 export const columns = [
+  { id: "icon", label: "", minWidth: 60 },
   { id: "trip_date", label: "Trip Date", minWidth: 80 },
   { id: "_id", label: "Id" },
   { id: "user_id", label: "User Id", minWidth: 80 },
@@ -7,9 +8,7 @@ export const columns = [
   { id: "duration", label: "Duration", minWidth: 80 },
   { id: "start", label: "Start", minWidth: 80 },
   { id: "end", label: "End", minWidth: 80 },
-  // { id: "left_time", label: "Left Time", minWidth: 80 },
-
-  { id: "locations", label: "Locations" },
+  // { id: "locations", label: "Locations" },
   { id: "diesels", label: "Diesels" },
   { id: "estimated_odo", label: "Estimated Odometer", minWidth: 160 },
   { id: "odometer", label: "Odometer" },
@@ -21,7 +20,6 @@ export const columns = [
   },
   { id: "companion", label: "Companion" },
   { id: "others", label: "Others" },
-
   {
     id: "createdAt",
     label: "Created",

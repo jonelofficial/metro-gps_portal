@@ -133,11 +133,23 @@ const Trips = () => {
     const newObj = await data?.data?.map((item) => {
       const destination = item?.locations?.map((loc, i) => {
         if (loc.status == "left") {
-          return `Left → ${loc?.address[0]?.city} | `;
+          return `Left → ${loc?.address[0]?.name || "(No Name)"}  ${
+            loc?.address[0]?.district || "(No District)"
+          } ${loc?.address[0]?.city || "(No City)"}  ${
+            loc?.address[0]?.subregion || "(No Subregion)"
+          } | `;
         } else if (loc.status == "arrived") {
-          return `Arrived → ${loc?.address[0]?.city} | `;
+          return `Arrived → ${loc?.address[0]?.name || "(No Name)"}  ${
+            loc?.address[0]?.district || "(No District)"
+          } ${loc?.address[0]?.city || "(No City)"}  ${
+            loc?.address[0]?.subregion || "(No Subregion)"
+          } | `;
         } else {
-          return `Interval → ${loc?.address[0]?.city} | `;
+          return `Interval → ${loc?.address[0]?.name || "(No Name)"}  ${
+            loc?.address[0]?.district || "(No District)"
+          } ${loc?.address[0]?.city || "(No City)"}  ${
+            loc?.address[0]?.subregion || "(No Subregion)"
+          } | `;
         }
       });
 
@@ -166,9 +178,9 @@ const Trips = () => {
         Id: item._id.slice(20),
         User: `${item?.user_id?.first_name} ${item?.user_id?.last_name}`,
         Vehicle: item?.vehicle_id?.plate_no,
-        Duration: `${hours == 0 ? `${minutes}` : `${hour}`} ${
-          hours >= 2 ? "hours." : hours == 0 ? "" : "hour."
-        } ${minutes > 1 ? "minutes" : minutes == 0 ? "" : "minute"}`,
+        Duration: `${hours > 0 ? hours + " hours" : ""} ${
+          minutes > 0 ? minutes + " minutes" : ""
+        }${hours <= 0 && minutes <= 0 ? "0" : ""}`,
         Start: dayjs(item.locations[0]?.date).format("MMM-DD-YY hh:mm a"),
         End: dayjs(item.locations[item.locations.length - 1]?.date).format(
           "MMM-DD-YY hh:mm a"

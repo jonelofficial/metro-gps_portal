@@ -69,7 +69,6 @@ const HighestKMrun = () => {
                   { id: "km", label: "KM" },
                   { id: "plate_no", label: "Plate #" },
                   { id: "driver", label: "Driver" },
-                  { id: "locations", label: "Locations" },
                 ]}
               />
             </>
@@ -81,22 +80,22 @@ const HighestKMrun = () => {
           isFetching={isFetching}
           data={data}
           columns={[
+            { id: "icon", label: "", minWidth: 30 },
             { id: "_id", label: "Id" },
             { id: "km", label: "KM" },
             { id: "plate_no", label: "Plate #" },
             { id: "driver", label: "Driver" },
-            { id: "locations", label: "Locations" },
           ]}
           rows={data.data.map((item, i) => (
             <TableHighestKmrun
               key={i}
               item={item}
               columns={[
+                { id: "icon", label: "", minWidth: 30 },
                 { id: "_id", label: "Id" },
                 { id: "km", label: "KM" },
                 { id: "plate_no", label: "Plate #" },
                 { id: "driver", label: "Driver" },
-                { id: "locations", label: "Locations" },
               ]}
             />
           ))}

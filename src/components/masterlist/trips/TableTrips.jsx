@@ -2,9 +2,14 @@ import { LoadingButton } from "@mui/lab";
 import {
   Box,
   Button,
+  Collapse,
+  IconButton,
   Modal,
   styled,
+  Table,
+  TableBody,
   TableCell,
+  TableHead,
   TableRow,
   Tooltip,
   Typography,
@@ -12,7 +17,7 @@ import {
 import { Stack } from "@mui/system";
 import dayjs from "dayjs";
 import { getPathLength } from "geolib";
-import React from "react";
+import React, { Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDeleteTripMutation } from "../../../api/metroApi";
 import useDisclosure from "../../../hook/useDisclosure";
@@ -21,12 +26,15 @@ import { theme } from "../../../theme";
 import ImageViewer from "../../table/ImageViewer";
 import TableAction from "../../table/TableAction";
 import TripDrawer from "./TripDrawer";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { useState } from "react";
 
 const TableTrips = ({ item, columns }) => {
   // const [duration, setDuration] = useState(0);
   // REACT ROUTER DOM
   const navigate = useNavigate();
-
+  const [open, setOpen] = useState(false);
   // RTK QUERY
   const [deleteTrip, { isLoading }] = useDeleteTripMutation();
 
@@ -77,11 +85,36 @@ const TableTrips = ({ item, columns }) => {
     },
   }));
 
+  // console.log(item);
+
   return (
     <>
-      <StyledTableRow hover role="checkbox" tabIndex={-1}>
+      <StyledTableRow
+        hover
+        role="checkbox"
+        tabIndex={-1}
+        sx={{ "& > *": { borderBottom: "unset" } }}
+      >
         {columns.map((column) => {
           const value = item[column.id];
+          if (column.id === "icon") {
+            return (
+              <TableCell
+                key={column.id}
+                size="small"
+                style={{ whiteSpace: "nowrap" }}
+                align="center"
+              >
+                <IconButton
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => setOpen(!open)}
+                >
+                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+              </TableCell>
+            );
+          }
           return (
             <TableCell
               key={column.id}
@@ -176,14 +209,17 @@ const TableTrips = ({ item, columns }) => {
                 </Box>
               ) : column.id === "duration" ? (
                 <Stack flexDirection="row">
-                  <Box>
+                  {`${hours > 0 ? hours + " hours " : ""} 
+                ${minutes > 0 ? minutes + " minutes " : ""}`}
+                  {hours <= 0 && minutes <= 0 && "0"}
+                  {/* <Box>
                     {hours == 0 ? `${minutes}` : `${hour}`}
                     &nbsp;
                   </Box>
                   <Box>
                     {hours >= 2 ? "hours." : hours == 0 ? "" : "hour."}
                     {minutes > 1 ? "minutes" : minutes == 0 ? "" : "minute"}
-                  </Box>
+                  </Box> */}
                 </Stack>
               ) : column.id === "start" ? (
                 dayjs(item.locations[0].date).format("MMM-DD-YY hh:mm:ss a")
@@ -220,6 +256,61 @@ const TableTrips = ({ item, columns }) => {
           );
         })}
       </StyledTableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Locations
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Status</TableCell>
+                    <TableCell>Address</TableCell>
+                    <TableCell>Date</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {item?.locations?.map((loc, i) => {
+                    return (
+                      <TableRow key={i}>
+                        <TableCell
+                          sx={{
+                            minWidth: "90px",
+                            color:
+                              loc.status === "left"
+                                ? theme.palette.custom.danger
+                                : loc.status === "arrived"
+                                ? theme.palette.custom.success
+                                : theme.palette.customBlue.main,
+                          }}
+                        >
+                          {`${loc.status
+                            .toLowerCase()
+                            .replace(/\b\w/g, (l) => l.toUpperCase())}`}
+                        </TableCell>
+
+                        <TableCell>
+                          {`${loc?.address[0]?.name || "(No Name)"}  ${
+                            loc?.address[0]?.district || "(No District)"
+                          } ${loc?.address[0]?.city || "(No City)"}  ${
+                            loc?.address[0]?.subregion || "(No Subregion)"
+                          }`}
+                        </TableCell>
+
+                        <TableCell>
+                          {dayjs(loc?.date).format("MMM-DD-YY h:mm a")}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
 
       <Modal open={isOpen || isOpenAction} onClose={onClose}>
         <Box className="table__modal">
