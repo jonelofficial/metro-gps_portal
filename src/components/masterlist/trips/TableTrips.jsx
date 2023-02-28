@@ -50,9 +50,12 @@ const TableTrips = ({ item, columns }) => {
   const { toast } = useToast();
 
   // COMPUTE DURATION
+  const newLocations = item.locations.filter(
+    (location) => location.status == "left" || location.status == "arrived"
+  );
 
-  const startDate = dayjs(item.locations[0].date);
-  const endDate = dayjs(item.locations[item.locations.length - 1].date);
+  const startDate = dayjs(newLocations[0].date);
+  const endDate = dayjs(newLocations[newLocations.length - 1].date);
   const duration = endDate.diff(startDate);
   const totalMinutes = Math.floor(duration / (1000 * 60));
   const hours = Math.floor(totalMinutes / 60);
@@ -222,11 +225,9 @@ const TableTrips = ({ item, columns }) => {
                   </Box> */}
                 </Stack>
               ) : column.id === "start" ? (
-                dayjs(item.locations[0].date).format("MMM-DD-YY hh:mm:ss a")
+                dayjs(startDate).format("MMM-DD-YY hh:mm:ss a")
               ) : column.id === "end" ? (
-                dayjs(item.locations[item.locations.length - 1].date).format(
-                  "MMM-DD-YY hh:mm:ss a"
-                )
+                dayjs(endDate).format("MMM-DD-YY hh:mm:ss a")
               ) : column.id === "left_time" ? (
                 <Stack flexDirection="row">
                   <Box>

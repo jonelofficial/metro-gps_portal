@@ -97,17 +97,22 @@ const Trips = () => {
     let users = {};
 
     data?.data.forEach((trip, index) => {
+      const newLocations = trip?.locations.filter(
+        (location) => location.status == "left" || location.status == "arrived"
+      );
       let user = trip.user_id._id;
       if (!users[user]) {
         users[user] = {
           totalDuration: 0,
           user_id: user,
+          department: trip?.user_id?.department,
           name: trip.user_id.first_name,
           employee_id: trip.user_id.employee_id,
         };
       }
-      const startDate = dayjs(trip.locations[0].date);
-      const endDate = dayjs(trip.locations[trip.locations.length - 1].date);
+
+      const startDate = dayjs(newLocations[0].date);
+      const endDate = dayjs(newLocations[newLocations.length - 1].date);
       const duration = endDate.diff(startDate);
       users[user].totalDuration += duration;
     });
@@ -131,6 +136,10 @@ const Trips = () => {
     onToggleExport();
 
     const newObj = await data?.data?.map((item) => {
+      const newLocations = item?.locations?.filter(
+        (location) => location.status == "left" || location.status == "arrived"
+      );
+
       const destination = item?.locations?.map((loc, i) => {
         if (loc.status == "left") {
           return `Left → ${loc?.address[0]?.name || "(No Name)"}  ${
@@ -161,8 +170,8 @@ const Trips = () => {
         return `${Object.values(com)[0]}`;
       });
 
-      const startDate = dayjs(item.locations[0]?.date);
-      const endDate = dayjs(item.locations[item.locations.length - 1]?.date);
+      const startDate = dayjs(newLocations[0].date);
+      const endDate = dayjs(newLocations[newLocations.length - 1].date);
       const duration = endDate.diff(startDate);
       const totalMinutes = Math.floor(duration / (1000 * 60));
       const hours = Math.floor(totalMinutes / 60);
@@ -181,10 +190,8 @@ const Trips = () => {
         Duration: `${hours > 0 ? hours + " hours" : ""} ${
           minutes > 0 ? minutes + " minutes" : ""
         }${hours <= 0 && minutes <= 0 ? "0" : ""}`,
-        Start: dayjs(item.locations[0]?.date).format("MMM-DD-YY hh:mm a"),
-        End: dayjs(item.locations[item.locations.length - 1]?.date).format(
-          "MMM-DD-YY hh:mm a"
-        ),
+        Start: dayjs(startDate).format("MMM-DD-YY hh:mm a"),
+        End: dayjs(endDate).format("MMM-DD-YY hh:mm a"),
         Locations: destination.join("\n"),
         Diesels: gas.join("\n"),
         "Estimated Odometer": estimatedOdo,
@@ -201,12 +208,12 @@ const Trips = () => {
       const minutes = totalMinutes % 60;
       const hour = `${hours.toFixed(0)}.${minutes == 0 ? "00" : minutes}`;
       return {
-        "User Id": item.user_id,
         "Employee Id": item.employee_id,
         Name: item.name,
-        "Total Duration": `${hours == 0 ? `${minutes}` : `${hour}`} ${
-          hours >= 2 ? "hours." : hours == 0 ? "" : "hour."
-        } ${minutes > 1 ? "minutes" : minutes == 0 ? "" : "minute"}`,
+        Department: item?.department,
+        "Total Duration": `${hours > 0 ? hours + " hours" : ""} ${
+          minutes > 0 ? minutes + " minutes" : ""
+        }${hours <= 0 && minutes <= 0 ? "0" : ""}`,
       };
     });
 
