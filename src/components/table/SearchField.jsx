@@ -5,6 +5,7 @@ import InputField from "../form/InputField";
 import SearchIcon from "@mui/icons-material/Search";
 import DateFormPicker from "../../components/form/DateFormPicker";
 import { useState } from "react";
+import { LoadingButton } from "@mui/lab";
 
 const SearchField = ({
   onSubmit,
@@ -13,6 +14,7 @@ const SearchField = ({
   register,
   options,
   watch,
+  isFetching,
 }) => {
   const [value, setValue] = useState();
   let values;
@@ -64,14 +66,15 @@ const SearchField = ({
         />
       )}
 
-      <Button
+      <LoadingButton
         className="filter-button"
         variant="contained"
         startIcon={<SearchIcon />}
         type="submit"
+        loading={isFetching && isFetching}
       >
         Search
-      </Button>
+      </LoadingButton>
     </form>
   );
 };

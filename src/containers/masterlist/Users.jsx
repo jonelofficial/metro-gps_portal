@@ -182,6 +182,7 @@ const Users = () => {
                 register={register}
                 options={dropData}
                 watch={watch}
+                isFetching={isFetching}
               />
 
               <ButtonField

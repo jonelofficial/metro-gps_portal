@@ -241,6 +241,7 @@ const Trips = () => {
             register={register}
             options={dropData}
             watch={watch}
+            isFetching={isFetching}
           />
 
           <Box>

@@ -155,6 +155,7 @@ const GasStations = () => {
                 errors={errors}
                 register={register}
                 options={dropData}
+                isFetching={isFetching}
               />
 
               <ButtonField
