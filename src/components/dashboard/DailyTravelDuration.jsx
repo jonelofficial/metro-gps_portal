@@ -62,7 +62,7 @@ const DailyTravelDuration = ({ tripData }) => {
           let hours = Math.floor(totalMinutes / 60);
           return hours;
         }),
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        backgroundColor: "rgba(255, 0, 0, 0.5)",
       },
       {
         label: "Minutes",
@@ -71,7 +71,7 @@ const DailyTravelDuration = ({ tripData }) => {
           let minutes = totalMinutes % 60;
           return minutes;
         }),
-        backgroundColor: "rgba(78, 14, 229, 0.5)",
+        backgroundColor: "rgba(255, 120, 36, 0.5)",
       },
     ],
   };

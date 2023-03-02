@@ -58,7 +58,7 @@ const DailyTravelKilometerRun = ({ tripData }) => {
         data: combinedData.map((item) => {
           return parseFloat(item.odo).toFixed(1);
         }),
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        backgroundColor: "rgba(255, 0, 0, 0.5)",
       },
       {
         label: "Estimated Odo KM",
@@ -67,7 +67,7 @@ const DailyTravelKilometerRun = ({ tripData }) => {
           const km = meter / 1000;
           return parseFloat(km.toFixed(1));
         }),
-        backgroundColor: "rgba(78, 14, 229, 0.5)",
+        backgroundColor: "rgba(255, 120, 36, 0.5)",
       },
     ],
   };

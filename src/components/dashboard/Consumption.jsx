@@ -57,7 +57,7 @@ const Consumption = ({ tripData }) => {
 
           return parseFloat(km / item.kmpl).toFixed(1);
         }),
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        backgroundColor: "rgba(255, 0, 0, 0.5)",
       },
     ],
   };
