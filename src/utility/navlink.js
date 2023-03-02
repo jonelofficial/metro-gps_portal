@@ -55,12 +55,12 @@ export const navlink = [
     path: "/reports",
     show: false,
   },
-  {
-    id: 4,
-    name: "Map",
-    icon: PlaceOutlinedIcon,
-    accordion: [],
-    path: "/map",
-    show: true,
-  },
+  // {
+  //   id: 4,
+  //   name: "Map",
+  //   icon: PlaceOutlinedIcon,
+  //   accordion: [],
+  //   path: "/map",
+  //   show: true,
+  // },
 ];

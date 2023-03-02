@@ -204,12 +204,13 @@ const TableTrips = ({ item, columns }) => {
               ) : column.id === "others" ? (
                 value !== "null" && value
               ) : column.id === "_id" ? (
-                <Box
-                  sx={{ cursor: "pointer" }}
+                <Button
+                  variant="outlined"
+                  sx={{ textTransform: "none" }}
                   onClick={() => navigate(`/map/${item._id}`)}
                 >
                   {`${value.slice(20)}`}
-                </Box>
+                </Button>
               ) : column.id === "duration" ? (
                 <Stack flexDirection="row">
                   {`${hours > 0 ? hours + " hours " : ""} 
