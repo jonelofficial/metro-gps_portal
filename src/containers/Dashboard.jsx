@@ -23,17 +23,22 @@ const Dashboard = () => {
     data: tripData,
     isLoading: tripIsLoading,
     isError: tripIsError,
-  } = useGetAllTripsQuery({ search: "", searchBy: "" });
+  } = useGetAllTripsQuery({ search: "", searchBy: "_id", limit: 0, page: 0 });
   const {
     data: userData,
     isLoading: userIsLoading,
     isError: userIsError,
-  } = useGetAllUsersQuery({ search: "", searchBy: "", limit: 0, page: 0 });
+  } = useGetAllUsersQuery({ search: "", searchBy: "_id", limit: 0, page: 0 });
   const {
     data: vehicleData,
     isLoading: vehicleIsLoading,
     isError: vehicleIsError,
-  } = useGetAllVehiclesQuery({ search: "", searchBy: "", limit: 0, page: 0 });
+  } = useGetAllVehiclesQuery({
+    search: "",
+    searchBy: "_id",
+    limit: 0,
+    page: 0,
+  });
   const {
     data: gasStationData,
     isLoading: gasStationIsLoading,
