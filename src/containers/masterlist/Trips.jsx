@@ -82,8 +82,8 @@ const Trips = () => {
 
   useEffect(() => {
     // refresh();
-    dispatch(setSearch(""));
-    dispatch(setSearchBy("_id"));
+    // dispatch(setSearch(""));
+    // dispatch(setSearchBy("_id"));
 
     return () => {
       refresh();
