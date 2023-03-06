@@ -184,9 +184,9 @@ const TableTrips = ({ item, columns }) => {
                   );
                 })
               ) : column.id === "points" ? null : column.id === "createdAt" ? (
-                value !== null && dayjs(value).format("MMM-DD-YYYY")
+                value !== null && dayjs(value).format("MMM-DD-YYYY  h:mm a")
               ) : column.id === "trip_date" ? (
-                value !== null && dayjs(value).format("MMM-DD-YYYY")
+                value !== null && dayjs(value).format("MMM-DD-YYYY h:mm a")
               ) : column.id === "odometer_image_path" && value != null ? (
                 <Button onClick={onToggle}>View</Button>
               ) : column.id === "action" ? (

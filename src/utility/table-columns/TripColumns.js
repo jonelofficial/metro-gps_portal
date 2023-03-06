@@ -1,6 +1,11 @@
 export const columns = [
   { id: "icon", label: "", minWidth: 60 },
   { id: "trip_date", label: "Trip Date", minWidth: 80 },
+  {
+    id: "createdAt",
+    label: "Sync Date",
+    minWidth: 90,
+  },
   { id: "_id", label: "Id" },
   { id: "user_id", label: "User Id", minWidth: 80 },
   { id: "department", label: "Department", minWidth: 80 },
@@ -20,11 +25,7 @@ export const columns = [
   },
   { id: "companion", label: "Companion" },
   { id: "others", label: "Others" },
-  {
-    id: "createdAt",
-    label: "Created",
-    minWidth: 90,
-  },
+
   {
     id: "action",
     label: "Action",
@@ -45,5 +46,5 @@ export const dropData = [
   { id: "companion.first_name", label: "Companion" },
   { id: "others", label: "Others" },
   { id: "trip_date", label: "Trip Date" },
-  { id: "createdAt", label: "Created At" },
+  { id: "createdAt", label: "Sync Date" },
 ];

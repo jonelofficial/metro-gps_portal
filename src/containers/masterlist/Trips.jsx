@@ -183,7 +183,8 @@ const Trips = () => {
       const estimatedOdo = odo + km;
 
       return {
-        "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY"),
+        "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY h:mm a"),
+        "Sync Date": dayjs(item?.createdAt).format("MMM-DD-YYYY  h:mm a"),
         Id: item._id.slice(20),
         User: `${item?.user_id?.first_name} ${item?.user_id?.last_name}`,
         Vehicle: item?.vehicle_id?.plate_no,
