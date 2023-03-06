@@ -87,10 +87,8 @@ const GasStations = () => {
   });
 
   useEffect(() => {
-    refresh();
-
     return () => {
-      null;
+      refresh();
     };
   }, []);
 

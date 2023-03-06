@@ -89,10 +89,8 @@ const Users = () => {
   });
 
   useEffect(() => {
-    refresh();
-
     return () => {
-      null;
+      refresh();
     };
   }, []);
 

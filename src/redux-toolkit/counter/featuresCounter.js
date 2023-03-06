@@ -7,7 +7,7 @@ export const featuresSlice = createSlice({
       page: 1,
       limit: 25,
       search: "",
-      searchBy: null,
+      searchBy: "_id",
     },
   },
   reducers: {

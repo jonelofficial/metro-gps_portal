@@ -12,9 +12,9 @@ const useRefresh = () => {
 
   const refresh = (reset) => {
     dispatch(setPage(1));
-    dispatch(setLimit(10));
+    dispatch(setLimit(25));
     dispatch(setSearch(""));
-    dispatch(setSearchBy(null));
+    dispatch(setSearchBy("_id"));
     reset && reset();
   };
   return { refresh };

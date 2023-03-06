@@ -86,7 +86,7 @@ const Trips = () => {
     dispatch(setSearchBy("_id"));
 
     return () => {
-      null;
+      refresh();
     };
   }, []);
 

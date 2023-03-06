@@ -37,7 +37,7 @@ export const dropData = [
   // { id: "user_id.department.label", label: "Department", minWidth: 80 },
   { id: "user_id.department", label: "Department", minWidth: 80 },
   { id: "vehicle_id.plate_no", label: "Plate #" },
-  { id: "locations.address.city", label: "Locations" },
+  // { id: "locations.address.city", label: "Locations" },
   { id: "diesels.gas_station_name", label: "Diesels Gas Station" },
   { id: "odometer", label: "Odometer" },
   { id: "odometer_done", label: "Odometer Done" },

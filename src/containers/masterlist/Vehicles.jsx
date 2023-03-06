@@ -81,10 +81,8 @@ const Vehicles = () => {
   });
 
   useEffect(() => {
-    refresh();
-
     return () => {
-      null;
+      refresh();
     };
   }, []);
 
