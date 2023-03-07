@@ -200,6 +200,7 @@ const Trips = () => {
         "Odmeter Done": item?.odometer_done,
         Companion: companion.join("\n"),
         Others: item?.others !== "null" ? item?.others : "",
+        Charging: item?.charging,
       };
     });
 
