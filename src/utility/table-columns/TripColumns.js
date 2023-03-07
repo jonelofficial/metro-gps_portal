@@ -24,6 +24,8 @@ export const columns = [
     minWidth: 130,
   },
   { id: "companion", label: "Companion" },
+  { id: "charging", label: "Charging" },
+
   { id: "others", label: "Others" },
 
   {
