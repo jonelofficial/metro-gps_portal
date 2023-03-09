@@ -69,7 +69,7 @@ const Dashboard = () => {
     return (
       <Box
         sx={{
-          width: "400px",
+          width: "250px",
           height: "100%",
           display: "flex",
           justifyContent: "center",
@@ -131,13 +131,6 @@ const Dashboard = () => {
           <Box className="dashboard__total-data">{tripData?.data.length}</Box>
         </Box>
       </Box>
-
-      {/* <Box className="dashboard__consumption">
-        <Typography className="dashboard__consumption-label">
-          Consumption
-        </Typography>
-        {tripData && <Consumption tripData={tripData} />}
-      </Box> */}
 
       <Box className="dashboard__column">
         {/* 1st COLUMN */}

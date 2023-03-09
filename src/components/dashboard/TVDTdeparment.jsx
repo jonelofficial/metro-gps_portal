@@ -1,8 +1,9 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Skeleton, Stack } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGetTVDTdeparmentQuery } from "../../api/metroApi";
+import TableError from "../error/TableError";
 
 import SearchField from "../table/SearchField";
 import TableUI from "../table/TableUI";
@@ -47,11 +48,44 @@ const TVDTdeparment = () => {
   };
 
   if (isLoading) {
-    return <Box>isLoading</Box>;
+    return (
+      <Box sx={{ height: "100%", minHeight: "380px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+          }}
+        >
+          <Skeleton variant="rounded" width={550} height={50} />
+          <Box sx={{ padding: "10px" }}></Box>
+
+          <Skeleton variant="rounded" width={600} height={50} />
+          <Box sx={{ padding: "10px" }}></Box>
+          <Skeleton variant="rounded" width={100} height={50} />
+        </Box>
+        <Skeleton variant="rounded" width="100%" height="70%" />
+      </Box>
+    );
   }
 
   if (isError) {
-    return <Box>isError</Box>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            width: "70%",
+          }}
+        >
+          <TableError />
+        </Box>
+      </Box>
+    );
   }
 
   return (

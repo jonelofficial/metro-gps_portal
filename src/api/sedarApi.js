@@ -30,6 +30,12 @@ export const sedarApi = createApi({
         url: `/data/employee/filter/idnumber?prefix_id=${params?.prefix}&id_number=${params?.id_number}`,
       }),
     }),
+    getDepartments: builder.query({
+      transformResponse: (response) => response.data,
+      query: (params) => ({
+        url: "/data/departments",
+      }),
+    }),
   }),
 });
 
@@ -37,4 +43,5 @@ export const {
   // SEDAR
   useGetEmployeesQuery,
   useGetEmployeeQuery,
+  useGetDepartmentsQuery,
 } = sedarApi;

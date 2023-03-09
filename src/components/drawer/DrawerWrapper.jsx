@@ -9,6 +9,7 @@ const DrawerWrapper = ({
   loading,
   color,
   onClose,
+  disabled,
 }) => {
   return (
     <Box className="drawer">
@@ -32,6 +33,7 @@ const DrawerWrapper = ({
             </Button>
 
             <LoadingButton
+              disabled={disabled}
               variant="contained"
               type="submit"
               color={color || "customSuccess"}
