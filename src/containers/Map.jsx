@@ -17,6 +17,9 @@ import { useEffect } from "react";
 import dayjs from "dayjs";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import image from "../assets/images/guide.png";
+import Lottie from "lottie-react";
+import searchLoading from "../assets/images/lottie/search-file.json";
+import error from "../assets/images/lottie/error.json";
 
 import "../style/map/map.scss";
 import { Button, Divider } from "@mui/material";
@@ -58,11 +61,35 @@ const Map = () => {
   };
 
   if (isLoading || isFetching) {
-    return <Box>Loading</Box>;
+    return (
+      <Box
+        sx={{
+          width: "400px",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Lottie animationData={searchLoading} loop={true} />
+      </Box>
+    );
   }
 
   if (isError) {
-    return <Box>Error</Box>;
+    return (
+      <Box
+        sx={{
+          width: "600px",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Lottie animationData={error} loop={false} />
+      </Box>
+    );
   }
 
   const Marker = ({ item, queue }) => (

@@ -14,8 +14,10 @@ import HighestKMrun from "../components/dashboard/HighestKMrun";
 import LongestTravelDuration from "../components/dashboard/LongestTravelDuration";
 import TotalTripDriver from "../components/dashboard/TotalTripDriver";
 import Consumption from "../components/dashboard/Consumption";
-import Odometer from "../components/dashboard/Odometer";
 import DailyUserDuration from "../components/dashboard/DailyUserDuration";
+import dashboardLoading from "../assets/images/lottie/loading-dashboard.json";
+import error from "../assets/images/lottie/error.json";
+import Lottie from "lottie-react";
 
 const Dashboard = () => {
   const [drivers, setDrivers] = useState();
@@ -64,11 +66,35 @@ const Dashboard = () => {
     vehicleIsLoading ||
     gasStationIsLoading
   ) {
-    return <Box>isLoading</Box>;
+    return (
+      <Box
+        sx={{
+          width: "400px",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Lottie animationData={dashboardLoading} loop={true} />
+      </Box>
+    );
   }
 
   if (tripIsError || userIsError || vehicleIsError || gasStationIsError) {
-    return <Box>isError</Box>;
+    return (
+      <Box
+        sx={{
+          width: "600px",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Lottie animationData={error} loop={false} />
+      </Box>
+    );
   }
   return (
     <Box className="dashboard">
