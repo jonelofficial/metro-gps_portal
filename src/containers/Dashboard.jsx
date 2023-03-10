@@ -15,7 +15,8 @@ import LongestTravelDuration from "../components/dashboard/LongestTravelDuration
 import TotalTripDriver from "../components/dashboard/TotalTripDriver";
 import Consumption from "../components/dashboard/Consumption";
 import DailyUserDuration from "../components/dashboard/DailyUserDuration";
-import dashboardLoading from "../assets/images/lottie/loading-dashboard.json";
+import dashboardLoading from "../assets/images/lottie/bored-hand.json";
+import pleaseWait from "../assets/images/lottie/please-wait.json";
 import error from "../assets/images/lottie/error.json";
 import Lottie from "lottie-react";
 
@@ -69,14 +70,24 @@ const Dashboard = () => {
     return (
       <Box
         sx={{
-          width: "250px",
-          height: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          flexDirection: "column",
+
+          position: "relative",
         }}
       >
         <Lottie animationData={dashboardLoading} loop={true} />
+        <Box
+          sx={{
+            position: "absolute",
+            top: "45%",
+            width: "100%",
+          }}
+        >
+          <Lottie animationData={pleaseWait} loop={true} />
+        </Box>
       </Box>
     );
   }
