@@ -19,39 +19,64 @@ import dashboardLoading from "../assets/images/lottie/bored-hand.json";
 import pleaseWait from "../assets/images/lottie/please-wait.json";
 import error from "../assets/images/lottie/error.json";
 import Lottie from "lottie-react";
+import { useForm } from "react-hook-form";
+import DateFormPicker from "../components/form/DateFormPicker";
+import { LoadingButton } from "@mui/lab";
+import SearchIcon from "@mui/icons-material/Search";
+import dayjs from "dayjs";
 
 const Dashboard = () => {
   const [drivers, setDrivers] = useState();
+  const [date, setDate] = useState(dayjs(new Date()).format("MMM-DD-YY"));
   const {
     data: tripData,
     isLoading: tripIsLoading,
+    isFetching: tripIsFetching,
     isError: tripIsError,
-  } = useGetAllTripsQuery({ search: "", searchBy: "_id", limit: 0, page: 0 });
+  } = useGetAllTripsQuery(
+    { search: "", searchBy: "_id", limit: 0, page: 0 },
+    { refetchOnMountOrArgChange: true }
+  );
   const {
     data: userData,
     isLoading: userIsLoading,
     isError: userIsError,
-  } = useGetAllUsersQuery({ search: "", searchBy: "_id", limit: 0, page: 0 });
+  } = useGetAllUsersQuery(
+    { search: "", searchBy: "_id", limit: 0, page: 0 },
+    { refetchOnMountOrArgChange: true }
+  );
   const {
     data: vehicleData,
     isLoading: vehicleIsLoading,
     isError: vehicleIsError,
-  } = useGetAllVehiclesQuery({
-    search: "",
-    searchBy: "_id",
-    limit: 0,
-    page: 0,
-  });
+  } = useGetAllVehiclesQuery(
+    {
+      search: "",
+      searchBy: "_id",
+      limit: 0,
+      page: 0,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
   const {
     data: gasStationData,
     isLoading: gasStationIsLoading,
     isError: gasStationIsError,
-  } = useGetAllGasStationsQuery({
-    search: "",
-    searchBy: "",
-    limit: 0,
-    page: 0,
-  });
+  } = useGetAllGasStationsQuery(
+    {
+      search: "",
+      searchBy: "",
+      limit: 0,
+      page: 0,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
 
   useEffect(() => {
     userData?.data &&
@@ -142,14 +167,46 @@ const Dashboard = () => {
           <Box className="dashboard__total-data">{tripData?.data.length}</Box>
         </Box>
       </Box>
-
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: "20px",
+        }}
+      >
+        <form
+          onSubmit={handleSubmit((e) => {
+            setDate(dayjs(e.date).format("MMM-DD-YY"));
+          })}
+        >
+          <DateFormPicker
+            views={["month", "year", "day"]}
+            name="date"
+            control={control}
+            label={"Date"}
+            errors={errors}
+          />
+          <LoadingButton
+            className="filter-button"
+            variant="contained"
+            startIcon={<SearchIcon />}
+            type="submit"
+            loading={tripIsFetching || tripIsLoading}
+            sx={{ marginLeft: "10px" }}
+          >
+            Search
+          </LoadingButton>
+        </form>
+      </Box>
       <Box className="dashboard__column">
         {/* 1st COLUMN */}
         <Box className="dashboard__column-wrapper">
           <Typography className="dashboard__column-label">
             Daily Service Vehicle Kilometer Run
           </Typography>
-          {tripData && <DailyTravelKilometerRun tripData={tripData} />}
+          {tripData && (
+            <DailyTravelKilometerRun tripData={tripData} date={date} />
+          )}
         </Box>
 
         {/* 2nd COLUMN */}
@@ -157,7 +214,7 @@ const Dashboard = () => {
           <Typography className="dashboard__column-label">
             Daily Service Vehicle Travel Duration
           </Typography>
-          {tripData && <DailyTravelDuration tripData={tripData} />}
+          {tripData && <DailyTravelDuration tripData={tripData} date={date} />}
         </Box>
 
         {/* 3rd COLUMN */}
@@ -165,7 +222,7 @@ const Dashboard = () => {
           <Typography className="dashboard__column-label">
             Daily Service User Travel Duration
           </Typography>
-          {tripData && <DailyUserDuration tripData={tripData} />}
+          {tripData && <DailyUserDuration tripData={tripData} date={date} />}
         </Box>
 
         {/* 4th COLUMN */}
@@ -173,7 +230,7 @@ const Dashboard = () => {
           <Typography className="dashboard__column-label">
             Daily Trip Estimated Fuel Consumption
           </Typography>
-          {tripData && <Consumption tripData={tripData} />}
+          {tripData && <Consumption tripData={tripData} date={date} />}
         </Box>
 
         {/* 5th COLUMN */}

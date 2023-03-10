@@ -21,15 +21,13 @@ ChartJS.register(
   Legend
 );
 
-const DailyTravelKilometerRun = ({ tripData }) => {
+const DailyTravelKilometerRun = ({ tripData, date }) => {
   const options = {
     responsive: true,
   };
 
   const filteredData = tripData?.data.filter((item) => {
-    return (
-      dayjs(item.createdAt).format("MMM-DD-YY") == dayjs().format("MMM-DD-YY")
-    );
+    return dayjs(item.createdAt).format("MMM-DD-YY") == date;
   });
 
   const plateNumbers = {};

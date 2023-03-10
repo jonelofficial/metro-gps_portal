@@ -20,21 +20,22 @@ ChartJS.register(
   Legend
 );
 
-const DailyUserDuration = ({ tripData }) => {
+const DailyUserDuration = ({ tripData, date }) => {
   const options = {
     responsive: true,
   };
 
   // COMPUTE ALL DURATION
   const filteredData = tripData?.data.filter((item) => {
-    return (
-      dayjs(item.createdAt).format("MMM-DD-YY") == dayjs().format("MMM-DD-YY")
-    );
+    return dayjs(item.createdAt).format("MMM-DD-YY") == date;
   });
 
   let users = {};
 
   filteredData?.forEach((trip, index) => {
+    const newLocations = trip?.locations.filter(
+      (location) => location.status == "left" || location.status == "arrived"
+    );
     let user = trip.user_id.first_name;
     if (!users[user]) {
       users[user] = {
@@ -42,8 +43,8 @@ const DailyUserDuration = ({ tripData }) => {
         user_id: user,
       };
     }
-    const startDate = dayjs(trip.locations[0].date);
-    const endDate = dayjs(trip.locations[trip.locations.length - 1].date);
+    const startDate = dayjs(newLocations[0].date);
+    const endDate = dayjs(newLocations[newLocations.length - 1].date);
     const duration = endDate.diff(startDate);
     users[user].totalDuration += duration;
   });

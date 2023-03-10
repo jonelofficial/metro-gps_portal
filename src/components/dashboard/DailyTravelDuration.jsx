@@ -20,20 +20,21 @@ ChartJS.register(
   Legend
 );
 
-const DailyTravelDuration = ({ tripData }) => {
+const DailyTravelDuration = ({ tripData, date }) => {
   const options = {
     responsive: true,
   };
 
   const filteredData = tripData?.data.filter((item) => {
-    return (
-      dayjs(item.createdAt).format("MMM-DD-YY") == dayjs().format("MMM-DD-YY")
-    );
+    return dayjs(item.createdAt).format("MMM-DD-YY") == date;
   });
 
   let plateNos = {};
 
   filteredData.forEach((trip, index) => {
+    const newLocations = trip?.locations.filter(
+      (location) => location.status == "left" || location.status == "arrived"
+    );
     let plateNo = trip.vehicle_id.plate_no;
     if (!plateNos[plateNo]) {
       plateNos[plateNo] = {
@@ -43,8 +44,8 @@ const DailyTravelDuration = ({ tripData }) => {
       };
     }
 
-    const startDate = dayjs(trip.locations[0].date);
-    const endDate = dayjs(trip.locations[trip.locations.length - 1].date);
+    const startDate = dayjs(newLocations[0].date);
+    const endDate = dayjs(newLocations[newLocations.length - 1].date);
     const duration = endDate.diff(startDate);
     plateNos[plateNo].totalDuration += duration;
     // plateNos[plateNo].locations.push(location);
