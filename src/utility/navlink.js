@@ -1,4 +1,4 @@
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import DashboardIcon from "@mui/icons-material/DashboardOutlined";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -6,7 +6,7 @@ import DirectionsCarOutlinedIcon from "@mui/icons-material/DirectionsCarOutlined
 import LocalGasStationOutlinedIcon from "@mui/icons-material/LocalGasStationOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
-import SummarizeIcon from "@mui/icons-material/Summarize";
+import SummarizeIcon from "@mui/icons-material/SummarizeOutlined";
 
 export const navlink = [
   {

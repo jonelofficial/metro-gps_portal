@@ -5,7 +5,7 @@ import {
   useGetAllUsersQuery,
   useGetAllVehiclesQuery,
 } from "../api/metroApi";
-import { Box, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import "../style/dashboard/dashboard.scss";
 import DailyTravelDuration from "../components/dashboard/DailyTravelDuration";
 import DailyTravelKilometerRun from "../components/dashboard/DailyTravelKilometerRun";
@@ -24,6 +24,7 @@ import DateFormPicker from "../components/form/DateFormPicker";
 import { LoadingButton } from "@mui/lab";
 import SearchIcon from "@mui/icons-material/Search";
 import dayjs from "dayjs";
+import TableWrapper from "../components/table/TableWrapper";
 
 const Dashboard = () => {
   const [drivers, setDrivers] = useState();
@@ -167,37 +168,39 @@ const Dashboard = () => {
           <Box className="dashboard__total-data">{tripData?.data.length}</Box>
         </Box>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginBottom: "20px",
-        }}
-      >
-        <form
-          onSubmit={handleSubmit((e) => {
-            setDate(dayjs(e.date).format("MMM-DD-YY"));
-          })}
+      <TableWrapper sx={{ width: "100%" }}>
+        <Stack
+          direction="row"
+          sx={{ marginBottom: "20px", justifyContent: "flex-end" }}
+          className="table__header"
         >
-          <DateFormPicker
-            views={["month", "year", "day"]}
-            name="date"
-            control={control}
-            label={"Date"}
-            errors={errors}
-          />
-          <LoadingButton
-            className="filter-button"
-            variant="contained"
-            startIcon={<SearchIcon />}
-            type="submit"
-            loading={tripIsFetching || tripIsLoading}
-            sx={{ marginLeft: "10px" }}
+          <form
+            onSubmit={handleSubmit((e) => {
+              setDate(dayjs(e.date).format("MMM-DD-YY"));
+            })}
+            className="table__filter-wrapper"
           >
-            Search
-          </LoadingButton>
-        </form>
-      </Box>
+            <DateFormPicker
+              views={["month", "year", "day"]}
+              name="date"
+              control={control}
+              label={"Date"}
+              errors={errors}
+              className="filter-textfield"
+            />
+            <LoadingButton
+              className="filter-button"
+              variant="contained"
+              startIcon={<SearchIcon />}
+              type="submit"
+              loading={tripIsFetching || tripIsLoading}
+              sx={{ marginLeft: "10px" }}
+            >
+              Search
+            </LoadingButton>
+          </form>
+        </Stack>
+      </TableWrapper>
       <Box className="dashboard__column">
         {/* 1st COLUMN */}
         <Box className="dashboard__column-wrapper">
