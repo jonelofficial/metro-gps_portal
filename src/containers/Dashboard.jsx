@@ -35,7 +35,13 @@ const Dashboard = () => {
     isFetching: tripIsFetching,
     isError: tripIsError,
   } = useGetAllTripsQuery(
-    { search: "", searchBy: "_id", limit: 0, page: 0 },
+    {
+      search: "",
+      searchBy: "trip_date",
+      limit: 0,
+      page: 0,
+      date: dayjs(date).format("YYYY-MM-DD"),
+    },
     { refetchOnMountOrArgChange: true }
   );
   const {
@@ -163,7 +169,7 @@ const Dashboard = () => {
 
         <Box className="dashboard__total-wrapper">
           <Typography className="dashboard__total-label">
-            Total Trips
+            Total Trips by Date
           </Typography>
           <Box className="dashboard__total-data">{tripData?.data.length}</Box>
         </Box>
