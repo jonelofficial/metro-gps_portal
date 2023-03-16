@@ -126,6 +126,7 @@ const Users = () => {
           item?.division_category?.label || item?.division_category,
         Company: item?.company?.label || item?.company,
         Permission: permisionObj ? permisionObj.join("\n") : "",
+        "Show All Departments": item?.show_all_departments,
         "License Exp": dayjs(item?.license_exp).format("MMM-DD-YYYY"),
         Status: item?.status,
         Created: dayjs(item?.createdAt).format("MMM-DD-YYYY"),

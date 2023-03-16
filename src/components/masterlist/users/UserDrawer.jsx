@@ -15,8 +15,13 @@ import DrawerWrapper from "../../drawer/DrawerWrapper";
 import useToast from "../../../hook/useToast";
 import {
   Autocomplete,
+  Box,
   Checkbox,
   createFilterOptions,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
@@ -35,6 +40,15 @@ const UserDrawer = ({ onClose, item }) => {
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
   // STATE
   const [image, setImage] = useState();
+  const [radioBtnValue, setRadioBtnValue] = useState(
+    item?.show_all_departments === false ||
+      item?.show_all_departments === undefined
+      ? "no"
+      : "yes"
+  );
+  const onChangeRadioBtn = (e) => {
+    setRadioBtnValue(e.target.value);
+  };
 
   let singleEmployee, singleEmployeeLoading;
 
@@ -130,6 +144,10 @@ const UserDrawer = ({ onClose, item }) => {
       form.append("division", data.division);
       form.append("division_category", data.division_category);
       form.append("company", data.company);
+      form.append(
+        "show_all_departments",
+        radioBtnValue === "on" ? false : true
+      );
       if (item) {
         res = await updateUser({ id: item._id, obj: form });
         !res?.error &&
@@ -431,6 +449,24 @@ const UserDrawer = ({ onClose, item }) => {
               />
             )}
           />
+
+          {/* RADIO BTN */}
+          <Box sx={{ paddingLeft: "5px" }}>
+            <FormLabel>Show all departments on the trip report</FormLabel>
+            <RadioGroup
+              row
+              value={radioBtnValue}
+              onChange={onChangeRadioBtn}
+              sx={{
+                "& .MuiSvgIcon-root": {
+                  fontSize: 18,
+                },
+              }}
+            >
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+            </RadioGroup>
+          </Box>
         </>
       )}
     </DrawerWrapper>

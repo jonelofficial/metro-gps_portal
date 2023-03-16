@@ -69,6 +69,7 @@ const TableUsers = ({ item, columns }) => {
               key={column.id}
               size="small"
               style={{ whiteSpace: "nowrap" }}
+              align={column.id == "show_all_departments" ? "center" : "left"}
             >
               {column.id === "profile" && value != null ? (
                 <Button onClick={onToggle}>View</Button>
@@ -112,6 +113,8 @@ const TableUsers = ({ item, columns }) => {
                 value?.map((item, i) => {
                   return <Box key={i}>{item.label}</Box>;
                 })
+              ) : column.id === "show_all_departments" ? (
+                <Box>{value === false ? "No" : "Yes"}</Box>
               ) : (
                 value
               )}
