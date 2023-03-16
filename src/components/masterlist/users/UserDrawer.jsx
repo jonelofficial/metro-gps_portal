@@ -146,7 +146,7 @@ const UserDrawer = ({ onClose, item }) => {
       form.append("company", data.company);
       form.append(
         "show_all_departments",
-        radioBtnValue === "on" ? false : true
+        radioBtnValue === "no" ? false : true
       );
       if (item) {
         res = await updateUser({ id: item._id, obj: form });
