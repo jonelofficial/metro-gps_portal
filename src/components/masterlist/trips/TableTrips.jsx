@@ -54,8 +54,8 @@ const TableTrips = ({ item, columns }) => {
     (location) => location.status == "left" || location.status == "arrived"
   );
 
-  const startDate = dayjs(newLocations[0].date);
-  const endDate = dayjs(newLocations[newLocations.length - 1].date);
+  const startDate = dayjs(newLocations[0]?.date);
+  const endDate = dayjs(newLocations[newLocations.length - 1]?.date);
   const duration = endDate.diff(startDate);
   const totalMinutes = Math.floor(duration / (1000 * 60));
   const hours = Math.floor(totalMinutes / 60);
@@ -164,14 +164,14 @@ const TableTrips = ({ item, columns }) => {
                     <Stack direction="row" gap={1} key={i}>
                       <Box
                         sx={{ minWidth: "140px" }}
-                      >{`Gas Station: ${loc.gas_station_name} `}</Box>
+                      >{`Gas Station: ${loc?.gas_station_name} `}</Box>
                       <Box
                         sx={{ minWidth: "100px" }}
-                      >{`Odometer: ${loc.odometer} `}</Box>
+                      >{`Odometer: ${loc?.odometer} `}</Box>
                       <Box
                         sx={{ minWidth: "60px" }}
-                      >{`Liter: ${loc.liter} `}</Box>
-                      <Box>{`Amount: ${loc.amount} `}</Box>
+                      >{`Liter: ${loc?.liter} `}</Box>
+                      <Box>{`Amount: ${loc?.amount} `}</Box>
                     </Stack>
                   );
                 })
