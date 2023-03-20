@@ -5,6 +5,7 @@ import {
   ListItemIcon,
   Menu,
   MenuItem,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import useAuth from "../../auth/useAuth";
@@ -49,7 +50,21 @@ const Header = () => {
             {isOpen ? <CloseIcon /> : <MenuIcon />}
           </IconButton>
         </Box>
-        <Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+              color: "custom.dark",
+              textTransform: "capitalize",
+              fontWeight: "bold",
+            }}
+          >
+            Hello {user?.first_name}
+          </Typography>
           <IconButton
             onClick={handleClick}
             aria-controls={open ? "account-menu" : undefined}
