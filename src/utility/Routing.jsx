@@ -111,7 +111,29 @@ const Routing = () => {
           element: null,
         },
         {
-          path: "/reports/trips",
+          path: "/reports/trips-sg",
+          element:
+            validUser &&
+            user.permission?.some((el) => el?.id === "trips_sg") ? (
+              <Trips />
+            ) : (
+              <NotFound />
+            ),
+          errorElement: <ErrorElement />,
+        },
+        {
+          path: "/reports/trips-depot",
+          element:
+            validUser &&
+            user.permission?.some((el) => el?.id === "trips_sg") ? (
+              <Trips />
+            ) : (
+              <NotFound />
+            ),
+          errorElement: <ErrorElement />,
+        },
+        {
+          path: "/reports/trips-live",
           element:
             validUser &&
             user.permission?.some((el) => el?.id === "trips_sg") ? (

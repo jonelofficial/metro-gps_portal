@@ -1,18 +1,20 @@
-import DashboardIcon from "@mui/icons-material/DashboardOutlined";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import DirectionsCarOutlinedIcon from "@mui/icons-material/DirectionsCarOutlined";
-import LocalGasStationOutlinedIcon from "@mui/icons-material/LocalGasStationOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
-import SummarizeIcon from "@mui/icons-material/SummarizeOutlined";
+import {
+  DashboardOutlined,
+  ContentCopyOutlined,
+  PersonOutlineOutlined,
+  DirectionsCarOutlined,
+  LocalGasStationOutlined,
+  MapOutlined,
+  SummarizeOutlined,
+  FactoryOutlined,
+  AgricultureOutlined,
+} from "@mui/icons-material";
 
 export const navlink = [
   {
     id: 1,
     name: "Dashboard",
-    icon: DashboardIcon,
+    icon: DashboardOutlined,
     accordion: [],
     path: "/",
     show: true,
@@ -20,21 +22,21 @@ export const navlink = [
   {
     id: 2,
     name: "Masterlist",
-    icon: ContentCopyIcon,
+    icon: ContentCopyOutlined,
     accordion: [
       {
         name: "Users",
-        icon: PersonOutlineOutlinedIcon,
+        icon: PersonOutlineOutlined,
         path: "/masterlist/users",
       },
       {
         name: "Vehicles",
-        icon: DirectionsCarOutlinedIcon,
+        icon: DirectionsCarOutlined,
         path: "/masterlist/vehicles",
       },
       {
         name: "Gas Stations",
-        icon: LocalGasStationOutlinedIcon,
+        icon: LocalGasStationOutlined,
         path: "/masterlist/gas-stations",
       },
     ],
@@ -44,23 +46,25 @@ export const navlink = [
   {
     id: 2,
     name: "Reports",
-    icon: SummarizeIcon,
+    icon: MapOutlined,
     accordion: [
       {
         name: "Trips SG",
-        icon: MapOutlinedIcon,
-        path: "/reports/trips",
+        icon: SummarizeOutlined,
+        path: "/reports/trips-sg",
+      },
+      {
+        name: "Trips Depot",
+        icon: FactoryOutlined,
+        path: "/reports/trips-depot",
+      },
+      {
+        name: "Trips Live",
+        icon: AgricultureOutlined,
+        path: "/reports/trips-live",
       },
     ],
     path: "/reports",
     show: false,
   },
-  // {
-  //   id: 4,
-  //   name: "Map",
-  //   icon: PlaceOutlinedIcon,
-  //   accordion: [],
-  //   path: "/map",
-  //   show: true,
-  // },
 ];

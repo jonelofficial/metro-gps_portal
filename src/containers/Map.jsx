@@ -155,7 +155,7 @@ const Map = () => {
       <Button
         variant="contained"
         sx={{ margin: "10px" }}
-        onClick={() => navigate(`/reports/trips`)}
+        onClick={() => navigate(`/reports/trips-sg`)}
       >
         Back
       </Button>

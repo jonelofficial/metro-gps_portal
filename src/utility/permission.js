@@ -15,4 +15,12 @@ export const permission = [
     id: "trips_sg",
     label: "Trips SG",
   },
+  {
+    id: "trips_depot",
+    label: "Trips Depot",
+  },
+  {
+    id: "trips_live",
+    label: "Trips Live",
+  },
 ];
