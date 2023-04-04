@@ -10,17 +10,43 @@ import {
   setSearchBy,
 } from "../../../redux-toolkit/counter/featuresCounter";
 import { useDispatch, useSelector } from "react-redux";
-import { dropData } from "../../../utility/table-columns/TripDepotColumns";
+import {
+  columns,
+  dropData,
+} from "../../../utility/table-columns/TripDepotColumns";
 import dayjs from "dayjs";
 import useExcel from "../../../hook/useExcel";
 import useDisclosure from "../../../hook/useDisclosure";
 import ExportModal from "../../../components/features/ExportModal";
+import { useGetAllTripsHaulingQuery } from "../../../api/metroApi";
+import TableSkeleton from "../../../components/skeleton/TableSkeleton";
+import TableError from "../../../components/error/TableError";
+import TableUI from "../../../components/table/TableUI";
+import TableHauling from "../../../components/masterlist/depot/TableHauling";
 
 const TripDepot = () => {
   // STATE
   const [date, setDate] = useState();
 
-  //   RTK
+  const { page, limit, search, searchBy } = useSelector(
+    (state) => state.features.table
+  );
+
+  // RTK QUERY
+  const { data, isLoading, isError, isFetching } = useGetAllTripsHaulingQuery(
+    {
+      page: page,
+      limit: limit,
+      search: search,
+      searchBy: searchBy,
+      date: date,
+    },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  console.log(data);
+
+  // REACT HOOK FORM
   const {
     register,
     control,
@@ -33,9 +59,6 @@ const TripDepot = () => {
   //   HOOKS
   const dispatch = useDispatch();
 
-  const { page, limit, search, searchBy } = useSelector(
-    (state) => state.features.table
-  );
   const { excelExport } = useExcel();
   const {
     isOpen: isOpenExport,
@@ -56,9 +79,17 @@ const TripDepot = () => {
       onCloseExport();
     }, 1000);
   };
+
+  if (isLoading) {
+    return <TableSkeleton />;
+  }
+
+  if (isError) {
+    return <TableError />;
+  }
   return (
-    <>
-      <TableWrapper>
+    <Box>
+      <TableWrapper sx={{ margin: "0 auto" }}>
         <Stack direction="row" className="table__header">
           <SearchField
             onSubmit={handleSubmit(handleSearch)}
@@ -95,9 +126,19 @@ const TripDepot = () => {
           </Box>
         </Stack>
 
+        {/* TABLE  */}
+        <TableUI
+          isFetching={isFetching}
+          data={data}
+          columns={columns}
+          rows={data.data.map((item, i) => {
+            return <TableHauling key={i} item={item} columns={columns} />;
+          })}
+        />
+
         <ExportModal isOpenExport={isOpenExport} />
       </TableWrapper>
-    </>
+    </Box>
   );
 };
 

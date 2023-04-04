@@ -13,7 +13,7 @@ const TripDepot = () => {
   return (
     <Box sx={{ width: "100%" }}>
       <TabContext value={value}>
-        <Box>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={handleChange}>
             <Tab
               label="Hauling"

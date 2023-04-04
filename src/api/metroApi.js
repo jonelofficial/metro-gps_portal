@@ -178,6 +178,12 @@ export const metroApi = createApi({
         url: `/dashboard/total-trip-driver?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}`,
       }),
     }),
+    // DEPOT HAULING
+    getAllTripsHauling: builder.query({
+      query: (params) =>
+        `/depot/trips-hauling?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}&date=${params?.date}`,
+      providesTags: ["Trip Hauling"],
+    }),
   }),
 });
 
@@ -210,4 +216,6 @@ export const {
   useGetHighestKmQuery,
   useGetLongestDurationQuery,
   useGetTotalTripDriverQuery,
+  // DEPOT HAULING
+  useGetAllTripsHaulingQuery,
 } = metroApi;
