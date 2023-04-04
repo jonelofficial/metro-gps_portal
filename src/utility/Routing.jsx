@@ -20,6 +20,7 @@ import Lottie from "lottie-react";
 import underMaintenance from "../assets/images/lottie/maintenance.json";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
+import TripDepot from "../containers/masterlist/depot/TripDepot";
 
 const Routing = () => {
   const token = useSelector((state) => state.token.value);
@@ -126,7 +127,7 @@ const Routing = () => {
           element:
             validUser &&
             user.permission?.some((el) => el?.id === "trips_sg") ? (
-              <Trips />
+              <TripDepot />
             ) : (
               <NotFound />
             ),
