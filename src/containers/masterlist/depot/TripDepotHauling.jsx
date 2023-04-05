@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   columns,
   dropData,
-} from "../../../utility/table-columns/TripDepotColumns";
+} from "../../../utility/table-columns/TripHaulingColumns";
 import dayjs from "dayjs";
 import useExcel from "../../../hook/useExcel";
 import useDisclosure from "../../../hook/useDisclosure";
@@ -43,8 +43,6 @@ const TripDepot = () => {
     },
     { refetchOnMountOrArgChange: true }
   );
-
-  console.log(data);
 
   // REACT HOOK FORM
   const {
