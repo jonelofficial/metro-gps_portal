@@ -43,6 +43,8 @@ const TableHauling = ({ item, columns }) => {
     onToggle: onToggleAction,
   } = useDisclosure();
 
+  const { isOpen, onClose, onToggle } = useDisclosure();
+
   // COMPUTE DURATION
   const newLocations = item.locations.filter(
     (location) => location.status == "left" || location.status == "arrived"
@@ -112,7 +114,7 @@ const TableHauling = ({ item, columns }) => {
               ) : column.id === "vehicle_id" ? (
                 value?.plate_no
               ) : column.id === "locations" ? (
-                value?.map((loc, i) => {
+                value?.locations?.map((loc, i) => {
                   return (
                     <Stack direction="row" gap={1} key={i}>
                       <Box
@@ -138,7 +140,7 @@ const TableHauling = ({ item, columns }) => {
                   );
                 })
               ) : column.id === "diesels" ? (
-                value?.map((loc, i) => {
+                value?.diesels?.map((loc, i) => {
                   return (
                     <Stack direction="row" gap={1} key={i}>
                       <Box
@@ -155,10 +157,10 @@ const TableHauling = ({ item, columns }) => {
                   );
                 })
               ) : column.id === "companion" ? (
-                value?.map((el, i) => {
+                value?.companion?.map((el, i) => {
                   return (
                     <Stack direction="row" gap={1} key={i}>
-                      <Box>{el?.firstName || el?.first_name}</Box>
+                      ?<Box>{el?.firstName || el?.first_name}</Box>
                     </Stack>
                   );
                 })
