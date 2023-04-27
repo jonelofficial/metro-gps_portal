@@ -14,20 +14,20 @@ export const columns = [
   { id: "start", label: "Start", minWidth: 80 },
   { id: "end", label: "End", minWidth: 80 },
   // { id: "locations", label: "Locations" },
-  { id: "diesels", label: "Diesels" },
-  { id: "estimated_odo", label: "Estimated Odometer", minWidth: 160 },
+  // { id: "estimated_odo", label: "Estimated Odometer", minWidth: 160 },
+  { id: "estimated_total_km", label: "Estimated Total KM", minWidth: 160 },
+  { id: "total_km", label: "Total KM", minWidth: 100 },
   { id: "odometer", label: "Odometer" },
   { id: "odometer_done", label: "Odometer Done", minWidth: 120 },
+  { id: "diesels", label: "Diesels" },
+  { id: "companion", label: "Companion" },
+  { id: "charging", label: "Charging" },
+  { id: "others", label: "Others" },
   {
     id: "odometer_image_path",
     label: "Odometer Image",
     minWidth: 130,
   },
-  { id: "companion", label: "Companion" },
-  { id: "charging", label: "Charging" },
-
-  { id: "others", label: "Others" },
-
   {
     id: "action",
     label: "Action",

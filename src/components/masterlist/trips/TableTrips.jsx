@@ -17,8 +17,8 @@ import {
 import { Stack } from "@mui/system";
 import dayjs from "dayjs";
 import { getPathLength } from "geolib";
-import React, { Fragment } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useDeleteTripMutation } from "../../../api/metroApi";
 import useDisclosure from "../../../hook/useDisclosure";
 import useToast from "../../../hook/useToast";
@@ -71,6 +71,8 @@ const TableTrips = ({ item, columns }) => {
   }`;
 
   //COMPUTE ESTIMATED ODO
+  const totalKm = item?.odometer_done - item?.odometer;
+  const estimatedTotalKm = getPathLength(item.points) / 1000;
   const km = item.points?.length > 0 && getPathLength(item.points) / 1000;
   const odo = item?.odometer;
   const estimatedOdo = odo + km;
@@ -88,7 +90,9 @@ const TableTrips = ({ item, columns }) => {
     },
   }));
 
-  // console.log(item);
+  const tripLocations = [...item?.locations].sort((a, b) => {
+    return new Date(a.date) - new Date(b.date);
+  });
 
   return (
     <>
@@ -250,7 +254,11 @@ const TableTrips = ({ item, columns }) => {
                     item?.user_id?.department}
                 </Box>
               ) : column.id === "estimated_odo" ? (
-                <Box>{`${estimatedOdo} km`}</Box>
+                <Box>{estimatedOdo}</Box>
+              ) : column.id === "estimated_total_km" ? (
+                <Box>{estimatedTotalKm}</Box>
+              ) : column.id === "total_km" ? (
+                <Box>{totalKm}</Box>
               ) : (
                 value
               )}
@@ -274,7 +282,7 @@ const TableTrips = ({ item, columns }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {item?.locations?.map((loc, i) => {
+                  {tripLocations?.map((loc, i) => {
                     return (
                       <TableRow key={i}>
                         <TableCell

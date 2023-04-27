@@ -178,9 +178,11 @@ const Trips = () => {
       const minutes = totalMinutes % 60;
       const hour = `${hours.toFixed(0)}.${minutes == 0 ? "00" : minutes}`;
 
-      const km = item.points?.length > 0 && getPathLength(item.points) / 1000;
-      const odo = item?.odometer;
-      const estimatedOdo = odo + km;
+      // const km = item.points?.length > 0 && getPathLength(item.points) / 1000;
+      // const odo = item?.odometer;
+      // const estimatedOdo = odo + km;
+      const totalKm = item?.odometer_done - item?.odometer;
+      const estimatedTotalKm = getPathLength(item.points) / 1000;
 
       return {
         "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY h:mm a"),
@@ -195,7 +197,8 @@ const Trips = () => {
         End: dayjs(endDate).format("MMM-DD-YY hh:mm a"),
         Locations: destination.join("\n"),
         Diesels: gas.join("\n"),
-        "Estimated Odometer": estimatedOdo,
+        "Estimated Total KM": estimatedTotalKm,
+        "Total KM": totalKm,
         Odmeter: item?.odometer,
         "Odmeter Done": item?.odometer_done,
         Companion: companion.join("\n"),

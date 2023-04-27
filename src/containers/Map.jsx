@@ -1,14 +1,10 @@
 import React, { Fragment } from "react";
 import GoogleMapReact from "google-map-react";
-import { Box, Tooltip, Typography } from "@material-ui/core";
+import { Box, Tooltip } from "@material-ui/core";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetAllTripsQuery } from "../api/metroApi";
 import { useState } from "react";
-import InputField from "../components/form/InputField";
-import { useForm } from "react-hook-form";
-import { LoadingButton } from "@mui/lab";
-import SearchIcon from "@mui/icons-material/Search";
 import { Stack } from "@mui/system";
 import { ObjectID } from "bson";
 import useToast from "../hook/useToast";
@@ -22,11 +18,10 @@ import searchLoading from "../assets/images/lottie/search-file.json";
 import error from "../assets/images/lottie/error.json";
 
 import "../style/map/map.scss";
-import { Button, Divider } from "@mui/material";
+import { Button, Divider, Typography } from "@mui/material";
 
 const Map = () => {
   let { id } = useParams();
-  const [newID, setNewID] = useState();
 
   const navigate = useNavigate();
   // HOOKS
@@ -35,30 +30,11 @@ const Map = () => {
   // RTK QUERY
   const { data, isLoading, isError, isFetching } = useGetAllTripsQuery(
     {
-      search: newID,
+      search: id,
       searchBy: "_id",
     },
     { refetchOnMountOrArgChange: true }
   );
-
-  // RTK QUERY FORM
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
-
-  useEffect(() => {
-    id && setNewID(id);
-  }, []);
-
-  const onSubmit = (data) => {
-    if (ObjectID.isValid(data.id)) {
-      setNewID(data.id);
-    } else {
-      toast({ severity: "error", message: "Not valid Trip ID" });
-    }
-  };
 
   if (isLoading || isFetching) {
     return (
@@ -176,31 +152,6 @@ const Map = () => {
         ) : (
           <>
             <Stack className="map__first">
-              {/* <Box className="map__first__search-wrapper">
-        <Box className="map__first__search-wrapper--label">
-          Input complete Trip ID:
-        </Box>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="map__first__search-wrapper--form"
-        >
-          <InputField
-            {...register("id")}
-            id="id"
-            label="ID"
-            errors={errors}
-            sx={{ marginBottom: "unset" }}
-          />
-          <LoadingButton
-            variant="contained"
-            type="submit"
-            startIcon={<SearchIcon />}
-            loading={isFetching}
-          >
-            Search
-          </LoadingButton>
-        </form>
-      </Box> */}
               {data.data.length > 0 && (
                 <Stack className="map__first__trip-details">
                   <Box className="map__first-label">
@@ -229,58 +180,77 @@ const Map = () => {
                   <Box className="map__first-label">
                     Locations:
                     <Box className="map__first-data">
-                      {data.data[0]?.locations.map((item, i) => {
-                        // if (item.status == "left" || item.status == "arrived") {
-                        //   return (
-                        //     <Fragment key={i}>
-                        //       <Box
-                        //         sx={{
-                        //           color:
-                        //             item.status == "left"
-                        //               ? theme.palette.custom.danger
-                        //               : item.status == "arrived" &&
-                        //                 theme.palette.custom.success,
+                      {[...data.data[0]?.locations]
+                        .sort((a, b) => {
+                          return new Date(a.date) - new Date(b.date);
+                        })
+                        .map((item, i) => {
+                          // if (
+                          //   item.status == "left" ||
+                          //   item.status == "arrived"
+                          // ) {
+                          //   return (
+                          //     <Fragment key={i}>
+                          //       <Box
+                          //         sx={{
+                          //           color:
+                          //             item.status == "left"
+                          //               ? theme.palette.custom.danger
+                          //               : item.status == "arrived" &&
+                          //                 theme.palette.custom.success,
 
-                        //           textTransform: "capitalize",
-                        //         }}
-                        //       >{`${item.status} :`}</Box>
-                        //       {item.address[0].city} {item.address[0].subregion}
-                        //       <br />
-                        //       Date: {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
-                        //       <br />
-                        //       <br />
-                        //     </Fragment>
-                        //   );
-                        // }
-                        return (
-                          <Fragment key={i}>
-                            <Box
-                              sx={{
-                                color:
-                                  item.status == "left"
-                                    ? theme.palette.custom.danger
-                                    : item.status == "arrived"
-                                    ? theme.palette.custom.success
-                                    : theme.palette.customBlue.main,
-                                textTransform: "capitalize",
-                              }}
-                            >{`${item.status} :`}</Box>
-                            {`${item?.address[0]?.name || "(No Name)"}  ${
-                              item?.address[0]?.district || "(No District)"
-                            } ${item?.address[0]?.city || "(No City)"}  ${
-                              item?.address[0]?.subregion || "(No Subregion)"
-                            }`}
-                            <br />
-                            Date: {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
-                            <br />
-                            <br />
-                            {data.data[0]?.locations.length - 1 !== i && (
-                              <Divider sx={{ width: "40px" }} />
-                            )}
-                            <br />
-                          </Fragment>
-                        );
-                      })}
+                          //           textTransform: "capitalize",
+                          //         }}
+                          //       >{`${item.status} :`}</Box>
+                          //       {`${item?.address[0]?.name || "(No Name)"}  ${
+                          //         item?.address[0]?.district || "(No District)"
+                          //       } ${item?.address[0]?.city || "(No City)"}  ${
+                          //         item?.address[0]?.subregion ||
+                          //         "(No Subregion)"
+                          //       }`}
+                          //       <br />
+                          //       Date:{" "}
+                          //       {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
+                          //       <br />
+                          //       <br />
+                          //     </Fragment>
+                          //   );
+                          // }
+                          return (
+                            <Fragment key={i}>
+                              <Box
+                                sx={{
+                                  color:
+                                    item.status == "left"
+                                      ? theme.palette.custom.danger
+                                      : item.status == "arrived"
+                                      ? theme.palette.custom.success
+                                      : theme.palette.customBlue.main,
+                                  textTransform: "capitalize",
+                                }}
+                              >{`${item.status} :`}</Box>
+                              <Typography sx={{ fontWeight: "600" }}>
+                                {`${item?.address[0]?.name || "(No Name)"}  ${
+                                  item?.address[0]?.district || "(No District)"
+                                } ${item?.address[0]?.city || "(No City)"}  ${
+                                  item?.address[0]?.subregion ||
+                                  "(No Subregion)"
+                                }`}
+                                <br />
+
+                                {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
+                                <br />
+                                {`${item?.lat}° N  ${item?.long}° E`}
+                                <br />
+                                <br />
+                              </Typography>
+                              {data.data[0]?.locations.length - 1 !== i && (
+                                <Divider sx={{ width: "40px" }} />
+                              )}
+                              <br />
+                            </Fragment>
+                          );
+                        })}
                     </Box>
                   </Box>
 
@@ -424,7 +394,7 @@ const Map = () => {
                   </GoogleMapReact>
                 </Box>
               ) : (
-                ObjectID.isValid(newID) &&
+                ObjectID.isValid(id) &&
                 data.data.length <= 0 && (
                   <Box className="map__second-error">No Transaction Found</Box>
                 )
