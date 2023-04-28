@@ -6,7 +6,7 @@ export const columns = [
     label: "Sync Date",
     minWidth: 90,
   },
-  { id: "_id", label: "Id" },
+  { id: "_id", label: "Id", align: "center" },
   { id: "user_id", label: "User Id", minWidth: 80 },
   { id: "department", label: "Department", minWidth: 80 },
   { id: "vehicle_id", label: "Plate #", minWidth: 80 },

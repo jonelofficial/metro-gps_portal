@@ -68,6 +68,8 @@ const TableHauling = ({ item, columns }) => {
   }`;
 
   //COMPUTE ESTIMATED ODO
+  const totalKm = item?.odometer_done - item?.odometer;
+  const estimatedTotalKm = getPathLength(item.points) / 1000;
   const km = item.points?.length > 0 && getPathLength(item.points) / 1000;
   const odo = item?.odometer;
   const estimatedOdo = odo + km;
@@ -220,6 +222,10 @@ const TableHauling = ({ item, columns }) => {
                 </Box>
               ) : column.id === "estimated_odo" ? (
                 <Box>{`${estimatedOdo} km`}</Box>
+              ) : column.id === "estimated_total_km" ? (
+                <Box>{estimatedTotalKm}</Box>
+              ) : column.id === "total_km" ? (
+                <Box>{totalKm}</Box>
               ) : (
                 value
               )}
