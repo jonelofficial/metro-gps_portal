@@ -137,9 +137,7 @@ const Routing = () => {
           path: "/reports/trips-live",
           element:
             validUser &&
-            user.permission?.some((el) => el?.id === "trips_sg") ? (
-              <Trips />
-            ) : (
+            user.permission?.some((el) => el?.id === "trips_sg") ? null : (
               <NotFound />
             ),
           errorElement: <ErrorElement />,

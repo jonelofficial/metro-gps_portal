@@ -30,7 +30,7 @@ const TripDepot = () => {
         <TabPanel value="1">
           <TripDepotHauling />
         </TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
+        <TabPanel value="2"></TabPanel>
       </TabContext>
     </Box>
   );

@@ -63,7 +63,7 @@ const Header = () => {
               fontWeight: "bold",
             }}
           >
-            Hello {user?.first_name}
+            Fresh morning {user?.first_name}
           </Typography>
           <IconButton
             onClick={handleClick}

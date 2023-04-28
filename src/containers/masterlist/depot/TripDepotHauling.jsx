@@ -23,6 +23,8 @@ import TableSkeleton from "../../../components/skeleton/TableSkeleton";
 import TableError from "../../../components/error/TableError";
 import TableUI from "../../../components/table/TableUI";
 import TableHauling from "../../../components/masterlist/depot/TableHauling";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { searchSchema } from "../../../utility/schema";
 
 const TripDepot = () => {
   // STATE
@@ -52,7 +54,17 @@ const TripDepot = () => {
     reset,
     handleSubmit,
     watch,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      search_by: {
+        id: "_id",
+        label: "Id",
+      },
+      date: dayjs(),
+    },
+    resolver: yupResolver(searchSchema),
+    mode: "onChange",
+  });
 
   //   HOOKS
   const dispatch = useDispatch();
@@ -65,9 +77,10 @@ const TripDepot = () => {
   } = useDisclosure();
 
   const handleSearch = (data) => {
-    setDate(dayjs(date.date).format("YYYY-MM-DD"));
+    console.log(data);
+    setDate(dayjs(data.date).format("YYYY-MM-DD"));
     dispatch(setSearch(data.search));
-    dispatch(setSearchBy(date.search_by?.id || null));
+    dispatch(setSearchBy(data.search_by?.id || null));
   };
 
   const handleToggleExport = async () => {
