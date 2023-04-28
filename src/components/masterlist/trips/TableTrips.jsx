@@ -332,6 +332,69 @@ const TableTrips = ({ item, columns }) => {
                   })}
                 </TableBody>
               </Table>
+
+              {/* DIESELS */}
+              {item?.diesels?.length !== 0 && (
+                <>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    component="div"
+                    sx={{ paddingTop: "15px" }}
+                  >
+                    Diesels
+                  </Typography>
+                  <Table size="small" aria-label="purchases">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Details</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {item?.diesels?.map((loc, i) => {
+                        return (
+                          <TableCell direction="row" gap={1} key={i}>
+                            <Box
+                              sx={{ minWidth: "140px" }}
+                            >{`Gas Station: ${loc?.gas_station_name} `}</Box>
+                            <Box
+                              sx={{ minWidth: "100px" }}
+                            >{`Odometer: ${loc?.odometer} `}</Box>
+                            <Box
+                              sx={{ minWidth: "60px" }}
+                            >{`Liter: ${loc?.liter} `}</Box>
+                            <Box>{`Amount: ${loc?.amount} `}</Box>
+                          </TableCell>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </>
+              )}
+              {console.log(item?.others?.length)}
+              {/* OTHERS */}
+              {item?.others?.length > 0 && (
+                <>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    component="div"
+                    sx={{ paddingTop: "15px" }}
+                  >
+                    Others
+                  </Typography>
+                  <Table size="small" aria-label="purchases">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Details</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableCell>{item?.others}</TableCell>
+                    </TableBody>
+                  </Table>
+                </>
+              )}
             </Box>
           </Collapse>
         </TableCell>

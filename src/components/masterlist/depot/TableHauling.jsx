@@ -15,6 +15,7 @@ import {
   Table,
   TableHead,
   TableBody,
+  Modal,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
@@ -22,6 +23,7 @@ import TableAction from "../../table/TableAction";
 import useDisclosure from "../../../hook/useDisclosure";
 import { theme } from "../../../theme";
 import { getPathLength } from "geolib";
+import { LoadingButton } from "@mui/lab";
 
 const TableHauling = ({ item, columns }) => {
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -73,6 +75,8 @@ const TableHauling = ({ item, columns }) => {
   const km = item.points?.length > 0 && getPathLength(item.points) / 1000;
   const odo = item?.odometer;
   const estimatedOdo = odo + km;
+
+  const estimatedOdoOver = estimatedTotalKm - totalKm > 1;
   return (
     <>
       <StyledTableRow
@@ -223,9 +227,22 @@ const TableHauling = ({ item, columns }) => {
               ) : column.id === "estimated_odo" ? (
                 <Box>{`${estimatedOdo} km`}</Box>
               ) : column.id === "estimated_total_km" ? (
-                <Box>{estimatedTotalKm}</Box>
+                <Box
+                  sx={{
+                    color: estimatedOdoOver && theme.palette.custom.danger,
+                    textAlign: "center",
+                  }}
+                >
+                  {Math.round(estimatedTotalKm)}
+                </Box>
               ) : column.id === "total_km" ? (
-                <Box>{totalKm}</Box>
+                <Box
+                  sx={{
+                    textAlign: "center",
+                  }}
+                >
+                  {Math.round(totalKm)}
+                </Box>
               ) : (
                 value
               )}
@@ -234,7 +251,7 @@ const TableHauling = ({ item, columns }) => {
         })}
       </StyledTableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
@@ -246,6 +263,11 @@ const TableHauling = ({ item, columns }) => {
                     <TableCell>Status</TableCell>
                     <TableCell>Address</TableCell>
                     <TableCell>Date</TableCell>
+                    <TableCell>Temperature</TableCell>
+                    <TableCell>Tare Weight</TableCell>
+                    <TableCell>Net Weight</TableCell>
+                    <TableCell>Gross Weight</TableCell>
+                    <TableCell>DOA Count</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -263,12 +285,16 @@ const TableHauling = ({ item, columns }) => {
                                 : theme.palette.customBlue.main,
                           }}
                         >
-                          {`${loc.status
-                            .toLowerCase()
-                            .replace(/\b\w/g, (l) => l.toUpperCase())}`}
+                          {i == 0
+                            ? "Left Depot"
+                            : i == 1
+                            ? "Arrived Farm"
+                            : i == 2
+                            ? "Left Farm"
+                            : i == 3 && "Arrived Depot"}
                         </TableCell>
 
-                        <TableCell>
+                        <TableCell sx={{ maxWidth: "200px" }}>
                           {`${loc?.address[0]?.name || "(No Name)"}  ${
                             loc?.address[0]?.district || "(No District)"
                           } ${loc?.address[0]?.city || "(No City)"}  ${
@@ -279,15 +305,110 @@ const TableHauling = ({ item, columns }) => {
                         <TableCell>
                           {dayjs(loc?.date).format("MMM-DD-YY h:mm a")}
                         </TableCell>
+
+                        <TableCell>{item?.temperature[i]}</TableCell>
+                        <TableCell>{item?.tare_weight[i]}</TableCell>
+                        <TableCell>
+                          {i == 2
+                            ? item?.net_weight[0]
+                            : i == 3 && item?.net_weight[1]}
+                        </TableCell>
+                        <TableCell>
+                          {i == 2
+                            ? item?.gross_weight[0]
+                            : i == 3 && item?.gross_weight[1]}
+                        </TableCell>
+                        <TableCell>
+                          {item?.locations?.length === i + 1 && item?.doa_count}
+                        </TableCell>
                       </TableRow>
                     );
                   })}
                 </TableBody>
               </Table>
+
+              {/* DIESELS */}
+              {item?.diesels?.length !== 0 && (
+                <>
+                  <Typography variant="h6" gutterBottom component="div">
+                    Diesels
+                  </Typography>
+                  <Table size="small" aria-label="purchases">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Details</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {item?.diesels?.map((loc, i) => {
+                        return (
+                          <TableCell direction="row" gap={1} key={i}>
+                            <Box
+                              sx={{ minWidth: "140px" }}
+                            >{`Gas Station: ${loc?.gas_station_name} `}</Box>
+                            <Box
+                              sx={{ minWidth: "100px" }}
+                            >{`Odometer: ${loc?.odometer} `}</Box>
+                            <Box
+                              sx={{ minWidth: "60px" }}
+                            >{`Liter: ${loc?.liter} `}</Box>
+                            <Box>{`Amount: ${loc?.amount} `}</Box>
+                          </TableCell>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </>
+              )}
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
+
+      {/* <Modal open={isOpen || isOpenAction} onClose={onClose}>
+        <Box className="table__modal">
+          {isOpen ? (
+            <ImageViewer
+              alt="Odometer Image"
+              onClose={onClose}
+              img={`${process.env.BASEURL}/${item.odometer_image_path}`}
+            />
+          ) : (
+            <>
+              <Typography id="modal-modal-title" variant="h6">
+                {` Are you sure you want to delete the " ${item._id} " record ? This action cannot be undone.`}
+              </Typography>
+              <Box
+                sx={{
+                  marginTop: 2,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: 2,
+                }}
+              >
+                <Button onClick={onCloseAction} color="customDanger">
+                  Cancel
+                </Button>
+                <LoadingButton
+                  onClick={() => {
+                    deleteTrip(item._id);
+                    onCloseAction();
+                    toast({
+                      severity: "success",
+                      message: `Success deleting user  ${item._id}`,
+                    });
+                  }}
+                  variant="contained"
+                  color="customDanger"
+                  loading={isLoading}
+                >
+                  Delete
+                </LoadingButton>
+              </Box>
+            </>
+          )}
+        </Box>
+      </Modal> */}
     </>
   );
 };
