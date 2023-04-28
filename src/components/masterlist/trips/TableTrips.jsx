@@ -77,6 +77,8 @@ const TableTrips = ({ item, columns }) => {
   const odo = item?.odometer;
   const estimatedOdo = odo + km;
 
+  const estimatedOdoOver = estimatedTotalKm - totalKm > 1;
+
   //   FUNCTION
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -256,9 +258,22 @@ const TableTrips = ({ item, columns }) => {
               ) : column.id === "estimated_odo" ? (
                 <Box>{estimatedOdo}</Box>
               ) : column.id === "estimated_total_km" ? (
-                <Box>{estimatedTotalKm}</Box>
+                <Box
+                  sx={{
+                    color: estimatedOdoOver && theme.palette.custom.danger,
+                    textAlign: "center",
+                  }}
+                >
+                  {Math.round(estimatedTotalKm)}
+                </Box>
               ) : column.id === "total_km" ? (
-                <Box>{totalKm}</Box>
+                <Box
+                  sx={{
+                    textAlign: "center",
+                  }}
+                >
+                  {Math.round(totalKm)}
+                </Box>
               ) : (
                 value
               )}

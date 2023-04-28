@@ -126,6 +126,7 @@ const Map = () => {
   // data.data[0]?.locations.forEach((marker) => {
   //   bounds.extend({ lat: marker.lat, lng: marker.lng });
   // });
+
   return (
     <Box sx={{ width: "100%", marginBottom: "10px" }}>
       <Button
@@ -173,7 +174,7 @@ const Map = () => {
                   <Box className="map__first-label">
                     Vehicle:
                     <Box className="map__first-data">
-                      {`${data.data[0].vehicle_id.plate_no} - ${data.data[0].vehicle_id.name}`}
+                      {`${data.data[0].vehicle_id.plate_no}`}
                     </Box>
                   </Box>
 
