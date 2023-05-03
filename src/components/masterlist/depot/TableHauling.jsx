@@ -24,6 +24,7 @@ import useDisclosure from "../../../hook/useDisclosure";
 import { theme } from "../../../theme";
 import { getPathLength } from "geolib";
 import { LoadingButton } from "@mui/lab";
+import HaulingDrawer from "./HaulingDrawer";
 
 const TableHauling = ({ item, columns }) => {
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -182,7 +183,12 @@ const TableHauling = ({ item, columns }) => {
                   handleOpen={onToggleAction}
                   drawerDisclosure={drawerDisclosure}
                   hideDelete={true}
-                  drawer={null}
+                  drawer={
+                    <HaulingDrawer
+                      onClose={drawerDisclosure.onClose}
+                      item={item}
+                    />
+                  }
                 />
               ) : column.id === "others" ? (
                 value !== "null" && value
@@ -263,11 +269,11 @@ const TableHauling = ({ item, columns }) => {
                     <TableCell>Status</TableCell>
                     <TableCell>Address</TableCell>
                     <TableCell>Date</TableCell>
-                    <TableCell>Temperature</TableCell>
+                    {/* <TableCell>Temperature</TableCell>
                     <TableCell>Tare Weight</TableCell>
                     <TableCell>Net Weight</TableCell>
                     <TableCell>Gross Weight</TableCell>
-                    <TableCell>DOA Count</TableCell>
+                    <TableCell>DOA Count</TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -306,7 +312,7 @@ const TableHauling = ({ item, columns }) => {
                           {dayjs(loc?.date).format("MMM-DD-YY h:mm a")}
                         </TableCell>
 
-                        <TableCell>{item?.temperature[i]}</TableCell>
+                        {/* <TableCell>{item?.temperature[i]}</TableCell>
                         <TableCell>{item?.tare_weight[i]}</TableCell>
                         <TableCell>
                           {i == 2
@@ -320,7 +326,7 @@ const TableHauling = ({ item, columns }) => {
                         </TableCell>
                         <TableCell>
                           {item?.locations?.length === i + 1 && item?.doa_count}
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}

@@ -371,7 +371,6 @@ const TableTrips = ({ item, columns }) => {
                   </Table>
                 </>
               )}
-              {console.log(item?.others?.length)}
               {/* OTHERS */}
               {item?.others?.length > 0 && (
                 <>

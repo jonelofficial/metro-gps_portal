@@ -190,9 +190,15 @@ const Trips = () => {
         Id: item._id.slice(20),
         User: `${item?.user_id?.first_name} ${item?.user_id?.last_name}`,
         Vehicle: item?.vehicle_id?.plate_no,
-        Duration: `${hours > 0 ? hours + " hours" : ""} ${
-          minutes > 0 ? minutes + " minutes" : ""
-        }${hours <= 0 && minutes <= 0 ? "0" : ""}`,
+        Duration: `${
+          hours > 0 && hours != 1
+            ? hours + " hours"
+            : hours == 1
+            ? hours + " hour"
+            : ""
+        } ${minutes > 0 ? minutes + " minutes" : ""}${
+          hours <= 0 && minutes <= 0 ? "0" : ""
+        }`,
         Start: dayjs(startDate).format("MMM-DD-YY hh:mm a"),
         End: dayjs(endDate).format("MMM-DD-YY hh:mm a"),
         Locations: destination.join("\n"),
@@ -216,9 +222,15 @@ const Trips = () => {
         "Employee Id": item.employee_id,
         Name: item.name,
         Department: item?.department,
-        "Total Duration": `${hours > 0 ? hours + " hours" : ""} ${
-          minutes > 0 ? minutes + " minutes" : ""
-        }${hours <= 0 && minutes <= 0 ? "0" : ""}`,
+        "Total Duration": `${
+          hours > 0 && hours != 1
+            ? hours + " hours"
+            : hours == 1
+            ? hours + " hour"
+            : ""
+        } ${minutes > 0 ? minutes + " minutes" : ""}${
+          hours <= 0 && minutes <= 0 ? "0" : ""
+        }`,
       };
     });
 
