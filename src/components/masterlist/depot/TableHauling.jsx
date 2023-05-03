@@ -25,6 +25,7 @@ import { theme } from "../../../theme";
 import { getPathLength } from "geolib";
 import { LoadingButton } from "@mui/lab";
 import HaulingDrawer from "./HaulingDrawer";
+import ImageViewer from "../../table/ImageViewer";
 
 const TableHauling = ({ item, columns }) => {
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -371,50 +372,17 @@ const TableHauling = ({ item, columns }) => {
         </TableCell>
       </TableRow>
 
-      {/* <Modal open={isOpen || isOpenAction} onClose={onClose}>
+      <Modal open={isOpen || isOpenAction} onClose={onClose}>
         <Box className="table__modal">
-          {isOpen ? (
+          {isOpen && (
             <ImageViewer
               alt="Odometer Image"
               onClose={onClose}
               img={`${process.env.BASEURL}/${item.odometer_image_path}`}
             />
-          ) : (
-            <>
-              <Typography id="modal-modal-title" variant="h6">
-                {` Are you sure you want to delete the " ${item._id} " record ? This action cannot be undone.`}
-              </Typography>
-              <Box
-                sx={{
-                  marginTop: 2,
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  gap: 2,
-                }}
-              >
-                <Button onClick={onCloseAction} color="customDanger">
-                  Cancel
-                </Button>
-                <LoadingButton
-                  onClick={() => {
-                    deleteTrip(item._id);
-                    onCloseAction();
-                    toast({
-                      severity: "success",
-                      message: `Success deleting user  ${item._id}`,
-                    });
-                  }}
-                  variant="contained"
-                  color="customDanger"
-                  loading={isLoading}
-                >
-                  Delete
-                </LoadingButton>
-              </Box>
-            </>
           )}
         </Box>
-      </Modal> */}
+      </Modal>
     </>
   );
 };

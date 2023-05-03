@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DrawerWrapper from "../../drawer/DrawerWrapper";
 import { useGetDepartmentsQuery } from "../../../api/sedarApi";
 import InputField from "../../form/InputField";
 import { Controller, useForm } from "react-hook-form";
 import { Autocomplete, TextField, Typography } from "@mui/material";
+import { useUpdateTripHaulingMutation } from "../../../api/metroApi";
+import useToast from "../../../hook/useToast";
 
 const HaulingDrawer = ({ item, onClose }) => {
+  const [updateTripHauling, { isLoading: isUpdating }] =
+    useUpdateTripHaulingMutation();
   const {
     data: departments = [],
     isLoading,
     isError,
   } = useGetDepartmentsQuery();
+
+  const { toast } = useToast();
 
   // REACT HOOK FORMS
   const {
@@ -24,17 +30,50 @@ const HaulingDrawer = ({ item, onClose }) => {
       department: null,
     },
   });
+
+  useEffect(() => {
+    departments &&
+      item?.charging &&
+      setFormValue("department", { department_name: item?.charging });
+    return () => {
+      null;
+    };
+  }, [departments]);
+
+  // FUNCTION
+  const onSubmit = async (data) => {
+    try {
+      let res;
+      const newObj = { ...data, charging: data?.department?.department_name };
+
+      if (item) {
+        res = await updateTripHauling({ id: item._id, obj: newObj });
+        !res?.error &&
+          toast({
+            severity: "success",
+            message: `Success updating trip ${item._id}`,
+          });
+      }
+
+      if (res?.error) {
+        toast({ severity: "error", message: res.error.data.error });
+      } else {
+        onClose();
+      }
+    } catch (error) {
+      toast({ severity: "error", message: error });
+    }
+
+    t;
+  };
   return (
     <DrawerWrapper
       title={item ? "Update Trip" : "Create Trip"}
       color={item ? "customWarning" : "customSuccess"}
-      // loading={isUpdating || null}
-      loading={null}
-      // onSubmit={handleSubmit(onSubmit) || null}
-      onSubmit={null}
+      loading={isUpdating}
+      onSubmit={handleSubmit(onSubmit)}
       onClose={onClose}
-      // disabled={isLoading || null}
-      disabled={null}
+      disabled={isLoading}
     >
       <InputField
         {...register("odometer")}
@@ -136,6 +175,23 @@ const HaulingDrawer = ({ item, onClose }) => {
           },
         }}
         defaultValue={item && item?.gross_weight}
+      />
+
+      <InputField
+        {...register("item_count")}
+        id="item_count"
+        label="Item Count"
+        autoComplete="off"
+        errors={errors}
+        sx={{ width: "100%" }}
+        InputProps={{
+          inputProps: {
+            style: {
+              textTransform: "uppercase",
+            },
+          },
+        }}
+        defaultValue={item && item?.item_count}
       />
 
       <InputField

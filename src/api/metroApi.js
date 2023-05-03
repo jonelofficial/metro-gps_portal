@@ -184,6 +184,14 @@ export const metroApi = createApi({
         `/depot/trips-hauling?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}&date=${params?.date}`,
       providesTags: ["Trip Hauling"],
     }),
+    updateTripHauling: builder.mutation({
+      query: (payload) => ({
+        url: `/depot/trip-hauling/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+      invalidatesTags: ["Trip Hauling"],
+    }),
   }),
 });
 
@@ -218,4 +226,5 @@ export const {
   useGetTotalTripDriverQuery,
   // DEPOT HAULING
   useGetAllTripsHaulingQuery,
+  useUpdateTripHaulingMutation,
 } = metroApi;

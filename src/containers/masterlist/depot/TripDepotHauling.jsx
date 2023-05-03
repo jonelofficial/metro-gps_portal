@@ -220,9 +220,7 @@ const TripDepot = () => {
     await excelExport(newObj, "METRO-HAULING-REPORT");
     await excelExport(dailyDuration, "METRO-HAULING-USER-DURATION-REPORT");
 
-    setTimeout(() => {
-      onCloseExport();
-    }, 1000);
+    onCloseExport();
   };
 
   if (isLoading) {
