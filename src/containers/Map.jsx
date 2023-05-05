@@ -3,38 +3,41 @@ import GoogleMapReact from "google-map-react";
 import { Box, Tooltip } from "@material-ui/core";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetAllTripsQuery } from "../api/metroApi";
-import { useState } from "react";
+import {
+  useGetAllTripsHaulingQuery,
+  useGetAllTripsQuery,
+} from "../api/metroApi";
 import { Stack } from "@mui/system";
 import { ObjectID } from "bson";
 import useToast from "../hook/useToast";
 import { theme } from "../theme";
-import { useEffect } from "react";
 import dayjs from "dayjs";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import image from "../assets/images/guide.png";
 import Lottie from "lottie-react";
 import searchLoading from "../assets/images/lottie/search-file.json";
 import error from "../assets/images/lottie/error.json";
-
-import "../style/map/map.scss";
 import { Button, Divider, Typography } from "@mui/material";
+import "../style/map/map.scss";
 
 const Map = () => {
-  let { id } = useParams();
+  let { id, category } = useParams();
 
   const navigate = useNavigate();
   // HOOKS
   const { toast } = useToast();
 
+  const opt1 = {
+    search: id,
+    searchBy: "_id",
+  };
+  const opt2 = { refetchOnMountOrArgChange: true };
+
   // RTK QUERY
-  const { data, isLoading, isError, isFetching } = useGetAllTripsQuery(
-    {
-      search: id,
-      searchBy: "_id",
-    },
-    { refetchOnMountOrArgChange: true }
-  );
+  const { data, isLoading, isError, isFetching } =
+    category === "office"
+      ? useGetAllTripsQuery(opt1, opt2)
+      : category === "hauling" && useGetAllTripsHaulingQuery(opt1, opt2);
 
   if (isLoading || isFetching) {
     return (
@@ -132,7 +135,12 @@ const Map = () => {
       <Button
         variant="contained"
         sx={{ margin: "10px" }}
-        onClick={() => navigate(`/reports/trips-sg`)}
+        onClick={() => {
+          category === "office"
+            ? navigate("/reports/trips-sg")
+            : category === "hauling" &&
+              navigate("/reports/trips-depot", { state: "delivery" });
+        }}
       >
         Back
       </Button>
@@ -178,6 +186,67 @@ const Map = () => {
                     </Box>
                   </Box>
 
+                  {/* HAULING */}
+                  {category === "hauling" && (
+                    <>
+                      <Box className="map__first-label">
+                        Destination:
+                        <Box className="map__first-data">
+                          {`${data.data[0]?.destination}`}
+                        </Box>
+                      </Box>
+
+                      <Box className="map__first-label">
+                        Farm:
+                        <Box className="map__first-data">
+                          {`${data.data[0]?.farm}`}
+                        </Box>
+                      </Box>
+
+                      <Box className="map__first-label">
+                        Temperature:
+                        <Box className="map__first-data">
+                          {`${data.data[0]?.temperature}`}
+                        </Box>
+                      </Box>
+
+                      <Box className="map__first-label">
+                        Tare Weight:
+                        <Box className="map__first-data">
+                          {`${data.data[0]?.tare_weight}`}
+                        </Box>
+                      </Box>
+
+                      <Box className="map__first-label">
+                        Net Weight:
+                        <Box className="map__first-data">
+                          {`${data.data[0]?.net_weight}`}
+                        </Box>
+                      </Box>
+
+                      <Box className="map__first-label">
+                        Gross Weight:
+                        <Box className="map__first-data">
+                          {`${data.data[0]?.gross_weight}`}
+                        </Box>
+                      </Box>
+
+                      <Box className="map__first-label">
+                        Item Count:
+                        <Box className="map__first-data">
+                          {`${data.data[0]?.item_count}`}
+                        </Box>
+                      </Box>
+
+                      <Box className="map__first-label">
+                        DOA Count:
+                        <Box className="map__first-data">
+                          {`${data.data[0]?.doa_count}`}
+                        </Box>
+                      </Box>
+                    </>
+                  )}
+
                   <Box className="map__first-label">
                     Locations:
                     <Box className="map__first-data">
@@ -186,37 +255,6 @@ const Map = () => {
                           return new Date(a.date) - new Date(b.date);
                         })
                         .map((item, i) => {
-                          // if (
-                          //   item.status == "left" ||
-                          //   item.status == "arrived"
-                          // ) {
-                          //   return (
-                          //     <Fragment key={i}>
-                          //       <Box
-                          //         sx={{
-                          //           color:
-                          //             item.status == "left"
-                          //               ? theme.palette.custom.danger
-                          //               : item.status == "arrived" &&
-                          //                 theme.palette.custom.success,
-
-                          //           textTransform: "capitalize",
-                          //         }}
-                          //       >{`${item.status} :`}</Box>
-                          //       {`${item?.address[0]?.name || "(No Name)"}  ${
-                          //         item?.address[0]?.district || "(No District)"
-                          //       } ${item?.address[0]?.city || "(No City)"}  ${
-                          //         item?.address[0]?.subregion ||
-                          //         "(No Subregion)"
-                          //       }`}
-                          //       <br />
-                          //       Date:{" "}
-                          //       {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
-                          //       <br />
-                          //       <br />
-                          //     </Fragment>
-                          //   );
-                          // }
                           return (
                             <Fragment key={i}>
                               <Box
@@ -285,6 +323,13 @@ const Map = () => {
                       </Box>
                     </Box>
                   )}
+
+                  <Box className="map__first-label">
+                    Charging:
+                    <Box className="map__first-data">
+                      {`${data.data[0].charging}`}
+                    </Box>
+                  </Box>
 
                   <Box className="map__first-label">
                     Odo:

@@ -197,7 +197,9 @@ const TableHauling = ({ item, columns }) => {
                 <Button
                   variant="outlined"
                   sx={{ textTransform: "none" }}
-                  onClick={() => navigate(`/map/${item._id}`)}
+                  onClick={() =>
+                    navigate(`/map/${item._id}/${item?.trip_category}`)
+                  }
                 >
                   {`${value.slice(20)}`}
                 </Button>

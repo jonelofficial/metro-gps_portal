@@ -145,7 +145,7 @@ const Routing = () => {
 
         // MAP
         {
-          path: "/map/:id",
+          path: "/map/:id/:category",
           element: <Map />,
           errorElement: <ErrorElement />,
         },

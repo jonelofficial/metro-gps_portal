@@ -2,9 +2,12 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box, Tab } from "@mui/material";
 import React, { useState } from "react";
 import TripDepotHauling from "./TripDepotHauling";
+import { useParams, useLocation } from "react-router-dom";
 
 const TripDepot = () => {
-  const [value, setValue] = useState("1");
+  const { state } = useLocation();
+
+  const [value, setValue] = useState("hauling");
 
   const handleChange = (e, newValue) => {
     setValue(newValue);
@@ -17,20 +20,20 @@ const TripDepot = () => {
           <TabList onChange={handleChange}>
             <Tab
               label="Hauling"
-              value="1"
+              value="hauling"
               sx={{ fontWeight: "600", fontSize: "15px" }}
             />
             <Tab
               label="Delivery"
-              value="2"
+              value="delivery"
               sx={{ fontWeight: "600", fontSize: "15px" }}
             />
           </TabList>
         </Box>
-        <TabPanel value="1">
+        <TabPanel value="hauling">
           <TripDepotHauling />
         </TabPanel>
-        <TabPanel value="2"></TabPanel>
+        <TabPanel value="delivery"></TabPanel>
       </TabContext>
     </Box>
   );

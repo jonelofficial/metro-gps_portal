@@ -213,7 +213,7 @@ const TableTrips = ({ item, columns }) => {
                 <Button
                   variant="outlined"
                   sx={{ textTransform: "none" }}
-                  onClick={() => navigate(`/map/${item._id}`)}
+                  onClick={() => navigate(`/map/${item._id}/office`)}
                 >
                   {`${value.slice(20)}`}
                 </Button>
