@@ -52,7 +52,7 @@ const VehicleDrawer = () => {
     setFormValue("department", item?.department);
     setFormValue("vehicle_type", item?.vehicle_type);
     setFormValue("brand", item?.brand);
-    setFormValue("fuel_type");
+    setFormValue("fuel_type", item?.fuel_type);
     setFormValue("plate_no", item?.plate_no);
     setFormValue("name", item?.name);
     setFormValue("km_per_liter", item?.km_per_liter);
