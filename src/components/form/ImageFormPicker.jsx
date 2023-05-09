@@ -8,9 +8,7 @@ const ImageFormPicker = ({ item, image, setImage }) => {
   function getImageFileObject(imageFile) {
     setImage({ imageFile });
   }
-  function runAfterImageDelete(file) {
-    // console.log({ file });
-  }
+  function runAfterImageDelete(file) {}
   return (
     <Box className="drawer__form-image">
       {item?.profile && image == null ? (

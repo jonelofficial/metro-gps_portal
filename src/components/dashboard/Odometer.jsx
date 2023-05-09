@@ -34,7 +34,6 @@ const Odometer = ({ tripData }) => {
   const plateNumbers = {};
   filteredData?.forEach((item) => {
     const plateNumber = item.vehicle_id.plate_no;
-    // console.log(item.odometer_done);
     if (!plateNumbers[plateNumber]) {
       plateNumbers[plateNumber] = {
         plate_no: plateNumber,
@@ -46,8 +45,6 @@ const Odometer = ({ tripData }) => {
       plateNumbers[plateNumber].odo =
         plateNumbers[plateNumber].odo + item.odometer_done;
     }
-    console.log(item.odometer_done);
-    // console.log(plateNumbers[plateNumber].odo);
   });
 
   const obj = Object.values(plateNumbers);

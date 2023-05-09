@@ -31,6 +31,10 @@ import {
   columns,
   dropData,
 } from "../../utility/table-columns/gasStationColumns";
+import {
+  onToggle as onToggleCreate,
+  setDrawerState,
+} from "../../redux-toolkit/counter/drawerDisclosure";
 
 const GasStations = () => {
   // HOOKS
@@ -95,7 +99,6 @@ const GasStations = () => {
   // FUNCTION
 
   const handleSearch = (data) => {
-    console.log(data);
     dispatch(setSearch(data.search));
     dispatch(setSearchBy(data.search_by?.id || null));
   };
@@ -160,7 +163,10 @@ const GasStations = () => {
                 handleRefresh={() => refresh(reset)}
                 handleToggleExport={handleToggleExport}
                 handleToggleImport={onToggleImport}
-                handleCreate={onToggle}
+                handleCreate={() => {
+                  dispatch(onToggleCreate());
+                  dispatch(setDrawerState(null));
+                }}
               />
             </>
           )}
@@ -177,14 +183,8 @@ const GasStations = () => {
         />
 
         {/* CREATE DRAWER */}
-        <Drawer
-          className="main-drawer"
-          anchor="right"
-          open={isOpen}
-          onClose={onClose}
-        >
-          <GasStationsDrawer onClose={onClose} />
-        </Drawer>
+
+        <GasStationsDrawer />
 
         {/* EXPORT LOADING */}
         <ExportModal isOpenExport={isOpenExport} />

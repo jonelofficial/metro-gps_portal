@@ -112,7 +112,6 @@ const TripDepot = () => {
   } = useDisclosure();
 
   const handleSearch = (data) => {
-    console.log(data);
     setDate(dayjs(data.date).format("YYYY-MM-DD"));
     dispatch(setSearch(data.search));
     dispatch(setSearchBy(data.search_by?.id || null));

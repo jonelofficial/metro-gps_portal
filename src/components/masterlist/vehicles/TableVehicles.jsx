@@ -16,7 +16,6 @@ import useQrCode from "../../../hook/useQrCode";
 import useToast from "../../../hook/useToast";
 import ImageViewer from "../../table/ImageViewer";
 import TableAction from "../../table/TableAction";
-import VehicleDrawer from "./VehicleDrawer";
 
 const TableVehicles = ({ item, columns }) => {
   const { toast } = useToast();

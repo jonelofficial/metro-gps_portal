@@ -9,11 +9,18 @@ import useToast from "../../../hook/useToast";
 import { gasStationSchema } from "../../../utility/schema";
 import DrawerWrapper from "../../drawer/DrawerWrapper";
 import InputField from "../../form/InputField";
+import { onClose } from "../../../redux-toolkit/counter/drawerDisclosure";
+import { useDispatch, useSelector } from "react-redux";
+import { Drawer } from "@mui/material";
 
-const GasStationsDrawer = ({ onClose, item }) => {
+const GasStationsDrawer = () => {
   const [createGasStaion, { isLoading }] = useCreateGasStationMutation();
   const [updateGasStation, { isLoading: isUpdating }] =
     useUpdateGasStationMutation();
+
+  const isDrawerOpen = useSelector((state) => state.drawer.value);
+  const item = useSelector((state) => state.drawer.drawerState);
+  const dispatch = useDispatch();
 
   const { toast } = useToast();
 
@@ -22,6 +29,7 @@ const GasStationsDrawer = ({ onClose, item }) => {
     handleSubmit,
     formState: { errors },
     setValue: setFormValue,
+    clearErrors,
   } = useForm({ resolver: yupResolver(gasStationSchema), mode: "onSubmit" });
 
   useEffect(() => {
@@ -30,7 +38,7 @@ const GasStationsDrawer = ({ onClose, item }) => {
     return () => {
       null;
     };
-  }, []);
+  }, [item]);
 
   const onSubmit = async (data) => {
     try {
@@ -42,8 +50,6 @@ const GasStationsDrawer = ({ onClose, item }) => {
             severity: "success",
             message: `Success updating gas station ${data.label}`,
           });
-
-        console.log(res);
       } else {
         res = await createGasStaion(data);
         !res?.error &&
@@ -56,30 +62,43 @@ const GasStationsDrawer = ({ onClose, item }) => {
       if (res?.error) {
         toast({ severity: "error", message: res.error.data.error });
       } else {
-        onClose();
+        dispatch(onClose());
       }
     } catch (error) {
       toast({ severity: "error", message: error });
     }
   };
   return (
-    <DrawerWrapper
-      title={item ? "Update Gas Station" : "Create Gas Station"}
-      color={item ? "customWarning" : "customSuccess"}
-      loading={item ? isUpdating : isLoading}
-      onSubmit={handleSubmit(onSubmit)}
-      onClose={onClose}
+    <Drawer
+      className="main-drawer"
+      anchor="right"
+      open={isDrawerOpen}
+      onClose={() => {
+        dispatch(onClose());
+        clearErrors();
+      }}
     >
-      <InputField
-        {...register("label")}
-        id="label"
-        label="Label"
-        autoComplete="off"
-        errors={errors}
-        sx={{ width: "100%" }}
-        defaultValue={item && item.label}
-      />
-    </DrawerWrapper>
+      <DrawerWrapper
+        title={item ? "Update Gas Station" : "Create Gas Station"}
+        color={item ? "customWarning" : "customSuccess"}
+        loading={item ? isUpdating : isLoading}
+        onSubmit={handleSubmit(onSubmit)}
+        onClose={() => {
+          dispatch(onClose());
+          clearErrors();
+        }}
+      >
+        <InputField
+          {...register("label")}
+          id="label"
+          label="Label"
+          autoComplete="off"
+          errors={errors}
+          sx={{ width: "100%" }}
+          defaultValue={item && item.label}
+        />
+      </DrawerWrapper>
+    </Drawer>
   );
 };
 

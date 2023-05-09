@@ -13,7 +13,6 @@ import { useDeleteGasStationMutation } from "../../../api/metroApi";
 import useDisclosure from "../../../hook/useDisclosure";
 import useToast from "../../../hook/useToast";
 import TableAction from "../../table/TableAction";
-import GasStationsDrawer from "./GasStationsDrawer";
 
 const TableGasStation = ({ item, columns }) => {
   const drawerDisclosure = useDisclosure();
@@ -58,16 +57,7 @@ const TableGasStation = ({ item, columns }) => {
               }}
             >
               {column.id === "action" && item["label"] !== "Others" ? (
-                <TableAction
-                  handleOpen={onToggle}
-                  drawerDisclosure={drawerDisclosure}
-                  drawer={
-                    <GasStationsDrawer
-                      onClose={drawerDisclosure.onClose}
-                      item={item}
-                    />
-                  }
-                />
+                <TableAction item={item} />
               ) : (
                 value
               )}
