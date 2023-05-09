@@ -25,7 +25,6 @@ import useToast from "../../../hook/useToast";
 import { theme } from "../../../theme";
 import ImageViewer from "../../table/ImageViewer";
 import TableAction from "../../table/TableAction";
-import TripDrawer from "./TripDrawer";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useState } from "react";
@@ -39,7 +38,6 @@ const TableTrips = ({ item, columns }) => {
   const [deleteTrip, { isLoading }] = useDeleteTripMutation();
 
   //   HOOKS
-  const drawerDisclosure = useDisclosure();
   const { isOpen, onClose, onToggle } = useDisclosure();
   const {
     isOpen: isOpenAction,
@@ -196,7 +194,7 @@ const TableTrips = ({ item, columns }) => {
               ) : column.id === "odometer_image_path" && value != null ? (
                 <Button onClick={onToggle}>View</Button>
               ) : column.id === "action" ? (
-                <TableAction drawerDisclosure={drawerDisclosure} item={item} />
+                <TableAction item={item} />
               ) : column.id === "others" ? (
                 value !== "null" && value
               ) : column.id === "_id" ? (

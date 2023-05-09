@@ -26,6 +26,7 @@ import TableHauling from "../../../components/masterlist/depot/TableHauling";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { searchSchema } from "../../../utility/schema";
 import { getPathLength } from "geolib";
+import HaulingDrawer from "../../../components/masterlist/depot/HaulingDrawer";
 
 const TripDepot = () => {
   // STATE
@@ -285,7 +286,11 @@ const TripDepot = () => {
           })}
         />
 
+        {/* EXPORT LOADING */}
         <ExportModal isOpenExport={isOpenExport} />
+
+        {/* DRAWER */}
+        <HaulingDrawer />
       </TableWrapper>
     </Box>
   );

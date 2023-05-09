@@ -23,8 +23,7 @@ import TableAction from "../../table/TableAction";
 import useDisclosure from "../../../hook/useDisclosure";
 import { theme } from "../../../theme";
 import { getPathLength } from "geolib";
-import { LoadingButton } from "@mui/lab";
-import HaulingDrawer from "./HaulingDrawer";
+
 import ImageViewer from "../../table/ImageViewer";
 
 const TableHauling = ({ item, columns }) => {
@@ -40,7 +39,6 @@ const TableHauling = ({ item, columns }) => {
   }));
 
   const navigate = useNavigate();
-  const drawerDisclosure = useDisclosure();
   const [open, setOpen] = useState(false);
   const {
     isOpen: isOpenAction,
@@ -180,17 +178,7 @@ const TableHauling = ({ item, columns }) => {
               ) : column.id === "odometer_image_path" && value != null ? (
                 <Button onClick={onToggle}>View</Button>
               ) : column.id === "action" ? (
-                <TableAction
-                  handleOpen={onToggleAction}
-                  drawerDisclosure={drawerDisclosure}
-                  hideDelete={true}
-                  drawer={
-                    <HaulingDrawer
-                      onClose={drawerDisclosure.onClose}
-                      item={item}
-                    />
-                  }
-                />
+                <TableAction item={item} />
               ) : column.id === "others" ? (
                 value !== "null" && value
               ) : column.id === "_id" ? (

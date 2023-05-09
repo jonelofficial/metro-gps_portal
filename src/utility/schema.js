@@ -43,20 +43,6 @@ export const userSchema = Yup.object().shape({
 });
 
 export const userUpdateSchema = Yup.object().shape({
-  // department: Yup.object().required().label("Department"),
-  // employee_id: Yup.string().required().label("Employee Id"),
-  // first_name: Yup.string().required().label("First name"),
-  // last_name: Yup.string().required().label("Last name"),
-  // username: Yup.string().required().label("Username"),
-  // license_exp: Yup.date().required().label("License expiration"),
-  // trip_template: Yup.string().required().label("Trip template"),
-  // role: Yup.string().required().label("Role"),
-  // status: Yup.string().required().label("Status"),
-  // sub_unit: Yup.object().required().label("Sub Unit"),
-  // location: Yup.object().required().label("Location"),
-  // division: Yup.object().required().label("Division"),
-  // division_category: Yup.object().required().label("Division Category"),
-  // company: Yup.object().required().label("Company"),
   division: Yup.string().required().label("Division"),
   company: Yup.string().required().label("Company"),
   division_category: Yup.string().required().label("Division Category"),
@@ -97,4 +83,51 @@ export const vehicleSchema = Yup.object().shape({
 
 export const gasStationSchema = Yup.object().shape({
   label: Yup.string().required().label("Label"),
+});
+
+export const tripDrawerSchema = Yup.object().shape({
+  odometer: Yup.number()
+    .required("Odometer is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Odometer"),
+  odometer_done: Yup.number()
+    .required("Odometer done is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Odometer Done"),
+});
+
+export const haulingDrawerSchema = Yup.object().shape({
+  odometer: Yup.number()
+    .required("Odometer is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Odometer"),
+  odometer_done: Yup.number()
+    .required("Odometer done is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Odometer Done"),
+
+  temperature: Yup.number()
+    .required("Temperature is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Temperature"),
+  tare_weight: Yup.number()
+    .required("Tare Weight is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Tare Weight"),
+  net_weight: Yup.number()
+    .required("Net Weight is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Tare Weight"),
+  gross_weight: Yup.number()
+    .required("Gross Weight is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Tare Weight"),
+  item_count: Yup.number()
+    .required("Item Count is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Item Count"),
+  doa_count: Yup.number()
+    .required("DOA Count is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("DOA Count"),
 });

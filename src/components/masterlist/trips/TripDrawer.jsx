@@ -7,10 +7,9 @@ import useToast from "../../../hook/useToast";
 import DrawerWrapper from "../../drawer/DrawerWrapper";
 import InputField from "../../form/InputField";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearDrawerState,
-  onClose,
-} from "../../../redux-toolkit/counter/drawerDisclosure";
+import { onClose } from "../../../redux-toolkit/counter/drawerDisclosure";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { tripDrawerSchema } from "../../../utility/schema";
 
 const TripDrawer = () => {
   // RTK QUERY
@@ -35,7 +34,10 @@ const TripDrawer = () => {
     formState: { errors },
     handleSubmit,
     setValue: setFormValue,
+    clearErrors,
   } = useForm({
+    resolver: yupResolver(tripDrawerSchema),
+    mode: "onSubmit",
     defaultValues: {
       department: null,
     },
@@ -49,7 +51,7 @@ const TripDrawer = () => {
     setFormValue("odometer", item?.odometer);
     setFormValue("odometer_done", item?.odometer_done);
     return () => {
-      null;
+      clearErrors();
     };
   }, [departments, item]);
 
@@ -72,7 +74,6 @@ const TripDrawer = () => {
         toast({ severity: "error", message: res.error.data.error });
       } else {
         dispatch(onClose());
-        dispatch(clearDrawerState());
       }
     } catch (error) {
       toast({ severity: "error", message: error });
@@ -84,14 +85,20 @@ const TripDrawer = () => {
       className="main-drawer"
       anchor="right"
       open={isDrawerOpen}
-      onClose={() => dispatch(onClose())}
+      onClose={() => {
+        dispatch(onClose());
+        clearErrors();
+      }}
     >
       <DrawerWrapper
         title={item ? "Update Trip" : "Create Trip"}
         color={item ? "customWarning" : "customSuccess"}
         loading={isUpdating}
         onSubmit={handleSubmit(onSubmit)}
-        onClose={onClose}
+        onClose={() => {
+          dispatch(onClose());
+          clearErrors();
+        }}
         disabled={isLoading}
       >
         <InputField
@@ -144,7 +151,7 @@ const TripDrawer = () => {
                     option?.department_name === value?.department_name
                   }
                   renderInput={(params) => (
-                    <TextField {...params} label="Charging" I />
+                    <TextField {...params} label="Charging" />
                   )}
                   onChange={(e, value) => {
                     onChange(value);

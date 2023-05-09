@@ -9,6 +9,7 @@ export const drawerSlice = createSlice({
   reducers: {
     onClose: (state, action) => {
       state.value = false;
+      state.drawerState = {};
     },
     onToggle: (state, action) => {
       state.value = !state.value;
