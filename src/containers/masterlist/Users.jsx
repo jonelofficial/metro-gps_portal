@@ -30,6 +30,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { searchSchema } from "../../utility/schema";
 import "../../style/outlet/users/users.scss";
 import useToast from "../../hook/useToast";
+import {
+  onToggle as onToggleCreate,
+  setDrawerState,
+} from "../../redux-toolkit/counter/drawerDisclosure";
 
 const Users = () => {
   const [date, setDate] = useState();
@@ -188,7 +192,10 @@ const Users = () => {
                 handleRefresh={() => refresh(reset)}
                 handleToggleExport={handleToggleExport}
                 handleToggleImport={onToggleImport}
-                handleCreate={onToggle}
+                handleCreate={() => {
+                  dispatch(onToggleCreate());
+                  dispatch(setDrawerState(null));
+                }}
               />
             </>
           )}
@@ -205,14 +212,15 @@ const Users = () => {
         />
 
         {/* CREATE DRAWER */}
-        <Drawer
+        {/* <Drawer
           className="main-drawer"
           anchor="right"
           open={isOpen}
           onClose={onClose}
         >
           <UserDrawer onClose={onClose} />
-        </Drawer>
+        </Drawer> */}
+        <UserDrawer />
 
         {/* EXPORT LOADING */}
         <ExportModal isOpenExport={isOpenExport} />

@@ -79,16 +79,7 @@ const TableUsers = ({ item, columns }) => {
                   <Button onClick={handleDownloadQr}>{a}Download</Button>
                 </>
               ) : column.id === "action" ? (
-                <TableAction
-                  handleOpen={onToggleAction}
-                  drawerDisclosure={drawerDisclosure}
-                  drawer={
-                    <UserDrawer
-                      onClose={drawerDisclosure.onClose}
-                      item={item}
-                    />
-                  }
-                />
+                <TableAction item={item} />
               ) : column.id === "createdAt" ? (
                 value == null ? null : (
                   dayjs(value).format("MMM-DD-YYYY")
