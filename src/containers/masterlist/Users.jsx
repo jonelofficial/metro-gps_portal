@@ -1,4 +1,4 @@
-import { Drawer, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
   useGetAllUsersQuery,
@@ -212,14 +212,7 @@ const Users = () => {
         />
 
         {/* CREATE DRAWER */}
-        {/* <Drawer
-          className="main-drawer"
-          anchor="right"
-          open={isOpen}
-          onClose={onClose}
-        >
-          <UserDrawer onClose={onClose} />
-        </Drawer> */}
+
         <UserDrawer />
 
         {/* EXPORT LOADING */}

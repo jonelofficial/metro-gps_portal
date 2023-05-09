@@ -25,11 +25,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { searchNoDateSchema, searchSchema } from "../../utility/schema";
 import ExportModal from "../../components/features/ExportModal";
 import ImportModal from "../../components/features/ImportModal";
-import { Drawer } from "@mui/material";
 import useExcel from "../../hook/useExcel";
 import dayjs from "dayjs";
 import useToast from "../../hook/useToast";
 import VehicleDrawer from "../../components/masterlist/vehicles/VehicleDrawer";
+import {
+  onToggle as onToggleCreate,
+  setDrawerState,
+} from "../../redux-toolkit/counter/drawerDisclosure";
 
 const Vehicles = () => {
   // RTK
@@ -37,6 +40,7 @@ const Vehicles = () => {
   const { page, limit, search, searchBy } = useSelector(
     (state) => state.features.table
   );
+
   // HOOKS
   const { refresh } = useRefresh();
   const { excelExport, excelImport } = useExcel();
@@ -159,7 +163,10 @@ const Vehicles = () => {
                 handleRefresh={() => refresh(reset)}
                 handleToggleExport={handleToggleExport}
                 handleToggleImport={onToggleImport}
-                handleCreate={onToggle}
+                handleCreate={() => {
+                  dispatch(onToggleCreate());
+                  dispatch(setDrawerState(null));
+                }}
               />
             </>
           )}
@@ -174,14 +181,8 @@ const Vehicles = () => {
         />
 
         {/* CREATE DRAWER */}
-        <Drawer
-          className="main-drawer"
-          anchor="right"
-          open={isOpen}
-          onClose={onClose}
-        >
-          <VehicleDrawer onClose={onClose} />
-        </Drawer>
+
+        <VehicleDrawer />
 
         {/* EXPORT LOADING */}
         <ExportModal isOpenExport={isOpenExport} />

@@ -68,16 +68,7 @@ const TableVehicles = ({ item, columns }) => {
               {column.id === "createdAt" ? (
                 value && dayjs(value).format("MMM-DD-YYYY")
               ) : column.id === "action" ? (
-                <TableAction
-                  handleOpen={onToggleAction}
-                  drawerDisclosure={drawerDisclosure}
-                  drawer={
-                    <VehicleDrawer
-                      onClose={drawerDisclosure.onClose}
-                      item={item}
-                    />
-                  }
-                />
+                <TableAction item={item} />
               ) : column.id === "department" ? (
                 value?.label
               ) : column.id === "profile" && value != null ? (

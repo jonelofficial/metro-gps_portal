@@ -14,9 +14,16 @@ import AutoFormPicker from "../../form/AutoFormPicker";
 import FormPicker from "../../form/FormPicker";
 import ImageFormPicker from "../../form/ImageFormPicker";
 import InputField from "../../form/InputField";
+import { useDispatch, useSelector } from "react-redux";
+import { onClose } from "../../../redux-toolkit/counter/drawerDisclosure";
+import { Drawer } from "@mui/material";
 
-const VehicleDrawer = ({ onClose, item }) => {
+const VehicleDrawer = () => {
   const [image, setImage] = useState();
+
+  const isDrawerOpen = useSelector((state) => state.drawer.value);
+  const item = useSelector((state) => state.drawer.drawerState);
+  const dispatch = useDispatch();
 
   const [createVehicle, { isLoading }] = useCreateVehicleMutation();
   const [updateVehicle, { isLoading: isUpdating }] = useUpdateVehicleMutation();
@@ -29,6 +36,7 @@ const VehicleDrawer = ({ onClose, item }) => {
     control,
     formState: { errors },
     setValue: setFormValue,
+    clearErrors,
   } = useForm({
     resolver: yupResolver(vehicleSchema),
     mode: "onSubmit",
@@ -44,7 +52,10 @@ const VehicleDrawer = ({ onClose, item }) => {
     setFormValue("department", item?.department);
     setFormValue("vehicle_type", item?.vehicle_type);
     setFormValue("brand", item?.brand);
-    setFormValue("fuel_type", item?.fuel_type);
+    setFormValue("fuel_type");
+    setFormValue("plate_no", item?.plate_no);
+    setFormValue("name", item?.name);
+    setFormValue("km_per_liter", item?.km_per_liter);
 
     return () => {
       null;
@@ -87,7 +98,7 @@ const VehicleDrawer = ({ onClose, item }) => {
           message: res.error.data.error,
         });
       } else {
-        onClose();
+        dispatch(onClose());
       }
     } catch (error) {
       console.log("ERROR CREATE VEHICLE: ", error);
@@ -95,97 +106,107 @@ const VehicleDrawer = ({ onClose, item }) => {
   };
 
   return (
-    <DrawerWrapper
-      title={item ? "Update Vehicle" : "Create Vehicle"}
-      color={item ? "customWarning" : "customSuccess"}
-      loading={item ? isUpdating : isLoading}
-      onSubmit={handleSubmit(onSubmit)}
-      onClose={onClose}
+    <Drawer
+      className="main-drawer"
+      anchor="right"
+      open={isDrawerOpen}
+      onClose={() => {
+        dispatch(onClose());
+        clearErrors();
+      }}
     >
-      <ImageFormPicker item={item} image={image} setImage={setImage} />
-
-      <AutoFormPicker
-        control={control}
-        options={department}
-        name="department"
-        label="Department"
-        errors={errors}
-      />
-
-      <InputField
-        {...register("plate_no")}
-        id="plate_no"
-        label="Plate Number"
-        autoComplete="off"
-        errors={errors}
-        sx={{ width: "100%" }}
-        InputProps={{
-          inputProps: {
-            style: {
-              textTransform: "uppercase",
-            },
-          },
+      <DrawerWrapper
+        title={item ? "Update Vehicle" : "Create Vehicle"}
+        color={item ? "customWarning" : "customSuccess"}
+        loading={item ? isUpdating : isLoading}
+        onSubmit={handleSubmit(onSubmit)}
+        onClose={() => {
+          dispatch(onClose());
+          clearErrors();
         }}
-        defaultValue={item && item.plate_no}
-      />
+      >
+        <ImageFormPicker item={item} image={image} setImage={setImage} />
 
-      <FormPicker
-        control={control}
-        name="vehicle_type"
-        label="Vehicle Type"
-        items={[
-          { value: "Service Vehicle", label: "Service Vehicle" },
-          { value: "Depot", label: "Depot" },
-        ]}
-        errors={errors}
-      />
+        <AutoFormPicker
+          control={control}
+          options={department}
+          name="department"
+          label="Department"
+          errors={errors}
+        />
 
-      <InputField
-        {...register("name")}
-        id="name"
-        label="Name"
-        autoComplete="off"
-        errors={errors}
-        sx={{ width: "100%" }}
-        defaultValue={item && item.name}
-      />
+        <InputField
+          {...register("plate_no")}
+          id="plate_no"
+          label="Plate Number"
+          autoComplete="off"
+          errors={errors}
+          sx={{ width: "100%" }}
+          InputProps={{
+            inputProps: {
+              style: {
+                textTransform: "uppercase",
+              },
+            },
+          }}
+        />
 
-      <FormPicker
-        control={control}
-        name="brand"
-        label="Brand"
-        items={[
-          { value: "Toyota", label: "Toyota" },
-          { value: "Honda", label: "Honda" },
-          { value: "Hyundai", label: "Hyundai" },
-          { value: "Suzuki", label: "Suzuki" },
-          { value: "Mitsubishi", label: "Mitsubishi" },
-          { value: "Isuzu", label: "Isuzu" },
-        ]}
-        errors={errors}
-      />
+        <FormPicker
+          control={control}
+          name="vehicle_type"
+          label="Vehicle Type"
+          items={[
+            { value: "Service Vehicle", label: "Service Vehicle" },
+            { value: "Depot", label: "Depot" },
+          ]}
+          errors={errors}
+        />
 
-      <FormPicker
-        control={control}
-        name="fuel_type"
-        label="Fuel Type"
-        items={[
-          { value: "Gas", label: "Gas" },
-          { value: "Diesel", label: "Diesel" },
-        ]}
-        errors={errors}
-      />
+        <InputField
+          {...register("name")}
+          id="name"
+          label="Name"
+          autoComplete="off"
+          errors={errors}
+          sx={{ width: "100%" }}
+        />
 
-      <InputField
-        {...register("km_per_liter")}
-        id="km_per_liter"
-        label="KMPL"
-        autoComplete="off"
-        errors={errors}
-        sx={{ width: "100%" }}
-        defaultValue={item && item.km_per_liter}
-      />
-    </DrawerWrapper>
+        <FormPicker
+          control={control}
+          name="brand"
+          label="Brand"
+          items={[
+            { value: "Toyota", label: "Toyota" },
+            { value: "Honda", label: "Honda" },
+            { value: "Hyundai", label: "Hyundai" },
+            { value: "Suzuki", label: "Suzuki" },
+            { value: "Mitsubishi", label: "Mitsubishi" },
+            { value: "Isuzu", label: "Isuzu" },
+          ]}
+          errors={errors}
+        />
+
+        <FormPicker
+          control={control}
+          name="fuel_type"
+          label="Fuel Type"
+          items={[
+            { value: "Gasoline", label: "Gasoline" },
+            { value: "Diesel", label: "Diesel" },
+          ]}
+          errors={errors}
+        />
+
+        <InputField
+          {...register("km_per_liter")}
+          id="km_per_liter"
+          label="KMPL"
+          autoComplete="off"
+          errors={errors}
+          sx={{ width: "100%" }}
+        />
+      </DrawerWrapper>
+    </Drawer>
   );
 };
 
