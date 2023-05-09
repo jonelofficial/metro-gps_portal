@@ -196,17 +196,7 @@ const TableTrips = ({ item, columns }) => {
               ) : column.id === "odometer_image_path" && value != null ? (
                 <Button onClick={onToggle}>View</Button>
               ) : column.id === "action" ? (
-                <TableAction
-                  handleOpen={onToggleAction}
-                  drawerDisclosure={drawerDisclosure}
-                  hideDelete={true}
-                  drawer={
-                    <TripDrawer
-                      onClose={drawerDisclosure.onClose}
-                      item={item}
-                    />
-                  }
-                />
+                <TableAction drawerDisclosure={drawerDisclosure} item={item} />
               ) : column.id === "others" ? (
                 value !== "null" && value
               ) : column.id === "_id" ? (
@@ -222,14 +212,6 @@ const TableTrips = ({ item, columns }) => {
                   {`${hours > 0 ? hours + " hours " : ""} 
                 ${minutes > 0 ? minutes + " minutes " : ""}`}
                   {hours <= 0 && minutes <= 0 && "0"}
-                  {/* <Box>
-                    {hours == 0 ? `${minutes}` : `${hour}`}
-                    &nbsp;
-                  </Box>
-                  <Box>
-                    {hours >= 2 ? "hours." : hours == 0 ? "" : "hour."}
-                    {minutes > 1 ? "minutes" : minutes == 0 ? "" : "minute"}
-                  </Box> */}
                 </Stack>
               ) : column.id === "start" ? (
                 dayjs(startDate).format("MMM-DD-YY hh:mm:ss a")

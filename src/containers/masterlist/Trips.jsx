@@ -25,6 +25,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { searchSchema } from "../../utility/schema";
 import { getPathLength } from "geolib";
+import TripDrawer from "../../components/masterlist/trips/TripDrawer";
 
 const Trips = () => {
   // STATE
@@ -297,6 +298,9 @@ const Trips = () => {
         />
         {/* EXPORT LOADING */}
         <ExportModal isOpenExport={isOpenExport} />
+
+        {/* DRAWER */}
+        <TripDrawer />
       </TableWrapper>
     </>
   );
