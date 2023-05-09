@@ -232,7 +232,8 @@ const UserDrawer = () => {
       <DrawerWrapper
         title={item ? "Update User" : "Create User"}
         color={item ? "customWarning" : "customSuccess"}
-        loading={item ? isUpdating : isLoading}
+        loading={item ? isUpdating : isLoading || isLoadingEmployee}
+        disabled={isLoading || isLoadingEmployee}
         onSubmit={handleSubmit(onSubmit)}
         onClose={() => {
           dispatch(onClose());
