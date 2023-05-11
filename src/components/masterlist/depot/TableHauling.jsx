@@ -251,7 +251,12 @@ const TableHauling = ({ item, columns }) => {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
+              <Typography
+                variant="h6"
+                gutterBottom
+                component="div"
+                fontWeight={"bold"}
+              >
                 Locations
               </Typography>
               <Table size="small" aria-label="purchases">
@@ -326,8 +331,13 @@ const TableHauling = ({ item, columns }) => {
 
               {/* DIESELS */}
               {item?.diesels?.length !== 0 && (
-                <>
-                  <Typography variant="h6" gutterBottom component="div">
+                <Box sx={{ marginTop: "16px" }}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    component="div"
+                    fontWeight={"bold"}
+                  >
                     Diesels
                   </Typography>
                   <Table size="small" aria-label="purchases">
@@ -339,23 +349,25 @@ const TableHauling = ({ item, columns }) => {
                     <TableBody>
                       {item?.diesels?.map((loc, i) => {
                         return (
-                          <TableCell direction="row" gap={1} key={i}>
-                            <Box
-                              sx={{ minWidth: "140px" }}
-                            >{`Gas Station: ${loc?.gas_station_name} `}</Box>
-                            <Box
-                              sx={{ minWidth: "100px" }}
-                            >{`Odometer: ${loc?.odometer} `}</Box>
-                            <Box
-                              sx={{ minWidth: "60px" }}
-                            >{`Liter: ${loc?.liter} `}</Box>
-                            <Box>{`Amount: ${loc?.amount} `}</Box>
-                          </TableCell>
+                          <TableRow key={i}>
+                            <TableCell direction="row" gap={1}>
+                              <Box
+                                sx={{ minWidth: "140px" }}
+                              >{`Gas Station: ${loc?.gas_station_name} `}</Box>
+                              <Box
+                                sx={{ minWidth: "100px" }}
+                              >{`Odometer: ${loc?.odometer} `}</Box>
+                              <Box
+                                sx={{ minWidth: "60px" }}
+                              >{`Liter: ${loc?.liter} `}</Box>
+                              <Box>{`Amount: ${loc?.amount} `}</Box>
+                            </TableCell>
+                          </TableRow>
                         );
                       })}
                     </TableBody>
                   </Table>
-                </>
+                </Box>
               )}
             </Box>
           </Collapse>

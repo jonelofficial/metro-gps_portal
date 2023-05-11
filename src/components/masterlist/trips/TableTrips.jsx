@@ -315,12 +315,12 @@ const TableTrips = ({ item, columns }) => {
 
               {/* DIESELS */}
               {item?.diesels?.length !== 0 && (
-                <>
+                <Box sx={{ marginTop: "16px" }}>
                   <Typography
                     variant="h6"
                     gutterBottom
                     component="div"
-                    sx={{ paddingTop: "15px" }}
+                    fontWeight={"bold"}
                   >
                     Diesels
                   </Typography>
@@ -333,23 +333,25 @@ const TableTrips = ({ item, columns }) => {
                     <TableBody>
                       {item?.diesels?.map((loc, i) => {
                         return (
-                          <TableCell direction="row" gap={1} key={i}>
-                            <Box
-                              sx={{ minWidth: "140px" }}
-                            >{`Gas Station: ${loc?.gas_station_name} `}</Box>
-                            <Box
-                              sx={{ minWidth: "100px" }}
-                            >{`Odometer: ${loc?.odometer} `}</Box>
-                            <Box
-                              sx={{ minWidth: "60px" }}
-                            >{`Liter: ${loc?.liter} `}</Box>
-                            <Box>{`Amount: ${loc?.amount} `}</Box>
-                          </TableCell>
+                          <TableRow key={i}>
+                            <TableCell direction="row" gap={1}>
+                              <Box
+                                sx={{ minWidth: "140px" }}
+                              >{`Gas Station: ${loc?.gas_station_name} `}</Box>
+                              <Box
+                                sx={{ minWidth: "100px" }}
+                              >{`Odometer: ${loc?.odometer} `}</Box>
+                              <Box
+                                sx={{ minWidth: "60px" }}
+                              >{`Liter: ${loc?.liter} `}</Box>
+                              <Box>{`Amount: ${loc?.amount} `}</Box>
+                            </TableCell>
+                          </TableRow>
                         );
                       })}
                     </TableBody>
                   </Table>
-                </>
+                </Box>
               )}
               {/* OTHERS */}
               {item?.others?.length > 0 && (
