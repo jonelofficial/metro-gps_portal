@@ -244,7 +244,7 @@ const TableTrips = ({ item, columns }) => {
                     textAlign: "center",
                   }}
                 >
-                  {Math.round(estimatedTotalKm)}
+                  {Math.round(estimatedTotalKm)?.toLocaleString()}
                 </Box>
               ) : column.id === "total_km" ? (
                 <Box
@@ -252,7 +252,15 @@ const TableTrips = ({ item, columns }) => {
                     textAlign: "center",
                   }}
                 >
-                  {Math.round(totalKm)}
+                  {Math.round(totalKm)?.toLocaleString()}
+                </Box>
+              ) : column.id === "odometer" || column.id === "odometer_done" ? (
+                <Box
+                  sx={{
+                    textAlign: "center",
+                  }}
+                >
+                  {value?.toLocaleString()}
                 </Box>
               ) : (
                 value
@@ -340,7 +348,7 @@ const TableTrips = ({ item, columns }) => {
                               >{`Gas Station: ${loc?.gas_station_name} `}</Box>
                               <Box
                                 sx={{ minWidth: "100px" }}
-                              >{`Odometer: ${loc?.odometer} `}</Box>
+                              >{`Odometer: ${loc?.odometer?.toLocaleString()} `}</Box>
                               <Box
                                 sx={{ minWidth: "60px" }}
                               >{`Liter: ${loc?.liter} `}</Box>

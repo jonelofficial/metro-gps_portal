@@ -49,7 +49,6 @@ const HaulingDrawer = () => {
 
     setFormValue("odometer", item?.odometer);
     setFormValue("odometer_done", item?.odometer_done);
-    setFormValue("temperature", item?.temperature);
     setFormValue("tare_weight", item?.tare_weight);
     setFormValue("net_weight", item?.net_weight);
     setFormValue("gross_weight", item?.gross_weight);
@@ -141,22 +140,6 @@ const HaulingDrawer = () => {
         />
 
         <InputField
-          {...register("temperature")}
-          id="temperature"
-          label="Temperature"
-          autoComplete="off"
-          errors={errors}
-          sx={{ width: "100%" }}
-          InputProps={{
-            inputProps: {
-              style: {
-                textTransform: "uppercase",
-              },
-            },
-          }}
-        />
-
-        <InputField
           {...register("tare_weight")}
           id="tare_weight"
           label="Tare Weight"
@@ -173,9 +156,9 @@ const HaulingDrawer = () => {
         />
 
         <InputField
-          {...register("net_weight")}
-          id="net_weight"
-          label="Net Weight"
+          {...register("gross_weight")}
+          id="gross_weight"
+          label="Gross Weight"
           autoComplete="off"
           errors={errors}
           sx={{ width: "100%" }}
@@ -189,9 +172,9 @@ const HaulingDrawer = () => {
         />
 
         <InputField
-          {...register("gross_weight")}
-          id="gross_weight"
-          label="Gross Weight"
+          {...register("net_weight")}
+          id="net_weight"
+          label="Net Weight"
           autoComplete="off"
           errors={errors}
           sx={{ width: "100%" }}

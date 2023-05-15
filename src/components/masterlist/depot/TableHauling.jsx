@@ -230,7 +230,7 @@ const TableHauling = ({ item, columns }) => {
                     textAlign: "center",
                   }}
                 >
-                  {Math.round(estimatedTotalKm)}
+                  {Math.round(estimatedTotalKm)?.toLocaleString()}
                 </Box>
               ) : column.id === "total_km" ? (
                 <Box
@@ -238,7 +238,20 @@ const TableHauling = ({ item, columns }) => {
                     textAlign: "center",
                   }}
                 >
-                  {Math.round(totalKm)}
+                  {Math.round(totalKm)?.toLocaleString()}
+                </Box>
+              ) : column.id === "odometer" ||
+                column.id === "odometer_done" ||
+                column.id === "tare_weight" ||
+                column.id === "net_weight" ||
+                column.id === "gross_weight" ||
+                column.id === "doa_count" ? (
+                <Box
+                  sx={{
+                    textAlign: "center",
+                  }}
+                >
+                  {value?.toLocaleString()}
                 </Box>
               ) : (
                 value

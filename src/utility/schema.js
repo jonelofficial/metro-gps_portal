@@ -106,16 +106,12 @@ export const haulingDrawerSchema = Yup.object().shape({
     .typeError("Text/Special character are not allowed")
     .label("Odometer Done"),
 
-  temperature: Yup.number()
-    .required("Temperature is required field")
-    .typeError("Text/Special character are not allowed")
-    .label("Temperature"),
   tare_weight: Yup.number()
     .required("Tare Weight is required field")
     .typeError("Text/Special character are not allowed")
     .label("Tare Weight"),
   net_weight: Yup.number()
-    .required("Net Weight is required field")
+    .nullable()
     .typeError("Text/Special character are not allowed")
     .label("Tare Weight"),
   gross_weight: Yup.number()
