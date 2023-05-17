@@ -8,6 +8,9 @@ import {
   SummarizeOutlined,
   FactoryOutlined,
   AgricultureOutlined,
+  LocationOnOutlined,
+  CommuteOutlined,
+  LocalShippingOutlined,
 } from "@mui/icons-material";
 
 export const navlink = [
@@ -38,6 +41,21 @@ export const navlink = [
         name: "Gas Stations",
         icon: LocalGasStationOutlined,
         path: "/masterlist/gas-stations",
+      },
+      {
+        name: "Trip Category",
+        icon: CommuteOutlined,
+        path: "/masterlist/trip-category",
+      },
+      {
+        name: "Trip Type",
+        icon: LocalShippingOutlined,
+        path: "/masterlist/trip-type",
+      },
+      {
+        name: "Destination",
+        icon: LocationOnOutlined,
+        path: "/masterlist/destination",
       },
     ],
     path: "/masterlist",

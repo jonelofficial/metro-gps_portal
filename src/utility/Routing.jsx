@@ -21,11 +21,19 @@ import underMaintenance from "../assets/images/lottie/maintenance.json";
 import { Box } from "@mui/system";
 import { Typography } from "@mui/material";
 import TripDepot from "../containers/masterlist/depot/TripDepot";
+import TripCategory from "../containers/masterlist/TripCategory";
+import TripType from "../containers/masterlist/TripType";
+import Destination from "../containers/masterlist/Destination";
 
 const Routing = () => {
   const token = useSelector((state) => state.token.value);
   const user = useSelector((state) => state.token.userDetails);
   const [validUser, setValideUser] = useState();
+
+  console.log(user);
+  console.log(
+    validUser && user.permission?.some((el) => el?.id === "trip_category")
+  );
 
   useEffect(() => {
     setValideUser(user?.role === "admin");
@@ -100,6 +108,39 @@ const Routing = () => {
             validUser &&
             user.permission?.some((el) => el?.id === "gas_stations") ? (
               <GasStations />
+            ) : (
+              <NotFound />
+            ),
+          errorElement: <ErrorElement />,
+        },
+        {
+          path: "/masterlist/trip-category",
+          element:
+            validUser &&
+            user.permission?.some((el) => el?.id === "trip-category") ? (
+              <TripCategory />
+            ) : (
+              <NotFound />
+            ),
+          errorElement: <ErrorElement />,
+        },
+        {
+          path: "/masterlist/trip-type",
+          element:
+            validUser &&
+            user.permission?.some((el) => el?.id === "trip-type") ? (
+              <TripType />
+            ) : (
+              <NotFound />
+            ),
+          errorElement: <ErrorElement />,
+        },
+        {
+          path: "/masterlist/destination",
+          element:
+            validUser &&
+            user.permission?.some((el) => el?.id === "destination") ? (
+              <Destination />
             ) : (
               <NotFound />
             ),

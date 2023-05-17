@@ -12,6 +12,18 @@ export const permission = [
     label: "Gas Stations",
   },
   {
+    id: "trip-category",
+    label: "Trip Category",
+  },
+  {
+    id: "trip-type",
+    label: "Trip Type",
+  },
+  {
+    id: "destination",
+    label: "Destination",
+  },
+  {
     id: "trips_sg",
     label: "Trips SG",
   },
