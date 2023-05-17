@@ -62,7 +62,7 @@ const TableVehicles = ({ item, columns }) => {
             <TableCell
               key={column.id}
               size="small"
-              style={{ whiteSpace: "nowrap" }}
+              style={{ whiteSpace: "nowrap", textTransform: "capitalize" }}
             >
               {column.id === "createdAt" ? (
                 value && dayjs(value).format("MMM-DD-YYYY")

@@ -68,7 +68,7 @@ const TableUsers = ({ item, columns }) => {
             <TableCell
               key={column.id}
               size="small"
-              style={{ whiteSpace: "nowrap" }}
+              style={{ whiteSpace: "nowrap", textTransform: "capitalize" }}
               align={column.id == "show_all_departments" ? "center" : "left"}
             >
               {column.id === "profile" && value != null ? (
@@ -106,6 +106,8 @@ const TableUsers = ({ item, columns }) => {
                 })
               ) : column.id === "show_all_departments" ? (
                 <Box>{value === false ? "No" : "Yes"}</Box>
+              ) : column.id === "username" ? (
+                <Box sx={{ textTransform: "none" }}>{value}</Box>
               ) : (
                 value
               )}

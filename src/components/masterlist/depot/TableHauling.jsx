@@ -92,7 +92,7 @@ const TableHauling = ({ item, columns }) => {
               <TableCell
                 key={column.id}
                 size="small"
-                style={{ whiteSpace: "nowrap" }}
+                style={{ whiteSpace: "nowrap", textTransform: "capitalize" }}
                 align="center"
               >
                 <IconButton

@@ -54,6 +54,7 @@ const TableGasStation = ({ item, columns }) => {
               style={{
                 whiteSpace: "nowrap",
                 height: item["label"] === "Others" && "32px",
+                textTransform: "capitalize",
               }}
             >
               {column.id === "action" && item["label"] !== "Others" ? (
