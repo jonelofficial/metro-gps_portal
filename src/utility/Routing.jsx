@@ -30,11 +30,6 @@ const Routing = () => {
   const user = useSelector((state) => state.token.userDetails);
   const [validUser, setValideUser] = useState();
 
-  console.log(user);
-  console.log(
-    validUser && user.permission?.some((el) => el?.id === "trip_category")
-  );
-
   useEffect(() => {
     setValideUser(user?.role === "admin");
   }, [user]);

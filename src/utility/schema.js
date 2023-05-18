@@ -127,3 +127,20 @@ export const haulingDrawerSchema = Yup.object().shape({
     .typeError("Text/Special character are not allowed")
     .label("DOA Count"),
 });
+
+// TRIP CATEGORY
+
+export const tripCategorySchema = Yup.object().shape({
+  category: Yup.string()
+    .required("Category is required field")
+    .label("Category"),
+});
+
+// TRIP TYPE
+
+export const tripTypeSchema = Yup.object().shape({
+  type: Yup.string().required("Type is required field").label("Type"),
+  trip_category: Yup.string()
+    .required("Trip Category is required field")
+    .label("Trip Category"),
+});

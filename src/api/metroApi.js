@@ -15,7 +15,16 @@ export const metroApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Trip", "User", "Vehicles", "GasStation", "Trip Hauling"],
+  tagTypes: [
+    "Trip",
+    "User",
+    "Vehicles",
+    "GasStation",
+    "Trip Hauling",
+    "Trip Category",
+    "Trip Type",
+    "Destination",
+  ],
   endpoints: (builder) => ({
     // T R I P S
     getAllTrips: builder.query({
@@ -192,6 +201,98 @@ export const metroApi = createApi({
       }),
       invalidatesTags: ["Trip Hauling"],
     }),
+
+    // TRIP CATEGORY
+    getAllTripCategory: builder.query({
+      query: (params) =>
+        `/api/data/trip-category?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}&date=${params?.date}`,
+      providesTags: ["Trip Category"],
+    }),
+    createTripCategory: builder.mutation({
+      query: (payload) => ({
+        url: "/api/data/trip-category",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["Trip Category"],
+    }),
+    updateTripCategory: builder.mutation({
+      query: (payload) => ({
+        url: `/api/data/trip-category/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+      invalidatesTags: ["Trip Category"],
+    }),
+    importTripCategory: builder.mutation({
+      query: (payload) => ({
+        url: "/api/data/import-trip-categories",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["Trip Category"],
+    }),
+
+    // TRIP TYPE
+    getAllTripType: builder.query({
+      query: (params) =>
+        `/api/data/trip-type?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}&date=${params?.date}`,
+      providesTags: ["Trip Type"],
+    }),
+    createTripType: builder.mutation({
+      query: (payload) => ({
+        url: "/api/data/trip-type",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["Trip Type"],
+    }),
+    updateTripType: builder.mutation({
+      query: (payload) => ({
+        url: `/api/data/trip-type/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+      invalidatesTags: ["Trip Type"],
+    }),
+    importTripType: builder.mutation({
+      query: (payload) => ({
+        url: "/api/data/import-trip-type",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["Trip Type"],
+    }),
+
+    // DESTINATION
+    getAllDestination: builder.query({
+      query: (params) =>
+        `/api/data/destinations?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}&date=${params?.date}`,
+      providesTags: ["Destination"],
+    }),
+    createDestination: builder.mutation({
+      query: (payload) => ({
+        url: "/api/data/destination",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["Destination"],
+    }),
+    updateDestination: builder.mutation({
+      query: (payload) => ({
+        url: `/data/destination/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+      invalidatesTags: ["Destination"],
+    }),
+    importDestination: builder.mutation({
+      query: (payload) => ({
+        url: "/api/data/import-destinations",
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 });
 
@@ -227,4 +328,19 @@ export const {
   // DEPOT HAULING
   useGetAllTripsHaulingQuery,
   useUpdateTripHaulingMutation,
+  // TRIP CATEGORY
+  useGetAllTripCategoryQuery,
+  useCreateTripCategoryMutation,
+  useUpdateTripCategoryMutation,
+  useImportTripCategoryMutation,
+  // TRIP TYPE
+  useGetAllTripTypeQuery,
+  useCreateTripTypeMutation,
+  useUpdateTripTypeMutation,
+  useImportTripTypeMutation,
+  // DESTINATION
+  useGetAllDestinationQuery,
+  useCreateDestinationMutation,
+  useUpdateDestinationMutation,
+  useImportDestinationMutation,
 } = metroApi;

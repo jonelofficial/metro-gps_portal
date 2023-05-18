@@ -9,7 +9,16 @@ import { Box } from "@mui/system";
 import React from "react";
 import { Controller } from "react-hook-form";
 
-const FormPicker = ({ control, name, label, items, errors, sx, ...etc }) => {
+const FormPicker = ({
+  control,
+  name,
+  label,
+  items,
+  errors,
+  sx,
+  disabled,
+  ...etc
+}) => {
   return (
     <>
       <Controller
@@ -26,6 +35,7 @@ const FormPicker = ({ control, name, label, items, errors, sx, ...etc }) => {
                 },
                 ...sx,
               }}
+              disabled={disabled}
             >
               <InputLabel id="select-label">{label}</InputLabel>
               <Select
