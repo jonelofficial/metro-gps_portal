@@ -31,6 +31,7 @@ import TableTripType from "../../components/masterlist/trip-type/TableTripType";
 import TripTypeDrawer from "../../components/masterlist/trip-type/TripTypeDrawer";
 import ExportModal from "../../components/features/ExportModal";
 import ImportModal from "../../components/features/ImportModal";
+import TableError from "../../components/error/TableError";
 
 const TripType = () => {
   // HOOKS
@@ -62,7 +63,6 @@ const TripType = () => {
     { page, limit, search, saerchBy },
     { refetchOnMountOrArgChange: true }
   );
-
   const [importTripType, { isLoading: isImporting }] =
     useImportTripTypeMutation();
 

@@ -6,21 +6,16 @@ import {
 } from "../../../api/metroApi";
 import { useDispatch, useSelector } from "react-redux";
 import useToast from "../../../hook/useToast";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { tripTypeSchema } from "../../../utility/schema";
 import { useEffect } from "react";
 import DrawerWrapper from "../../drawer/DrawerWrapper";
 import InputField from "../../form/InputField";
 import { onClose } from "../../../redux-toolkit/counter/drawerDisclosure";
-import { Drawer } from "@mui/material";
-import FormPicker from "../../form/FormPicker";
-import { useState } from "react";
+import { Autocomplete, Drawer, TextField, Typography } from "@mui/material";
 
 const TripTypeDrawer = () => {
-  const [categories, setCategories] = useState([
-    { value: "", label: "Loading..." },
-  ]);
   const [createTripType, { isLoading }] = useCreateTripTypeMutation();
   const [updateTripTypem, { isLoading: isUpdating }] =
     useUpdateTripTypeMutation();
@@ -28,28 +23,14 @@ const TripTypeDrawer = () => {
   const isDrawerOpen = useSelector((state) => state.drawer.value);
   const item = useSelector((state) => state.drawer.drawerState);
   const dispatch = useDispatch();
-  const {
-    data,
-    isLoading: isLoadingCategory,
-    isError,
-    isFetching,
-  } = useGetAllTripCategoryQuery(
-    {
-      page: 1,
-      limit: 0,
-    },
-    { refetchOnMountOrArgChange: true }
-  );
-
-  useEffect(() => {
-    if (data) {
-      setCategories(
-        data?.data?.map((item) => {
-          return { value: item?.category, label: item?.category };
-        })
-      );
-    }
-  }, [data]);
+  const { data = [], isLoading: isLoadingCategory } =
+    useGetAllTripCategoryQuery(
+      {
+        page: 1,
+        limit: 0,
+      },
+      { refetchOnMountOrArgChange: true }
+    );
 
   const { toast } = useToast();
 
@@ -60,15 +41,21 @@ const TripTypeDrawer = () => {
     setValue: setFormValue,
     clearErrors,
     control,
-  } = useForm({ resolver: yupResolver(tripTypeSchema) });
+  } = useForm({
+    resolver: yupResolver(tripTypeSchema),
+    mode: "onSubmit",
+    defaultValues: {
+      trip_category: { category: "" },
+      type: "",
+    },
+  });
 
   useEffect(() => {
     setFormValue("type", item?.type);
-    setFormValue("trip_category", item?.trip_category);
+    setFormValue("trip_category", { category: item?.trip_category || "" });
   }, [item]);
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       let res;
       if (item) {
@@ -127,13 +114,58 @@ const TripTypeDrawer = () => {
           defaultValue={item && item.type}
         />
 
-        <FormPicker
+        <Controller
           control={control}
           name="trip_category"
-          label={isLoadingCategory ? "Loading..." : "Trip Category"}
-          items={categories}
-          errors={errors}
-          disabled={isLoadingCategory}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <>
+                <Autocomplete
+                  required
+                  className="filter"
+                  size="small"
+                  loading={isLoadingCategory}
+                  disabled={isLoading || isUpdating}
+                  options={data?.data}
+                  value={value}
+                  getOptionLabel={(option) => option.category}
+                  isOptionEqualToValue={(option, value) =>
+                    option.category === value.category || "" === value.category
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={isLoadingCategory ? "Loading..." : "Trip Category"}
+                    />
+                  )}
+                  onChange={(e, value) => {
+                    onChange(value);
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& > fieldset": {
+                        borderColor: errors["trip_category"] && "error.main",
+                      },
+                    },
+                  }}
+                />
+                {errors["trip_category"] && (
+                  <Typography
+                    variant="p"
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontSize: 12,
+                      marginBottom: 1,
+                      marginLeft: 1,
+                      color: "custom.danger",
+                    }}
+                  >
+                    {errors["trip_category"].message}
+                  </Typography>
+                )}
+              </>
+            );
+          }}
         />
       </DrawerWrapper>
     </Drawer>
