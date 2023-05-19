@@ -110,7 +110,7 @@ const TripType = () => {
     if ("type" in filteredData[0]) {
       const res = await importTripType(filteredData);
       res?.error &&
-        toast({ severity: "error", message: "Error importing gas station" });
+        toast({ severity: "error", message: "Error importing trip type" });
     } else {
       toast({
         severity: "error",

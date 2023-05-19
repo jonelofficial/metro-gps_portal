@@ -1,29 +1,27 @@
 import React from "react";
 import {
-  useCreateTripTypeMutation,
+  useCreateDestinationMutation,
   useGetAllTripCategoryQuery,
-  useUpdateTripTypeMutation,
+  useGetAllTripTypeQuery,
+  useUpdateDestinationMutation,
 } from "../../../api/metroApi";
 import { useDispatch, useSelector } from "react-redux";
 import useToast from "../../../hook/useToast";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { tripTypeSchema } from "../../../utility/schema";
+import { destinationSchema } from "../../../utility/schema";
 import { useEffect } from "react";
+import { Autocomplete, Drawer, TextField, Typography } from "@mui/material";
 import DrawerWrapper from "../../drawer/DrawerWrapper";
 import InputField from "../../form/InputField";
 import { onClose } from "../../../redux-toolkit/counter/drawerDisclosure";
-import { Autocomplete, Drawer, TextField, Typography } from "@mui/material";
 
-const TripTypeDrawer = () => {
-  const [createTripType, { isLoading }] = useCreateTripTypeMutation();
-  const [updateTripTypem, { isLoading: isUpdating }] =
-    useUpdateTripTypeMutation();
+const DestinationDrawer = () => {
+  const [createDestination, { isLoading }] = useCreateDestinationMutation();
+  const [updateDestination, { isLoading: isUpdating }] =
+    useUpdateDestinationMutation();
 
-  const isDrawerOpen = useSelector((state) => state.drawer.value);
-  const item = useSelector((state) => state.drawer.drawerState);
-  const dispatch = useDispatch();
-  const { data = [], isLoading: isLoadingCategory } =
+  const { data: tripCategoryData = [], isLoading: isLoadingTripCategory } =
     useGetAllTripCategoryQuery(
       {
         page: 1,
@@ -31,6 +29,19 @@ const TripTypeDrawer = () => {
       },
       { refetchOnMountOrArgChange: true }
     );
+
+  const { data: tripTypeData = [], isLoading: isLoadingTripType } =
+    useGetAllTripTypeQuery(
+      {
+        page: 1,
+        limit: 0,
+      },
+      { refetchOnMountOrArgChange: true }
+    );
+
+  const isDrawerOpen = useSelector((state) => state.drawer.value);
+  const item = useSelector((state) => state.drawer.drawerState);
+  const dispatch = useDispatch();
 
   const { toast } = useToast();
 
@@ -42,35 +53,37 @@ const TripTypeDrawer = () => {
     clearErrors,
     control,
   } = useForm({
-    resolver: yupResolver(tripTypeSchema),
+    resolver: yupResolver(destinationSchema),
     mode: "onSubmit",
     defaultValues: {
       trip_category: { category: "" },
-      type: "",
+      trip_type: { type: "" },
+      destination: "",
     },
   });
 
   useEffect(() => {
-    setFormValue("type", item?.type);
+    setFormValue("destination", item?.destination);
     setFormValue("trip_category", { category: item?.trip_category || "" });
+    setFormValue("trip_type", { type: item?.trip_type || "" });
   }, [item]);
 
   const onSubmit = async (data) => {
     try {
       let res;
       if (item) {
-        res = await updateTripTypem({ id: item._id, obj: data });
+        res = await updateDestination({ id: item._id, obj: data });
         !res?.error &&
           toast({
             severity: "success",
-            message: `Success updating trip type ${data.type}`,
+            message: `Success updating trip type ${data.destination}`,
           });
       } else {
-        res = await createTripType(data);
+        res = await createDestination(data);
         !res?.error &&
           toast({
             severity: "success",
-            message: `Success creating trip type ${data.type}`,
+            message: `Success creating trip type ${data.destination}`,
           });
       }
 
@@ -95,7 +108,7 @@ const TripTypeDrawer = () => {
       }}
     >
       <DrawerWrapper
-        title={item ? "Update Trip Type" : "Create Trip Type"}
+        title={item ? "Update Destination" : "Create Destination"}
         color={item ? "customWarning" : "customSuccess"}
         loading={item ? isUpdating : isLoading}
         onSubmit={handleSubmit(onSubmit)}
@@ -105,13 +118,67 @@ const TripTypeDrawer = () => {
         }}
       >
         <InputField
-          {...register("type")}
-          id="type"
-          label="Type"
+          {...register("destination")}
+          id="destination"
+          label="Detination"
           autoComplete="off"
           errors={errors}
           sx={{ width: "100%", margin: "unset!important" }}
-          defaultValue={item && item.type}
+          defaultValue={item && item.destination}
+        />
+
+        <Controller
+          control={control}
+          name="trip_type"
+          render={({ field: { onChange, value } }) => {
+            return (
+              <>
+                <Autocomplete
+                  required
+                  className="filter"
+                  size="small"
+                  loading={isLoadingTripCategory}
+                  disabled={isLoading || isUpdating}
+                  options={tripTypeData?.data}
+                  value={value}
+                  getOptionLabel={(option) => option.type}
+                  isOptionEqualToValue={(option, value) =>
+                    option.type === value.type || "" === value.type
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={isLoadingTripCategory ? "Loading..." : "Trip Type"}
+                    />
+                  )}
+                  onChange={(e, value) => {
+                    onChange(value);
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& > fieldset": {
+                        borderColor: errors["trip_type"] && "error.main",
+                      },
+                    },
+                  }}
+                />
+                {errors["trip_type"] && (
+                  <Typography
+                    variant="p"
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontSize: 12,
+                      marginBottom: 1,
+                      marginLeft: 1,
+                      color: "custom.danger",
+                    }}
+                  >
+                    {errors["trip_type"].message}
+                  </Typography>
+                )}
+              </>
+            );
+          }}
         />
 
         <Controller
@@ -124,9 +191,9 @@ const TripTypeDrawer = () => {
                   required
                   className="filter"
                   size="small"
-                  loading={isLoadingCategory}
+                  loading={isLoadingTripCategory}
                   disabled={isLoading || isUpdating}
-                  options={data?.data}
+                  options={tripCategoryData?.data}
                   value={value}
                   getOptionLabel={(option) => option.category}
                   isOptionEqualToValue={(option, value) =>
@@ -135,7 +202,9 @@ const TripTypeDrawer = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label={isLoadingCategory ? "Loading..." : "Trip Category"}
+                      label={
+                        isLoadingTripCategory ? "Loading..." : "Trip Category"
+                      }
                     />
                   )}
                   onChange={(e, value) => {
@@ -172,4 +241,4 @@ const TripTypeDrawer = () => {
   );
 };
 
-export default TripTypeDrawer;
+export default DestinationDrawer;

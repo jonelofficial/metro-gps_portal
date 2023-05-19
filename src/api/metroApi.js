@@ -280,7 +280,7 @@ export const metroApi = createApi({
     }),
     updateDestination: builder.mutation({
       query: (payload) => ({
-        url: `/data/destination/${payload.id}`,
+        url: `/api/data/destination/${payload.id}`,
         method: "PUT",
         body: payload.obj,
       }),
@@ -292,6 +292,7 @@ export const metroApi = createApi({
         method: "POST",
         body: payload,
       }),
+      invalidatesTags: ["Destination"],
     }),
   }),
 });

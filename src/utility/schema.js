@@ -145,3 +145,17 @@ export const tripTypeSchema = Yup.object().shape({
     .required("Trip Category is required field")
     .label("Trip Category"),
 });
+
+// DESTINATION
+
+export const destinationSchema = Yup.object().shape({
+  destination: Yup.string().required("Type is required field").label("Type"),
+  trip_type: Yup.string()
+    .transform((e) => e?.type)
+    .required("Type is required field")
+    .label("Type"),
+  trip_category: Yup.string()
+    .transform((e) => e?.category)
+    .required("Trip Category is required field")
+    .label("Trip Category"),
+});
