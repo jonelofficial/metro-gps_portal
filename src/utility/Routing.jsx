@@ -24,6 +24,7 @@ import TripDepot from "../containers/masterlist/depot/TripDepot";
 import TripCategory from "../containers/masterlist/TripCategory";
 import TripType from "../containers/masterlist/TripType";
 import Destination from "../containers/masterlist/Destination";
+import TripTemplate from "../containers/masterlist/TripTemplate";
 
 const Routing = () => {
   const token = useSelector((state) => state.token.value);
@@ -103,6 +104,17 @@ const Routing = () => {
             validUser &&
             user.permission?.some((el) => el?.id === "gas_stations") ? (
               <GasStations />
+            ) : (
+              <NotFound />
+            ),
+          errorElement: <ErrorElement />,
+        },
+        {
+          path: "/masterlist/trip-template",
+          element:
+            validUser &&
+            user.permission?.some((el) => el?.id === "trip-template") ? (
+              <TripTemplate />
             ) : (
               <NotFound />
             ),

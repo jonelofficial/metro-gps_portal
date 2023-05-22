@@ -37,7 +37,10 @@ export const userSchema = Yup.object().shape({
     .required()
     .typeError("License Expiration is a required field")
     .label("License Expiration"),
-  trip_template: Yup.string().required().label("Trip template"),
+  trip_template: Yup.string()
+    .transform((e) => e?.category)
+    .required()
+    .label("Trip template"),
   role: Yup.string().required().label("Role"),
   status: Yup.string().required().label("Status"),
 });
@@ -60,7 +63,10 @@ export const userUpdateSchema = Yup.object().shape({
     .required()
     .typeError("License Expiration is a required field")
     .label("License Expiration"),
-  trip_template: Yup.string().required().label("Trip template"),
+  trip_template: Yup.string()
+    .transform((e) => e?.category)
+    .required()
+    .label("Trip template"),
   role: Yup.string().required().label("Role"),
   status: Yup.string().required().label("Status"),
 });
@@ -126,6 +132,14 @@ export const haulingDrawerSchema = Yup.object().shape({
     .required("DOA Count is required field")
     .typeError("Text/Special character are not allowed")
     .label("DOA Count"),
+});
+
+// TRIP TEMPLATE
+
+export const tripTemplateSchema = Yup.object().shape({
+  template: Yup.string()
+    .required("Category is required field")
+    .label("Category"),
 });
 
 // TRIP CATEGORY

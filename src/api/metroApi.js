@@ -24,6 +24,7 @@ export const metroApi = createApi({
     "Trip Category",
     "Trip Type",
     "Destination",
+    "Trip Template",
   ],
   endpoints: (builder) => ({
     // T R I P S
@@ -202,6 +203,37 @@ export const metroApi = createApi({
       invalidatesTags: ["Trip Hauling"],
     }),
 
+    // TRIP TEMPLATE
+    getAllTripTemplate: builder.query({
+      query: (params) => ({
+        url: `/api/data/trip-template?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}&date=${params?.date}`,
+      }),
+      providesTags: ["Trip Template"],
+    }),
+    createTripTemplate: builder.mutation({
+      query: (payload) => ({
+        url: "/api/data/trip-template",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["Trip Template"],
+    }),
+    updateTripTemplate: builder.mutation({
+      query: (payload) => ({
+        url: `/api/data/trip-template/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+      invalidatesTags: ["Trip Template"],
+    }),
+    importTripTemplate: builder.mutation({
+      query: (payload) => ({
+        url: "/api/data/import-trip-template",
+        method: "POST",
+        body: payload,
+      }),
+    }),
+
     // TRIP CATEGORY
     getAllTripCategory: builder.query({
       query: (params) =>
@@ -344,4 +376,9 @@ export const {
   useCreateDestinationMutation,
   useUpdateDestinationMutation,
   useImportDestinationMutation,
+  // TRIP TEMPLATE
+  useGetAllTripTemplateQuery,
+  useCreateTripTemplateMutation,
+  useUpdateTripTemplateMutation,
+  useImportTripTemplateMutation,
 } = metroApi;

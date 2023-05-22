@@ -12,6 +12,10 @@ export const permission = [
     label: "Gas Stations",
   },
   {
+    id: "trip-template",
+    label: "Trip Template",
+  },
+  {
     id: "trip-category",
     label: "Trip Category",
   },

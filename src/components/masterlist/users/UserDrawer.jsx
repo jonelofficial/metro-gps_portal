@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { userSchema, userUpdateSchema } from "../../../utility/schema";
 import {
   useCreateUserMutation,
+  useGetAllTripCategoryQuery,
   useUpdateUserMutation,
 } from "../../../api/metroApi";
 import { useEffect } from "react";
@@ -116,7 +117,7 @@ const UserDrawer = () => {
       setFormValue("division", employeeData?.unit_info?.division_name);
       setFormValue("division_category", employeeData?.unit_info?.category_name);
       setFormValue("company", employeeData?.unit_info?.company_name);
-      setFormValue("trip_template", item?.trip_template);
+      setFormValue("trip_template", { category: item?.trip_template || "" });
       setFormValue("username", item?.username);
       setFormValue("role", item?.role);
       setFormValue("status", item?.status);
@@ -133,6 +134,16 @@ const UserDrawer = () => {
   const [createUser, { isLoading }] = useCreateUserMutation();
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
   const { data = [], isLoading: employeeLoading } = useGetEmployeesQuery();
+  const { data: tripTemplate = [], isLoading: tripTemplateLoading } =
+    useGetAllTripCategoryQuery(
+      {
+        page: 1,
+        limit: 0,
+      },
+      { refetchOnMountOrArgChange: true }
+    );
+
+  console.log(tripTemplate);
 
   // HOOKS
   const { toast } = useToast();
@@ -152,7 +163,7 @@ const UserDrawer = () => {
     mode: "onSubmit",
     defaultValues: {
       employee_id: null,
-      trip_template: "",
+      trip_template: { category: "" },
       role: "",
       status: "",
       license_exp: null,
@@ -428,7 +439,7 @@ const UserDrawer = () => {
           label="License Expiration"
           errors={errors}
         />
-
+        {/* 
         <FormPicker
           control={control}
           name="trip_template"
@@ -439,6 +450,62 @@ const UserDrawer = () => {
             { value: "Live", label: "Live" },
           ]}
           errors={errors}
+        /> */}
+
+        <Controller
+          control={control}
+          name="trip_template"
+          render={({ field: { onChange, value } }) => {
+            return (
+              <>
+                <Autocomplete
+                  required
+                  className="filter"
+                  size="small"
+                  loading={tripTemplateLoading}
+                  disabled={isLoading || isUpdating}
+                  options={tripTemplate?.data}
+                  value={value}
+                  getOptionLabel={(option) => option.category}
+                  isOptionEqualToValue={(option, value) =>
+                    option.category === value.category || "" === value.category
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={
+                        tripTemplateLoading ? "Loading..." : "Trip Template"
+                      }
+                    />
+                  )}
+                  onChange={(e, value) => {
+                    onChange(value);
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& > fieldset": {
+                        borderColor: errors["trip_category"] && "error.main",
+                      },
+                    },
+                  }}
+                />
+                {errors["trip_template"] && (
+                  <Typography
+                    variant="p"
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontSize: 12,
+                      marginBottom: 1,
+                      marginLeft: 1,
+                      color: "custom.danger",
+                    }}
+                  >
+                    {errors["trip_template"].message}
+                  </Typography>
+                )}
+              </>
+            );
+          }}
         />
 
         <FormPicker

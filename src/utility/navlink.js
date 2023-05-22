@@ -11,6 +11,7 @@ import {
   LocationOnOutlined,
   CommuteOutlined,
   LocalShippingOutlined,
+  SwitchAccountOutlined,
 } from "@mui/icons-material";
 
 export const navlink = [
@@ -41,6 +42,11 @@ export const navlink = [
         name: "Gas Stations",
         icon: LocalGasStationOutlined,
         path: "/masterlist/gas-stations",
+      },
+      {
+        name: "Trip Template",
+        icon: SwitchAccountOutlined,
+        path: "/masterlist/trip-template",
       },
       {
         name: "Trip Category",
