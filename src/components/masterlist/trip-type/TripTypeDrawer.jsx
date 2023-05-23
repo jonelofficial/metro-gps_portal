@@ -2,6 +2,7 @@ import React from "react";
 import {
   useCreateTripTypeMutation,
   useGetAllTripCategoryQuery,
+  useGetAllTripTemplateQuery,
   useUpdateTripTypeMutation,
 } from "../../../api/metroApi";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +33,15 @@ const TripTypeDrawer = () => {
       { refetchOnMountOrArgChange: true }
     );
 
+  const { data: tripTemplate = [], isLoading: tripTemplateLoading } =
+    useGetAllTripTemplateQuery(
+      {
+        page: 1,
+        limit: 0,
+      },
+      { refetchOnMountOrArgChange: true }
+    );
+
   const { toast } = useToast();
 
   const {
@@ -46,6 +56,7 @@ const TripTypeDrawer = () => {
     mode: "onSubmit",
     defaultValues: {
       trip_category: { category: "" },
+      trip_template: { template: "" },
       type: "",
     },
   });
@@ -53,6 +64,7 @@ const TripTypeDrawer = () => {
   useEffect(() => {
     setFormValue("type", item?.type);
     setFormValue("trip_category", { category: item?.trip_category || "" });
+    setFormValue("trip_template", { template: item?.trip_template || "" });
   }, [item]);
 
   const onSubmit = async (data) => {
@@ -161,6 +173,63 @@ const TripTypeDrawer = () => {
                     }}
                   >
                     {errors["trip_category"].message}
+                  </Typography>
+                )}
+              </>
+            );
+          }}
+        />
+
+        <Controller
+          control={control}
+          name="trip_template"
+          render={({ field: { onChange, value } }) => {
+            return (
+              <>
+                <Autocomplete
+                  required
+                  className="filter"
+                  size="small"
+                  loading={tripTemplateLoading}
+                  disabled={isLoading || isUpdating}
+                  options={tripTemplate?.data}
+                  value={value}
+                  getOptionLabel={(option) => option.template}
+                  isOptionEqualToValue={(option, value) =>
+                    option.template === value.template || "" === value.template
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={
+                        tripTemplateLoading ? "Loading..." : "Trip Template"
+                      }
+                    />
+                  )}
+                  onChange={(e, value) => {
+                    console.log(value);
+                    onChange(value);
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& > fieldset": {
+                        borderColor: errors["trip_category"] && "error.main",
+                      },
+                    },
+                  }}
+                />
+                {errors["trip_template"] && (
+                  <Typography
+                    variant="p"
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontSize: 12,
+                      marginBottom: 1,
+                      marginLeft: 1,
+                      color: "custom.danger",
+                    }}
+                  >
+                    {errors["trip_template"].message}
                   </Typography>
                 )}
               </>

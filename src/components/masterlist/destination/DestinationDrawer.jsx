@@ -2,6 +2,7 @@ import React from "react";
 import {
   useCreateDestinationMutation,
   useGetAllTripCategoryQuery,
+  useGetAllTripTemplateQuery,
   useGetAllTripTypeQuery,
   useUpdateDestinationMutation,
 } from "../../../api/metroApi";
@@ -39,6 +40,15 @@ const DestinationDrawer = () => {
       { refetchOnMountOrArgChange: true }
     );
 
+  const { data: tripTemplate = [], isLoading: tripTemplateLoading } =
+    useGetAllTripTemplateQuery(
+      {
+        page: 1,
+        limit: 0,
+      },
+      { refetchOnMountOrArgChange: true }
+    );
+
   const isDrawerOpen = useSelector((state) => state.drawer.value);
   const item = useSelector((state) => state.drawer.drawerState);
   const dispatch = useDispatch();
@@ -57,6 +67,7 @@ const DestinationDrawer = () => {
     mode: "onSubmit",
     defaultValues: {
       trip_category: { category: "" },
+      trip_template: { template: "" },
       trip_type: { type: "" },
       destination: "",
     },
@@ -66,6 +77,7 @@ const DestinationDrawer = () => {
     setFormValue("destination", item?.destination);
     setFormValue("trip_category", { category: item?.trip_category || "" });
     setFormValue("trip_type", { type: item?.trip_type || "" });
+    setFormValue("trip_template", { template: item?.trip_template || "" });
   }, [item]);
 
   const onSubmit = async (data) => {
@@ -230,6 +242,63 @@ const DestinationDrawer = () => {
                     }}
                   >
                     {errors["trip_category"].message}
+                  </Typography>
+                )}
+              </>
+            );
+          }}
+        />
+
+        <Controller
+          control={control}
+          name="trip_template"
+          render={({ field: { onChange, value } }) => {
+            return (
+              <>
+                <Autocomplete
+                  required
+                  className="filter"
+                  size="small"
+                  loading={tripTemplateLoading}
+                  disabled={isLoading || isUpdating}
+                  options={tripTemplate?.data}
+                  value={value}
+                  getOptionLabel={(option) => option.template}
+                  isOptionEqualToValue={(option, value) =>
+                    option.template === value.template || "" === value.template
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={
+                        tripTemplateLoading ? "Loading..." : "Trip Template"
+                      }
+                    />
+                  )}
+                  onChange={(e, value) => {
+                    console.log(value);
+                    onChange(value);
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& > fieldset": {
+                        borderColor: errors["trip_category"] && "error.main",
+                      },
+                    },
+                  }}
+                />
+                {errors["trip_template"] && (
+                  <Typography
+                    variant="p"
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontSize: 12,
+                      marginBottom: 1,
+                      marginLeft: 1,
+                      color: "custom.danger",
+                    }}
+                  >
+                    {errors["trip_template"].message}
                   </Typography>
                 )}
               </>

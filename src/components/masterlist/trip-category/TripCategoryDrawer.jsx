@@ -1,14 +1,15 @@
 import React from "react";
 import {
   useCreateTripCategoryMutation,
+  useGetAllTripTemplateQuery,
   useUpdateTripCategoryMutation,
 } from "../../../api/metroApi";
 import { useDispatch, useSelector } from "react-redux";
 import useToast from "../../../hook/useToast";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { tripCategorySchema } from "../../../utility/schema";
-import { Drawer } from "@mui/material";
+import { Autocomplete, Drawer, TextField, Typography } from "@mui/material";
 import DrawerWrapper from "../../drawer/DrawerWrapper";
 import InputField from "../../form/InputField";
 import { onClose } from "../../../redux-toolkit/counter/drawerDisclosure";
@@ -18,6 +19,15 @@ const TripCategoryDrawer = () => {
   const [createTripCategory, { isLoading }] = useCreateTripCategoryMutation();
   const [updateTripCategory, { isLoading: isUpdating }] =
     useUpdateTripCategoryMutation();
+
+  const { data: tripTemplate = [], isLoading: tripTemplateLoading } =
+    useGetAllTripTemplateQuery(
+      {
+        page: 1,
+        limit: 0,
+      },
+      { refetchOnMountOrArgChange: true }
+    );
 
   const isDrawerOpen = useSelector((state) => state.drawer.value);
   const item = useSelector((state) => state.drawer.drawerState);
@@ -31,10 +41,19 @@ const TripCategoryDrawer = () => {
     formState: { errors },
     setValue: setFormValue,
     clearErrors,
-  } = useForm({ resolver: yupResolver(tripCategorySchema) });
+    control,
+  } = useForm({
+    resolver: yupResolver(tripCategorySchema),
+    mode: "onSubmit",
+    defaultValues: {
+      trip_template: { template: "" },
+      category: "",
+    },
+  });
 
   useEffect(() => {
     setFormValue("category", item?.category);
+    setFormValue("trip_template", { template: item?.trip_template || "" });
     return () => {
       null;
     };
@@ -95,8 +114,65 @@ const TripCategoryDrawer = () => {
           label="Category"
           autoComplete="off"
           errors={errors}
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", margin: "unset!important" }}
           defaultValue={item && item.category}
+        />
+
+        <Controller
+          control={control}
+          name="trip_template"
+          render={({ field: { onChange, value } }) => {
+            return (
+              <>
+                <Autocomplete
+                  required
+                  className="filter"
+                  size="small"
+                  loading={tripTemplateLoading}
+                  disabled={isLoading || isUpdating}
+                  options={tripTemplate?.data}
+                  value={value}
+                  getOptionLabel={(option) => option.template}
+                  isOptionEqualToValue={(option, value) =>
+                    option.template === value.template || "" === value.template
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={
+                        tripTemplateLoading ? "Loading..." : "Trip Template"
+                      }
+                    />
+                  )}
+                  onChange={(e, value) => {
+                    console.log(value);
+                    onChange(value);
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& > fieldset": {
+                        borderColor: errors["trip_category"] && "error.main",
+                      },
+                    },
+                  }}
+                />
+                {errors["trip_template"] && (
+                  <Typography
+                    variant="p"
+                    sx={{
+                      fontFamily: "Roboto",
+                      fontSize: 12,
+                      marginBottom: 1,
+                      marginLeft: 1,
+                      color: "custom.danger",
+                    }}
+                  >
+                    {errors["trip_template"].message}
+                  </Typography>
+                )}
+              </>
+            );
+          }}
         />
       </DrawerWrapper>
     </Drawer>

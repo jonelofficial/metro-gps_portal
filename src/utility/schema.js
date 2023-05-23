@@ -148,6 +148,10 @@ export const tripCategorySchema = Yup.object().shape({
   category: Yup.string()
     .required("Category is required field")
     .label("Category"),
+  trip_template: Yup.string()
+    .transform((e) => e?.template)
+    .required("Trip Template is required field")
+    .label("Trip Template"),
 });
 
 // TRIP TYPE
@@ -158,6 +162,10 @@ export const tripTypeSchema = Yup.object().shape({
     .transform((e) => e?.category)
     .required("Trip Category is required field")
     .label("Trip Category"),
+  trip_template: Yup.string()
+    .transform((e) => e?.template)
+    .required("Trip Template is required field")
+    .label("Trip Template"),
 });
 
 // DESTINATION
@@ -172,4 +180,8 @@ export const destinationSchema = Yup.object().shape({
     .transform((e) => e?.category)
     .required("Trip Category is required field")
     .label("Trip Category"),
+  trip_template: Yup.string()
+    .transform((e) => e?.template)
+    .required("Trip Template is required field")
+    .label("Trip Template"),
 });
