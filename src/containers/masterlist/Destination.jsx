@@ -96,6 +96,7 @@ const Destination = () => {
         Destination: item?.destination,
         "Trip Type": item?.trip_type,
         "Trip Category": item?.trip_category,
+        "Trip Template": item?.trip_template,
       };
     });
 

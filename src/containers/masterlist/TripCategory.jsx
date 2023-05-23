@@ -101,7 +101,7 @@ const TripCategory = () => {
     onToggleExport();
 
     const newObj = await data?.data?.map((item) => {
-      return { Category: item?.category };
+      return { Category: item?.category, "Trip Template": item?.trip_template };
     });
 
     await excelExport(newObj, "METRO-TRIP-CATEGORY-MASTERLIST");

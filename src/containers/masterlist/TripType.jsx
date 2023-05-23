@@ -97,7 +97,11 @@ const TripType = () => {
     onToggleExport();
 
     const newObj = await data?.data?.map((item) => {
-      return { Type: item?.type, "Trip Category": item?.trip_category };
+      return {
+        Type: item?.type,
+        "Trip Category": item?.trip_category,
+        "Trip Template": item?.trip_template,
+      };
     });
 
     await excelExport(newObj, "METRO-TRIP-TYPE-MASTERLIST");
