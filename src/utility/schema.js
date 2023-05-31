@@ -38,7 +38,7 @@ export const userSchema = Yup.object().shape({
     .typeError("License Expiration is a required field")
     .label("License Expiration"),
   trip_template: Yup.string()
-    .transform((e) => e?.category)
+    .transform((e) => e?.template)
     .required()
     .label("Trip template"),
   role: Yup.string().required().label("Role"),
@@ -64,7 +64,7 @@ export const userUpdateSchema = Yup.object().shape({
     .typeError("License Expiration is a required field")
     .label("License Expiration"),
   trip_template: Yup.string()
-    .transform((e) => e?.category)
+    .transform((e) => e?.template)
     .required()
     .label("Trip template"),
   role: Yup.string().required().label("Role"),

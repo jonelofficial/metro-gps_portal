@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { userSchema, userUpdateSchema } from "../../../utility/schema";
 import {
   useCreateUserMutation,
-  useGetAllTripCategoryQuery,
+  useGetAllTripTemplateQuery,
   useUpdateUserMutation,
 } from "../../../api/metroApi";
 import { useEffect } from "react";
@@ -117,7 +117,7 @@ const UserDrawer = () => {
       setFormValue("division", employeeData?.unit_info?.division_name);
       setFormValue("division_category", employeeData?.unit_info?.category_name);
       setFormValue("company", employeeData?.unit_info?.company_name);
-      setFormValue("trip_template", { category: item?.trip_template || "" });
+      setFormValue("trip_template", { template: item?.trip_template || "" });
       setFormValue("username", item?.username);
       setFormValue("role", item?.role);
       setFormValue("status", item?.status);
@@ -135,15 +135,13 @@ const UserDrawer = () => {
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
   const { data = [], isLoading: employeeLoading } = useGetEmployeesQuery();
   const { data: tripTemplate = [], isLoading: tripTemplateLoading } =
-    useGetAllTripCategoryQuery(
+    useGetAllTripTemplateQuery(
       {
         page: 1,
         limit: 0,
       },
       { refetchOnMountOrArgChange: true }
     );
-
-  console.log(tripTemplate);
 
   // HOOKS
   const { toast } = useToast();
@@ -163,7 +161,7 @@ const UserDrawer = () => {
     mode: "onSubmit",
     defaultValues: {
       employee_id: null,
-      trip_template: { category: "" },
+      trip_template: { template: "" },
       role: "",
       status: "",
       license_exp: null,
@@ -466,9 +464,9 @@ const UserDrawer = () => {
                   disabled={isLoading || isUpdating}
                   options={tripTemplate?.data}
                   value={value}
-                  getOptionLabel={(option) => option.category}
+                  getOptionLabel={(option) => option.template}
                   isOptionEqualToValue={(option, value) =>
-                    option.category === value.category || "" === value.category
+                    option.template === value.template || "" === value.template
                   }
                   renderInput={(params) => (
                     <TextField
