@@ -1,4 +1,5 @@
 export const columns = [
+  { id: "icon", label: "", minWidth: 60 },
   { id: "employee_id", label: "Employee Id", minWidth: 150 },
   {
     id: "first_name",
@@ -58,10 +59,7 @@ export const columns = [
     id: "status",
     label: "Status",
   },
-  {
-    id: "permission",
-    label: "Permission",
-  },
+
   {
     id: "show_all_departments",
     label: "Show All Departments",

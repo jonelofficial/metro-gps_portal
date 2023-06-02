@@ -48,7 +48,7 @@
     }
     &__menu {
       height: calc(100% - 64px);
-      // overflow-y: auto;
+      overflow-y: scroll;
 
       .nav {
         padding: 0;

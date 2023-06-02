@@ -1,9 +1,14 @@
 import { LoadingButton } from "@mui/lab";
 import {
   Button,
+  Collapse,
+  IconButton,
   Modal,
   styled,
+  Table,
+  TableBody,
   TableCell,
+  TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
@@ -15,12 +20,15 @@ import useToast from "../../../hook/useToast";
 import TableAction from "../../table/TableAction";
 import useDisclosure from "../../../hook/useDisclosure";
 import ImageViewer from "../../table/ImageViewer";
-import UserDrawer from "./UserDrawer";
 import useQrCode from "../../../hook/useQrCode";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { useState } from "react";
 
 const TableUsers = ({ item, columns }) => {
   // RTK QUERY
   const [deleteUser, { isLoading }] = useDeleteUserMutation();
+  const [open, setOpen] = useState(false);
 
   // HOOKS
   const { isOpen, onClose, onToggle } = useDisclosure();
@@ -64,6 +72,24 @@ const TableUsers = ({ item, columns }) => {
       >
         {columns.map((column) => {
           const value = item[column.id];
+          if (column.id === "icon" && item?.permission?.length > 0) {
+            return (
+              <TableCell
+                key={column.id}
+                size="small"
+                style={{ whiteSpace: "nowrap", textTransform: "capitalize" }}
+                align="center"
+              >
+                <IconButton
+                  aria-label="expand row"
+                  size="small"
+                  onClick={() => setOpen(!open)}
+                >
+                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+              </TableCell>
+            );
+          }
           return (
             <TableCell
               key={column.id}
@@ -100,10 +126,6 @@ const TableUsers = ({ item, columns }) => {
                 value?.label || value
               ) : column.id === "company" ? (
                 value?.label || value
-              ) : column.id === "permission" ? (
-                value?.map((item, i) => {
-                  return <Box key={i}>{item.label}</Box>;
-                })
               ) : column.id === "show_all_departments" ? (
                 <Box>{value === false ? "No" : "Yes"}</Box>
               ) : column.id === "username" ? (
@@ -115,6 +137,34 @@ const TableUsers = ({ item, columns }) => {
           );
         })}
       </StyledTableRow>
+
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Permision
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Details</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {item?.permission?.map((item, i) => {
+                    return (
+                      <TableRow key={i}>
+                        <TableCell>{item.label}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
 
       <Modal open={isOpen || isOpenAction} onClose={onClose}>
         <Box className="table__modal">
