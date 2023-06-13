@@ -35,9 +35,10 @@ const Map = () => {
 
   // RTK QUERY
   const { data, isLoading, isError, isFetching } =
-    category === "office"
+    category.toLocaleLowerCase() === "office"
       ? useGetAllTripsQuery(opt1, opt2)
-      : category === "hauling" && useGetAllTripsHaulingQuery(opt1, opt2);
+      : category.toLocaleLowerCase() === "hauling" &&
+        useGetAllTripsHaulingQuery(opt1, opt2);
 
   if (isLoading || isFetching) {
     return (
@@ -136,9 +137,9 @@ const Map = () => {
         variant="contained"
         sx={{ margin: "10px" }}
         onClick={() => {
-          category === "office"
+          category.toLocaleLowerCase() === "office"
             ? navigate("/reports/trips-sg")
-            : category === "hauling" &&
+            : category.toLocaleLowerCase() === "hauling" &&
               navigate("/reports/trips-depot", { state: "delivery" });
         }}
       >

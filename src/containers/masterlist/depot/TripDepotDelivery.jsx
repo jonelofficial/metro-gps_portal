@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from "react";
-import TableWrapper from "../../../components/table/TableWrapper";
-import { Box, IconButton, Stack, Tooltip } from "@mui/material";
-import SearchField from "../../../components/table/SearchField";
+import React from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useGetAllDeliveryQuery } from "../../../api/metroApi";
 import { useForm } from "react-hook-form";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import dayjs from "dayjs";
+import { useEffect } from "react";
+import useDisclosure from "../../../hook/useDisclosure";
 import {
   setSearch,
   setSearchBy,
 } from "../../../redux-toolkit/counter/featuresCounter";
-import { useDispatch, useSelector } from "react-redux";
+import TableSkeleton from "../../../components/skeleton/TableSkeleton";
+import TableError from "../../../components/error/TableError";
+import { Box, IconButton, Stack, Tooltip } from "@mui/material";
+import TableWrapper from "../../../components/table/TableWrapper";
+import SearchField from "../../../components/table/SearchField";
 import {
   columns,
   dropData,
-} from "../../../utility/table-columns/TripHaulingColumns";
-import dayjs from "dayjs";
-import useExcel from "../../../hook/useExcel";
-import useDisclosure from "../../../hook/useDisclosure";
+} from "../../../utility/table-columns/TripDeliveryColumns";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ExportModal from "../../../components/features/ExportModal";
-import { useGetAllTripsHaulingQuery } from "../../../api/metroApi";
-import TableSkeleton from "../../../components/skeleton/TableSkeleton";
-import TableError from "../../../components/error/TableError";
 import TableUI from "../../../components/table/TableUI";
-import TableHauling from "../../../components/masterlist/depot/TableHauling";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { searchSchema } from "../../../utility/schema";
+import TableDelivery from "../../../components/masterlist/depot/TableDelivery";
 import { getPathLength } from "geolib";
-import HaulingDrawer from "../../../components/masterlist/depot/HaulingDrawer";
+import useExcel from "../../../hook/useExcel";
 
-const TripDepot = () => {
+const TripDepotDelivery = () => {
   // STATE
   const [date, setDate] = useState();
   const [obj, setObj] = useState([]);
@@ -38,16 +37,13 @@ const TripDepot = () => {
   );
 
   // RTK QUERY
-  const { data, isLoading, isError, isFetching } = useGetAllTripsHaulingQuery(
-    {
-      page: page,
-      limit: limit,
-      search: search,
-      searchBy: searchBy,
-      date: date,
-    },
+
+  const { data, isLoading, isError, isFetching } = useGetAllDeliveryQuery(
+    { page, limit, search, searchBy },
     { refetchOnMountOrArgChange: true }
   );
+
+  const { excelExport } = useExcel();
 
   // REACT HOOK FORM
   const {
@@ -65,26 +61,28 @@ const TripDepot = () => {
       },
       date: dayjs(),
     },
-    resolver: yupResolver(searchSchema),
+    resolver: null,
     mode: "onChange",
   });
 
-  // COMPUTE ALL DURATION
+  //   COMPUTE ALL DURATION
   useEffect(() => {
     let users = {};
 
-    data?.data.forEach((trip, index) => {
+    data?.data.forEach((trip, i) => {
       const newLocations = trip?.locations.filter(
         (location) => location.status == "left" || location.status == "arrived"
       );
-      let user = trip.user_id._id;
+
+      let user = trip.user_id.id;
+
       if (!users[user]) {
         users[user] = {
           totalDuration: 0,
           user_id: user,
           department: trip?.user_id?.department,
-          name: trip.user_id.first_name,
-          employee_id: trip.user_id.employee_id,
+          name: trip?.user_id?.first_name,
+          employee_id: trip?.user_id?.employee_id,
         };
       }
 
@@ -103,8 +101,6 @@ const TripDepot = () => {
 
   //   HOOKS
   const dispatch = useDispatch();
-
-  const { excelExport } = useExcel();
   const {
     isOpen: isOpenExport,
     onClose: onCloseExport,
@@ -147,6 +143,10 @@ const TripDepot = () => {
         }
       });
 
+      const cratesTransaction = item?.crates_transaction?.map((crates) => {
+        return `Crates Dropped: ${crates.crates_dropped} | Crates Collected: ${crates.crates_collected} | Crates Borrowed: ${crates.crates_borrowed} `;
+      });
+
       const gas = item?.diesels?.map((diesel, i) => {
         return `Gas Station: ${diesel?.gas_station_name} Odometer: ${diesel?.odometer} Liter: ${diesel?.liter} Amount: ${diesel?.amount}`;
       });
@@ -155,8 +155,8 @@ const TripDepot = () => {
         return `${Object.values(com)[0]}`;
       });
 
-      const startDate = dayjs(newLocations[0].date);
-      const endDate = dayjs(newLocations[newLocations.length - 1].date);
+      const startDate = dayjs(newLocations.at(0).date);
+      const endDate = dayjs(newLocations.at(-1).date);
       const duration = endDate.diff(startDate);
       const totalMinutes = Math.floor(duration / (1000 * 60));
       const hours = Math.floor(totalMinutes / 60);
@@ -167,10 +167,10 @@ const TripDepot = () => {
 
       return {
         "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY h:mm a"),
-        "Sync Date": dayjs(item?.createdAt).format("MMM-DD-YYYY  h:mm a"),
+        "Sync Date": dayjs(item?.createdAt).format("MMM-DD-YYYY h:mm a"),
         Id: item._id.slice(20),
         User: `${item?.user_id?.first_name} ${item?.user_id?.last_name}`,
-        Department: item?.user_id?.department,
+        Department: item?.user_id.department,
         Vehicle: item?.vehicle_id?.plate_no,
         Duration: `${
           hours > 0 && hours != 1
@@ -184,18 +184,13 @@ const TripDepot = () => {
         Start: dayjs(startDate).format("MMM-DD-YY hh:mm a"),
         End: dayjs(endDate).format("MMM-DD-YY hh:mm a"),
         Locations: destination.join("\n"),
+        Crates: cratesTransaction.join("\n"),
         Diesels: gas.join("\n"),
         "Estimated Total KM": Math.round(estimatedTotalKm),
         "Total KM": Math.round(totalKm),
         Destination: item?.destination,
-        Temperature: item?.temperature,
-        "Tare Weight": item?.tare_weight,
-        "Net Weight": item?.net_weight,
-        "Gross Weight": item?.gross_weight,
-        "Item Count": item?.item_count,
-        "DOA Count": item?.doa_count,
-        Odmeter: item?.odometer,
-        "Odmeter Done": item?.odometer_done,
+        Odometer: item?.odometer,
+        "Odometer Done": item?.odometer_done,
         Companion: companion.join("\n"),
         Others: item?.others !== "null" ? item?.others : "",
         Charging: item?.charging,
@@ -222,8 +217,8 @@ const TripDepot = () => {
       };
     });
 
-    await excelExport(newObj, "METRO-HAULING-REPORT");
-    await excelExport(dailyDuration, "METRO-HAULING-USER-DURATION-REPORT");
+    await excelExport(newObj, "METRO-DELIVERY-REPORT");
+    await excelExport(dailyDuration, "METRO-DELIVERY-USER-DURATION-REPORT");
 
     onCloseExport();
   };
@@ -235,6 +230,7 @@ const TripDepot = () => {
   if (isError) {
     return <TableError />;
   }
+
   return (
     <Box>
       <TableWrapper sx={{ margin: "0 auto" }}>
@@ -274,24 +270,21 @@ const TripDepot = () => {
           </Box>
         </Stack>
 
-        {/* TABLE  */}
+        {/* TABLE */}
         <TableUI
           isFetching={isFetching}
           data={data}
           columns={columns}
           rows={data.data.map((item, i) => {
-            return <TableHauling key={i} item={item} columns={columns} />;
+            return <TableDelivery key={i} item={item} columns={columns} />;
           })}
         />
 
         {/* EXPORT LOADING */}
         <ExportModal isOpenExport={isOpenExport} />
-
-        {/* DRAWER */}
-        <HaulingDrawer />
       </TableWrapper>
     </Box>
   );
 };
 
-export default TripDepot;
+export default TripDepotDelivery;

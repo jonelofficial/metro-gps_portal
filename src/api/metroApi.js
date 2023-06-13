@@ -21,6 +21,7 @@ export const metroApi = createApi({
     "Vehicles",
     "GasStation",
     "Trip Hauling",
+    "Trip Delivery",
     "Trip Category",
     "Trip Type",
     "Destination",
@@ -326,6 +327,13 @@ export const metroApi = createApi({
       }),
       invalidatesTags: ["Destination"],
     }),
+
+    // DELIVERY
+    getAllDelivery: builder.query({
+      query: (params) =>
+        `/depot/trips-delivery?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}&date=${params?.date}`,
+      providesTags: ["Trip Delivery"],
+    }),
   }),
 });
 
@@ -381,4 +389,6 @@ export const {
   useCreateTripTemplateMutation,
   useUpdateTripTemplateMutation,
   useImportTripTemplateMutation,
+  // DELIVERY
+  useGetAllDeliveryQuery,
 } = metroApi;

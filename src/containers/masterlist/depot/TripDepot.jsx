@@ -3,6 +3,7 @@ import { Box, Tab } from "@mui/material";
 import React, { useState } from "react";
 import TripDepotHauling from "./TripDepotHauling";
 import { useParams, useLocation } from "react-router-dom";
+import TripDepotDelivery from "./TripDepotDelivery";
 
 const TripDepot = () => {
   const { state } = useLocation();
@@ -33,7 +34,9 @@ const TripDepot = () => {
         <TabPanel value="hauling">
           <TripDepotHauling />
         </TabPanel>
-        <TabPanel value="delivery"></TabPanel>
+        <TabPanel value="delivery">
+          <TripDepotDelivery />
+        </TabPanel>
       </TabContext>
     </Box>
   );

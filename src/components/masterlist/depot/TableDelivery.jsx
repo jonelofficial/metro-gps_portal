@@ -1,32 +1,31 @@
-import React, { useState } from "react";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import styled from "@emotion/styled";
 import {
   Box,
-  IconButton,
-  Stack,
-  TableCell,
-  TableRow,
-  Tooltip,
-  styled,
   Button,
   Collapse,
-  Typography,
-  Table,
-  TableHead,
-  TableBody,
+  IconButton,
   Modal,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
-import TableAction from "../../table/TableAction";
-import useDisclosure from "../../../hook/useDisclosure";
+import React, { useState } from "react";
 import { theme } from "../../../theme";
+import { useNavigate } from "react-router-dom";
+import useDisclosure from "../../../hook/useDisclosure";
+import dayjs from "dayjs";
 import { getPathLength } from "geolib";
-
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import TableAction from "../../table/TableAction";
 import ImageViewer from "../../table/ImageViewer";
 
-const TableHauling = ({ item, columns }) => {
+const TableDelivery = ({ item, columns }) => {
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
@@ -48,28 +47,26 @@ const TableHauling = ({ item, columns }) => {
 
   const { isOpen, onClose, onToggle } = useDisclosure();
 
-  // COMPUTE DURATION
+  //   COMPUTE DURATION
   const newLocations = item.locations.filter(
     (location) => location.status == "left" || location.status == "arrived"
   );
 
-  const startDate = dayjs(newLocations[0]?.date);
-  const endDate = dayjs(newLocations[newLocations.length - 1]?.date);
+  const startDate = dayjs(newLocations.at(0)?.date);
+  const endDate = dayjs(newLocations.at(-1)?.date);
   const duration = endDate.diff(startDate);
   const totalMinutes = Math.floor(duration / (1000 * 60));
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
 
-  const hour = `${hours.toFixed(0)}.${minutes == 0 ? "00" : minutes}`;
-
   const leftTime = 480 - totalMinutes;
   const leftHours = Math.floor(leftTime / 60);
-  const leftMinutes = leftTime % 60;
+  const leftMinutes = leftHours % 60;
   const leftHour = `${leftHours.toFixed(0)}.${
     leftMinutes == 0 ? "00" : leftMinutes
   }`;
 
-  //COMPUTE ESTIMATED ODO
+  //   COMPUTE ESTIMATED ODO
   const totalKm = item?.odometer_done - item?.odometer;
   const estimatedTotalKm = getPathLength(item.points) / 1000;
   const km = item.points?.length > 0 && getPathLength(item.points) / 1000;
@@ -77,6 +74,7 @@ const TableHauling = ({ item, columns }) => {
   const estimatedOdo = odo + km;
 
   const estimatedOdoOver = estimatedTotalKm - totalKm > 1;
+
   return (
     <>
       <StyledTableRow
@@ -105,7 +103,6 @@ const TableHauling = ({ item, columns }) => {
               </TableCell>
             );
           }
-
           return (
             <TableCell
               key={column.id}
@@ -191,19 +188,6 @@ const TableHauling = ({ item, columns }) => {
                 >
                   {Math.round(totalKm)?.toLocaleString()}
                 </Box>
-              ) : column.id === "odometer" ||
-                column.id === "odometer_done" ||
-                column.id === "tare_weight" ||
-                column.id === "net_weight" ||
-                column.id === "gross_weight" ||
-                column.id === "doa_count" ? (
-                <Box
-                  sx={{
-                    textAlign: "center",
-                  }}
-                >
-                  {value?.toLocaleString()}
-                </Box>
               ) : (
                 value
               )}
@@ -229,11 +213,6 @@ const TableHauling = ({ item, columns }) => {
                     <TableCell>Status</TableCell>
                     <TableCell>Address</TableCell>
                     <TableCell>Date</TableCell>
-                    {/* <TableCell>Temperature</TableCell>
-                    <TableCell>Tare Weight</TableCell>
-                    <TableCell>Net Weight</TableCell>
-                    <TableCell>Gross Weight</TableCell>
-                    <TableCell>DOA Count</TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -243,6 +222,7 @@ const TableHauling = ({ item, columns }) => {
                         <TableCell
                           sx={{
                             minWidth: "90px",
+                            textTransform: "capitalize",
                             color:
                               loc.status === "left"
                                 ? theme.palette.custom.danger
@@ -251,13 +231,9 @@ const TableHauling = ({ item, columns }) => {
                                 : theme.palette.customBlue.main,
                           }}
                         >
-                          {i == 0
-                            ? "Left Depot"
-                            : i == 1
-                            ? "Arrived Farm"
-                            : i == 2
-                            ? "Left Farm"
-                            : i == 3 && "Arrived Depot"}
+                          {i == 0 || newLocations.length - 1 === i
+                            ? `${loc?.status} Depot`
+                            : `${loc?.status} Store`}
                         </TableCell>
 
                         <TableCell sx={{ maxWidth: "200px" }}>
@@ -271,22 +247,6 @@ const TableHauling = ({ item, columns }) => {
                         <TableCell>
                           {dayjs(loc?.date).format("MMM-DD-YY h:mm a")}
                         </TableCell>
-
-                        {/* <TableCell>{item?.temperature[i]}</TableCell>
-                        <TableCell>{item?.tare_weight[i]}</TableCell>
-                        <TableCell>
-                          {i == 2
-                            ? item?.net_weight[0]
-                            : i == 3 && item?.net_weight[1]}
-                        </TableCell>
-                        <TableCell>
-                          {i == 2
-                            ? item?.gross_weight[0]
-                            : i == 3 && item?.gross_weight[1]}
-                        </TableCell>
-                        <TableCell>
-                          {item?.locations?.length === i + 1 && item?.doa_count}
-                        </TableCell> */}
                       </TableRow>
                     );
                   })}
@@ -353,4 +313,4 @@ const TableHauling = ({ item, columns }) => {
   );
 };
 
-export default TableHauling;
+export default TableDelivery;
