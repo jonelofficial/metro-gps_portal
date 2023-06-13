@@ -8,7 +8,7 @@ import TripDepotDelivery from "./TripDepotDelivery";
 const TripDepot = () => {
   const { state } = useLocation();
 
-  const [value, setValue] = useState("hauling");
+  const [value, setValue] = useState(state || "hauling");
 
   const handleChange = (e, newValue) => {
     setValue(newValue);

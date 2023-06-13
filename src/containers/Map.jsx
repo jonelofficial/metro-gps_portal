@@ -4,6 +4,7 @@ import { Box, Tooltip } from "@material-ui/core";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  useGetAllDeliveryQuery,
   useGetAllTripsHaulingQuery,
   useGetAllTripsQuery,
 } from "../api/metroApi";
@@ -24,8 +25,6 @@ const Map = () => {
   let { id, category } = useParams();
 
   const navigate = useNavigate();
-  // HOOKS
-  const { toast } = useToast();
 
   const opt1 = {
     search: id,
@@ -37,8 +36,10 @@ const Map = () => {
   const { data, isLoading, isError, isFetching } =
     category.toLocaleLowerCase() === "office"
       ? useGetAllTripsQuery(opt1, opt2)
-      : category.toLocaleLowerCase() === "hauling" &&
-        useGetAllTripsHaulingQuery(opt1, opt2);
+      : category.toLocaleLowerCase() === "hauling"
+      ? useGetAllTripsHaulingQuery(opt1, opt2)
+      : category.toLocaleLowerCase() === "delivery" &&
+        useGetAllDeliveryQuery(opt1, opt2);
 
   if (isLoading || isFetching) {
     return (
@@ -139,7 +140,9 @@ const Map = () => {
         onClick={() => {
           category.toLocaleLowerCase() === "office"
             ? navigate("/reports/trips-sg")
-            : category.toLocaleLowerCase() === "hauling" &&
+            : category.toLocaleLowerCase() === "hauling"
+            ? navigate("/reports/trips-depot", { state: "hauling" })
+            : category.toLocaleLowerCase() === "delivery" &&
               navigate("/reports/trips-depot", { state: "delivery" });
         }}
       >
@@ -188,26 +191,12 @@ const Map = () => {
                   </Box>
 
                   {/* HAULING */}
-                  {category === "hauling" && (
+                  {category.toLocaleLowerCase() === "hauling" && (
                     <>
                       <Box className="map__first-label">
                         Destination:
                         <Box className="map__first-data">
                           {`${data.data[0]?.destination}`}
-                        </Box>
-                      </Box>
-
-                      <Box className="map__first-label">
-                        Farm:
-                        <Box className="map__first-data">
-                          {`${data.data[0]?.farm}`}
-                        </Box>
-                      </Box>
-
-                      <Box className="map__first-label">
-                        Temperature:
-                        <Box className="map__first-data">
-                          {`${data.data[0]?.temperature}`}
                         </Box>
                       </Box>
 
@@ -248,6 +237,18 @@ const Map = () => {
                     </>
                   )}
 
+                  {/* DELIVERY */}
+                  {category.toLocaleLowerCase() === "delivery" && (
+                    <>
+                      <Box className="map__first-label">
+                        Destination:
+                        <Box className="map__first-data">
+                          {`${data.data[0]?.destination}`}
+                        </Box>
+                      </Box>
+                    </>
+                  )}
+
                   <Box className="map__first-label">
                     Locations:
                     <Box className="map__first-data">
@@ -268,7 +269,28 @@ const Map = () => {
                                       : theme.palette.customBlue.main,
                                   textTransform: "capitalize",
                                 }}
-                              >{`${item.status} :`}</Box>
+                              >
+                                {`${item.status} ${
+                                  category.toLocaleLowerCase() === "delivery" &&
+                                  (i == 0 ||
+                                    [...data.data[0]?.locations].length - 1 ===
+                                      i)
+                                    ? "Depot"
+                                    : category.toLocaleLowerCase() ===
+                                      "delivery"
+                                    ? "Store"
+                                    : ""
+                                } ${
+                                  category.toLocaleLowerCase() === "hauling" &&
+                                  (i == 0 ||
+                                    [...data.data[0]?.locations].length - 1 ===
+                                      i)
+                                    ? "Depot"
+                                    : category.toLocaleLowerCase() === "hauling"
+                                    ? "Farm"
+                                    : ""
+                                }:`}
+                              </Box>
                               <Typography sx={{ fontWeight: "600" }}>
                                 {`${item?.address[0]?.name || "(No Name)"}  ${
                                   item?.address[0]?.district || "(No District)"
@@ -281,6 +303,41 @@ const Map = () => {
                                 {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
                                 <br />
                                 {`${item?.lat}° N  ${item?.long}° E`}
+                                {category.toLocaleLowerCase() === "delivery" &&
+                                  item?.status === "arrived" &&
+                                  data.data[0]?.locations.length !== i + 1 && (
+                                    <Box
+                                      sx={{
+                                        display: "grid",
+                                        gridTemplateColumns: "105px 1fr",
+                                      }}
+                                    >
+                                      Dropped:
+                                      <Box>
+                                        {
+                                          data.data[0]?.crates_transaction[
+                                            Math.floor(i / 2)
+                                          ]?.crates_dropped
+                                        }
+                                      </Box>
+                                      Collected:{" "}
+                                      <Box>
+                                        {
+                                          data.data[0]?.crates_transaction[
+                                            Math.floor(i / 2)
+                                          ]?.crates_collected
+                                        }
+                                      </Box>
+                                      Borrowed:{" "}
+                                      <Box>
+                                        {
+                                          data.data[0]?.crates_transaction[
+                                            Math.floor(i / 2)
+                                          ]?.crates_borrowed
+                                        }
+                                      </Box>
+                                    </Box>
+                                  )}
                                 <br />
                                 <br />
                               </Typography>
