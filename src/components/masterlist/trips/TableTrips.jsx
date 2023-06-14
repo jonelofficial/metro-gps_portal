@@ -280,6 +280,7 @@ const TableTrips = ({ item, columns }) => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Status</TableCell>
+                    <TableCell>Destination</TableCell>
                     <TableCell>Address</TableCell>
                     <TableCell>Date</TableCell>
                   </TableRow>
@@ -303,6 +304,8 @@ const TableTrips = ({ item, columns }) => {
                             .toLowerCase()
                             .replace(/\b\w/g, (l) => l.toUpperCase())}`}
                         </TableCell>
+
+                        <TableCell>{loc?.destination}</TableCell>
 
                         <TableCell>
                           {`${loc?.address[0]?.name || "(No Name)"}  ${

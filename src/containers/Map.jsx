@@ -303,6 +303,12 @@ const Map = () => {
                                 {dayjs(item.date).format("MMM-DD-YY hh:mm a")}
                                 <br />
                                 {`${item?.lat}° N  ${item?.long}° E`}
+                                {item?.destination && (
+                                  <>
+                                    <br />
+                                    {item.destination}
+                                  </>
+                                )}
                                 {category.toLocaleLowerCase() === "delivery" &&
                                   item?.status === "arrived" &&
                                   data.data[0]?.locations.length !== i + 1 && (
