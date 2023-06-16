@@ -4,7 +4,11 @@ import "../../style/outlet/users/users.scss";
 
 const TableSkeleton = () => {
   return (
-    <Stack spacing={1} className="table">
+    <Stack
+      spacing={1}
+      className="table"
+      sx={{ height: "100%", margin: "0 auto" }}
+    >
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Skeleton variant="rounded" width={600} height={50} />
         <Skeleton variant="rounded" width={100} height={50} />

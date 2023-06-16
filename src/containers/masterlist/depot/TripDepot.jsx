@@ -31,10 +31,10 @@ const TripDepot = () => {
             />
           </TabList>
         </Box>
-        <TabPanel value="hauling">
+        <TabPanel value="hauling" sx={{ height: "100%" }}>
           <TripDepotHauling />
         </TabPanel>
-        <TabPanel value="delivery">
+        <TabPanel value="delivery" sx={{ height: "100%" }}>
           <TripDepotDelivery />
         </TabPanel>
       </TabContext>
