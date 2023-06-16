@@ -26,6 +26,7 @@ import TableUI from "../../../components/table/TableUI";
 import TableDelivery from "../../../components/masterlist/depot/TableDelivery";
 import { getPathLength } from "geolib";
 import useExcel from "../../../hook/useExcel";
+import DeliveryDrawer from "../../../components/masterlist/depot/DeliveryDrawer";
 
 const TripDepotDelivery = () => {
   // STATE
@@ -282,6 +283,9 @@ const TripDepotDelivery = () => {
 
         {/* EXPORT LOADING */}
         <ExportModal isOpenExport={isOpenExport} />
+
+        {/* DRAWER */}
+        <DeliveryDrawer />
       </TableWrapper>
     </Box>
   );

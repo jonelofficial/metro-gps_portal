@@ -334,6 +334,14 @@ export const metroApi = createApi({
         `/depot/trips-delivery?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}&date=${params?.date}`,
       providesTags: ["Trip Delivery"],
     }),
+    updateDelivery: builder.mutation({
+      query: (payload) => ({
+        url: `/depot/trip-delivery/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+      invalidatesTags: ["Trip Delivery"],
+    }),
   }),
 });
 
@@ -391,4 +399,5 @@ export const {
   useImportTripTemplateMutation,
   // DELIVERY
   useGetAllDeliveryQuery,
+  useUpdateDeliveryMutation,
 } = metroApi;
