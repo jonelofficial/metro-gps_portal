@@ -156,11 +156,13 @@ const Trips = () => {
         )} ${i % 2 === 0 ? counter : [Math.floor(i / 2) + 1]}`;
         i % 2 !== 0 && counter++;
         return {
-          [title]: `${loc?.address[0]?.name || "(No Name)"}  ${
-            loc?.address[0]?.district || "(No District)"
-          } ${loc?.address[0]?.city || "(No City)"}  ${
-            loc?.address[0]?.subregion || "(No Subregion)"
-          } | `,
+          [title]:
+            loc?.destination ||
+            `${loc?.address[0]?.name || "(No Name)"}  ${
+              loc?.address[0]?.district || "(No District)"
+            } ${loc?.address[0]?.city || "(No City)"}  ${
+              loc?.address[0]?.subregion || "(No Subregion)"
+            } | `,
         };
       });
 
