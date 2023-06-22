@@ -125,7 +125,7 @@ const TripDepot = () => {
         (location) => location.status == "left" || location.status == "arrived"
       );
 
-      const destination = item?.locations?.map((loc, i) => {
+      const destination = newLocations?.map((loc, i) => {
         if (loc.status == "left") {
           return `Left → ${loc?.address[0]?.name || "(No Name)"}  ${
             loc?.address[0]?.district || "(No District)"
@@ -145,6 +145,23 @@ const TripDepot = () => {
             loc?.address[0]?.subregion || "(No Subregion)"
           } | `;
         }
+      });
+
+      let counter = 1;
+      const perStatus = newLocations.map((loc, i) => {
+        const title = `${loc.status.toUpperCase().at(0)}${loc.status.slice(
+          1
+        )} ${i % 2 === 0 ? counter : [Math.floor(i / 2) + 1]}`;
+        i % 2 !== 0 && counter++;
+        return {
+          [title]:
+            loc?.destination ||
+            `${loc?.address[0]?.name || "(No Name)"}  ${
+              loc?.address[0]?.district || "(No District)"
+            } ${loc?.address[0]?.city || "(No City)"}  ${
+              loc?.address[0]?.subregion || "(No Subregion)"
+            } | `,
+        };
       });
 
       const gas = item?.diesels?.map((diesel, i) => {
@@ -183,7 +200,7 @@ const TripDepot = () => {
         }`,
         Start: dayjs(startDate).format("MMM-DD-YY hh:mm a"),
         End: dayjs(endDate).format("MMM-DD-YY hh:mm a"),
-        Locations: destination.join("\n"),
+        // Locations: destination.join("\n"),
         Diesels: gas.join("\n"),
         "Estimated Total KM": Math.round(estimatedTotalKm),
         "Total KM": Math.round(totalKm),
@@ -199,6 +216,7 @@ const TripDepot = () => {
         Companion: companion.join("\n"),
         Others: item?.others !== "null" ? item?.others : "",
         Charging: item?.charging,
+        ...Object.assign({}, ...perStatus),
       };
     });
 
