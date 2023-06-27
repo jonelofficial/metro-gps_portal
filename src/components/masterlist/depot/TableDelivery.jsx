@@ -211,6 +211,7 @@ const TableDelivery = ({ item, columns }) => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Status</TableCell>
+                    <TableCell>Destination</TableCell>
                     <TableCell>Address</TableCell>
                     <TableCell>Date</TableCell>
                   </TableRow>
@@ -235,6 +236,7 @@ const TableDelivery = ({ item, columns }) => {
                             ? `${loc?.status} Depot`
                             : `${loc?.status} Store`}
                         </TableCell>
+                        <TableCell>{loc?.destination}</TableCell>
 
                         <TableCell sx={{ maxWidth: "200px" }}>
                           {`${loc?.address[0]?.name || "(No Name)"}  ${

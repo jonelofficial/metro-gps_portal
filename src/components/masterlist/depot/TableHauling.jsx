@@ -227,13 +227,9 @@ const TableHauling = ({ item, columns }) => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Status</TableCell>
+                    <TableCell>Destination</TableCell>
                     <TableCell>Address</TableCell>
                     <TableCell>Date</TableCell>
-                    {/* <TableCell>Temperature</TableCell>
-                    <TableCell>Tare Weight</TableCell>
-                    <TableCell>Net Weight</TableCell>
-                    <TableCell>Gross Weight</TableCell>
-                    <TableCell>DOA Count</TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -249,16 +245,13 @@ const TableHauling = ({ item, columns }) => {
                                 : loc.status === "arrived"
                                 ? theme.palette.custom.success
                                 : theme.palette.customBlue.main,
+                            textTransform: "capitalize",
                           }}
                         >
-                          {i == 0
-                            ? "Left Depot"
-                            : i == 1
-                            ? "Arrived Farm"
-                            : i == 2
-                            ? "Left Farm"
-                            : i == 3 && "Arrived Depot"}
+                          {loc.status}
                         </TableCell>
+
+                        <TableCell>{loc?.destination}</TableCell>
 
                         <TableCell sx={{ maxWidth: "200px" }}>
                           {`${loc?.address[0]?.name || "(No Name)"}  ${
@@ -271,22 +264,6 @@ const TableHauling = ({ item, columns }) => {
                         <TableCell>
                           {dayjs(loc?.date).format("MMM-DD-YY h:mm a")}
                         </TableCell>
-
-                        {/* <TableCell>{item?.temperature[i]}</TableCell>
-                        <TableCell>{item?.tare_weight[i]}</TableCell>
-                        <TableCell>
-                          {i == 2
-                            ? item?.net_weight[0]
-                            : i == 3 && item?.net_weight[1]}
-                        </TableCell>
-                        <TableCell>
-                          {i == 2
-                            ? item?.gross_weight[0]
-                            : i == 3 && item?.gross_weight[1]}
-                        </TableCell>
-                        <TableCell>
-                          {item?.locations?.length === i + 1 && item?.doa_count}
-                        </TableCell> */}
                       </TableRow>
                     );
                   })}

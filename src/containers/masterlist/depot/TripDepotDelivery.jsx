@@ -150,6 +150,26 @@ const TripDepotDelivery = () => {
           1
         )} ${i % 2 === 0 ? counter : [Math.floor(i / 2) + 1]}`;
         i % 2 !== 0 && counter++;
+
+        if (loc?.status === "arrived") {
+          return {
+            [title]:
+              loc?.destination ||
+              `${loc?.address[0]?.name || "(No Name)"}  ${
+                loc?.address[0]?.district || "(No District)"
+              } ${loc?.address[0]?.city || "(No City)"}  ${
+                loc?.address[0]?.subregion || "(No Subregion)"
+              }`,
+            [`Crates ${counter - 1}`]: `Crates Dropped: ${
+              item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped || ""
+            } | Crates Collected: ${
+              item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+              ""
+            } | Crates Borrowed: ${
+              item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed || ""
+            } `,
+          };
+        }
         return {
           [title]:
             loc?.destination ||
@@ -157,7 +177,7 @@ const TripDepotDelivery = () => {
               loc?.address[0]?.district || "(No District)"
             } ${loc?.address[0]?.city || "(No City)"}  ${
               loc?.address[0]?.subregion || "(No Subregion)"
-            } | `,
+            }`,
         };
       });
 
@@ -202,7 +222,7 @@ const TripDepotDelivery = () => {
         Start: dayjs(startDate).format("MMM-DD-YY hh:mm a"),
         End: dayjs(endDate).format("MMM-DD-YY hh:mm a"),
         // Locations: destination.join("\n"),
-        Crates: cratesTransaction.join("\n"),
+        // Crates: cratesTransaction.join("\n"),
         Diesels: gas.join("\n"),
         "Estimated Total KM": Math.round(estimatedTotalKm),
         "Total KM": Math.round(totalKm),

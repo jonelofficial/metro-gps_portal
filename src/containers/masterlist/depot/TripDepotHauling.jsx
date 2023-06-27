@@ -160,7 +160,7 @@ const TripDepot = () => {
               loc?.address[0]?.district || "(No District)"
             } ${loc?.address[0]?.city || "(No City)"}  ${
               loc?.address[0]?.subregion || "(No Subregion)"
-            } | `,
+            }`,
         };
       });
 
