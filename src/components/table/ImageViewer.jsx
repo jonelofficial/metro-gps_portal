@@ -13,6 +13,7 @@ const ImageViewer = ({ onClose, img, ...etc }) => {
           display: "block",
           margin: "0 auto",
         }}
+        crossorigin="anonymous"
         src={img}
         {...etc}
       />

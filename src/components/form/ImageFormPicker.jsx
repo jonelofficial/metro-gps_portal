@@ -32,6 +32,7 @@ const ImageFormPicker = ({ item, image, setImage }) => {
               display: "block",
               margin: "0 auto",
             }}
+            crossorigin="anonymous"
             alt="Metro GPS"
             src={`${process.env.BASEURL}/${item.profile}`}
           />
