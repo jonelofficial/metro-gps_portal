@@ -236,7 +236,11 @@ const TableDelivery = ({ item, columns }) => {
                             ? `${loc?.status} Depot`
                             : `${loc?.status} Store`}
                         </TableCell>
-                        <TableCell>{loc?.destination}</TableCell>
+                        <TableCell>
+                          {loc?.destination}{" "}
+                          {item?.locations[i - 1]?.destination}{" "}
+                          {(i == 0 || newLocations.length - 1 === i) && `Depot`}
+                        </TableCell>
 
                         <TableCell sx={{ maxWidth: "200px" }}>
                           {`${loc?.address[0]?.name || "(No Name)"}  ${

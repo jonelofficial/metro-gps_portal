@@ -150,8 +150,23 @@ const TripDepotDelivery = () => {
           1
         )} ${i % 2 === 0 ? counter : [Math.floor(i / 2) + 1]}`;
         i % 2 !== 0 && counter++;
-
-        if (loc?.status === "arrived") {
+        if (i == 0 || newLocations.length - 1 === i) {
+          return {
+            [title]: "Depot",
+          };
+        }
+        if (loc?.status === "left" && i !== 0) {
+          return {
+            [title]:
+              item?.locations[i - 1]?.destination ||
+              `${loc?.address[0]?.name || "(No Name)"}  ${
+                loc?.address[0]?.district || "(No District)"
+              } ${loc?.address[0]?.city || "(No City)"}  ${
+                loc?.address[0]?.subregion || "(No Subregion)"
+              }`,
+          };
+        }
+        if (loc?.status === "arrived" && newLocations.length - 1 !== i) {
           return {
             [title]:
               loc?.destination ||
@@ -170,6 +185,7 @@ const TripDepotDelivery = () => {
             } `,
           };
         }
+
         return {
           [title]:
             loc?.destination ||
