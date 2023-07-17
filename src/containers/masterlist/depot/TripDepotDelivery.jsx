@@ -117,10 +117,21 @@ const TripDepotDelivery = () => {
   const handleToggleExport = async () => {
     onToggleExport();
 
+    let newReports = [];
+
     const newObj = await data?.data?.map((item) => {
-      const newLocations = item?.locations?.filter(
-        (location) => location.status == "left" || location.status == "arrived"
-      );
+      // const newLocations = item?.locations?.filter(
+      //   (location) => location.status == "left" || location.status == "arrived"
+      // );
+
+      const newLocations = item.locations
+        .filter(
+          (location) =>
+            location.status == "left" || location.status == "arrived"
+        )
+        .sort((a, b) => {
+          return new Date(a.date) - new Date(b.date);
+        });
 
       const destination = newLocations?.map((loc, i) => {
         if (loc.status == "left") {
@@ -219,37 +230,116 @@ const TripDepotDelivery = () => {
       const totalKm = item?.odometer_done - item?.odometer;
       const estimatedTotalKm = getPathLength(item.points) / 1000;
 
-      return {
-        "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY h:mm a"),
-        "Sync Date": dayjs(item?.createdAt).format("MMM-DD-YYYY h:mm a"),
-        Id: item._id.slice(20),
-        User: `${item?.user_id?.first_name} ${item?.user_id?.last_name}`,
-        Department: item?.user_id.department,
-        Vehicle: item?.vehicle_id?.plate_no,
-        Duration: `${
-          hours > 0 && hours != 1
-            ? hours + " hours"
-            : hours == 1
-            ? hours + " hour"
-            : ""
-        } ${minutes > 0 ? minutes + " minutes" : ""}${
-          hours <= 0 && minutes <= 0 ? "0" : ""
-        }`,
-        Start: dayjs(startDate).format("MMM-DD-YY hh:mm a"),
-        End: dayjs(endDate).format("MMM-DD-YY hh:mm a"),
-        // Locations: destination.join("\n"),
-        // Crates: cratesTransaction.join("\n"),
-        Diesels: gas.join("\n"),
-        "Estimated Total KM": Math.round(estimatedTotalKm),
-        "Total KM": Math.round(totalKm),
-        Destination: item?.destination,
-        Odometer: item?.odometer,
-        "Odometer Done": item?.odometer_done,
-        Companion: companion.join("\n"),
-        Others: item?.others !== "null" ? item?.others : "",
-        Charging: item?.charging,
-        ...Object.assign({}, ...perStatus),
-      };
+      newLocations.map((location, i) => {
+        if (i % 2 == 0) {
+          newReports.push({
+            "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY h:mm a"),
+            "Sync Date": dayjs(item?.createdAt).format("MMM-DD-YYYY  h:mm a"),
+            Id: item._id.slice(20),
+            User: `${item?.user_id?.first_name} ${item?.user_id?.last_name}`,
+            Department: item?.user_id.department,
+            Vehicle: item?.vehicle_id?.plate_no,
+            Duration: `${
+              hours > 0 && hours != 1
+                ? hours + " hours"
+                : hours == 1
+                ? hours + " hour"
+                : ""
+            } ${minutes > 0 ? minutes + " minutes" : ""}${
+              hours <= 0 && minutes <= 0 ? "0" : ""
+            }`,
+            Start: dayjs(startDate).format("MMM-DD-YY hh:mm a"),
+            End: dayjs(endDate).format("MMM-DD-YY hh:mm a"),
+            "Estimated Total KM": Math.round(estimatedTotalKm),
+            "Total KM": Math.round(totalKm),
+            Odmeter: item?.odometer,
+            "Odmeter Done": item?.odometer_done,
+            Companion: companion.join("\n"),
+            Others: item?.others !== "null" ? item?.others : "",
+            Charging: item?.charging,
+            Diesels: gas.join("\n"),
+            "Crates Dropped":
+              item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped ||
+              "0",
+            "Crates Collected":
+              item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+              "0",
+            "Crates Borrowed":
+              item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed ||
+              "0",
+            Origin:
+              i === 0
+                ? "Depot"
+                : newLocations[i - 1]?.destination ||
+                  `${location?.address[0]?.name || "(No Name)"}  ${
+                    location?.address[0]?.district || "(No District)"
+                  } ${location?.address[0]?.city || "(No City)"}  ${
+                    location?.address[0]?.subregion || "(No Subregion)"
+                  }`,
+            Destination:
+              newLocations.length - 1 === i + 1
+                ? "Depot"
+                : newLocations[i + 1]?.destination ||
+                  `${newLocations[i + 1].address[0]?.name || "(No Name)"}  ${
+                    newLocations[i + 1].address[0]?.district || "(No District)"
+                  } ${newLocations[i + 1].address[0]?.city || "(No City)"}  ${
+                    newLocations[i + 1].address[0]?.subregion ||
+                    "(No Subregion)"
+                  }`,
+            // Origin:
+            //   i === 0
+            //     ? "Depot"
+            //     : location?.destination ||
+            //       `${location?.address[0]?.name || "(No Name)"}  ${
+            //         location?.address[0]?.district || "(No District)"
+            //       } ${location?.address[0]?.city || "(No City)"}  ${
+            //         location?.address[0]?.subregion || "(No Subregion)"
+            //       }`,
+            // Destination:
+            //   newLocations.length - 1 === i + 1
+            //     ? "Depot"
+            //     : newLocations[i + 1]?.destination ||
+            //       `${newLocations[i + 1].address[0]?.name || "(No Name)"}  ${
+            //         newLocations[i + 1].address[0]?.district || "(No District)"
+            //       } ${newLocations[i + 1].address[0]?.city || "(No City)"}  ${
+            //         newLocations[i + 1].address[0]?.subregion ||
+            //         "(No Subregion)"
+            //       }`,
+          });
+        }
+      });
+
+      // return {
+      //   "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY h:mm a"),
+      //   "Sync Date": dayjs(item?.createdAt).format("MMM-DD-YYYY h:mm a"),
+      //   Id: item._id.slice(20),
+      //   User: `${item?.user_id?.first_name} ${item?.user_id?.last_name}`,
+      //   Department: item?.user_id.department,
+      //   Vehicle: item?.vehicle_id?.plate_no,
+      //   Duration: `${
+      //     hours > 0 && hours != 1
+      //       ? hours + " hours"
+      //       : hours == 1
+      //       ? hours + " hour"
+      //       : ""
+      //   } ${minutes > 0 ? minutes + " minutes" : ""}${
+      //     hours <= 0 && minutes <= 0 ? "0" : ""
+      //   }`,
+      //   Start: dayjs(startDate).format("MMM-DD-YY hh:mm a"),
+      //   End: dayjs(endDate).format("MMM-DD-YY hh:mm a"),
+      //   // Locations: destination.join("\n"),
+      //   // Crates: cratesTransaction.join("\n"),
+      //   Diesels: gas.join("\n"),
+      //   "Estimated Total KM": Math.round(estimatedTotalKm),
+      //   "Total KM": Math.round(totalKm),
+      //   Destination: item?.destination,
+      //   Odometer: item?.odometer,
+      //   "Odometer Done": item?.odometer_done,
+      //   Companion: companion.join("\n"),
+      //   Others: item?.others !== "null" ? item?.others : "",
+      //   Charging: item?.charging,
+      //   ...Object.assign({}, ...perStatus),
+      // };
     });
 
     const dailyDuration = obj.map((item) => {
@@ -272,7 +362,7 @@ const TripDepotDelivery = () => {
       };
     });
 
-    await excelExport(newObj, "METRO-DELIVERY-REPORT");
+    await excelExport(newReports, "METRO-DELIVERY-REPORT");
     await excelExport(dailyDuration, "METRO-DELIVERY-USER-DURATION-REPORT");
 
     onCloseExport();
