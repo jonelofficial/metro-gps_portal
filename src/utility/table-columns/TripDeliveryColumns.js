@@ -27,6 +27,11 @@ export const columns = [
     minWidth: 130,
   },
   {
+    id: "odometer_done_image_path",
+    label: "Done Odometer Image",
+    minWidth: 170,
+  },
+  {
     id: "action",
     label: "Action",
   },

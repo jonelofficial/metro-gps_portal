@@ -40,6 +40,11 @@ const TableTrips = ({ item, columns }) => {
   //   HOOKS
   const { isOpen, onClose, onToggle } = useDisclosure();
   const {
+    isOpen: isOpenDoneOdo,
+    onClose: onCloseDoneOdo,
+    onToggle: onToggleDoneOdo,
+  } = useDisclosure();
+  const {
     isOpen: isOpenAction,
     onClose: onCloseAction,
     onToggle: onToggleAction,
@@ -193,6 +198,8 @@ const TableTrips = ({ item, columns }) => {
                 value !== null && dayjs(value).format("MMM-DD-YYYY h:mm a")
               ) : column.id === "odometer_image_path" && value != null ? (
                 <Button onClick={onToggle}>View</Button>
+              ) : column.id === "odometer_done_image_path" && value != null ? (
+                <Button onClick={onToggleDoneOdo}>View</Button>
               ) : column.id === "action" ? (
                 <TableAction item={item} />
               ) : column.id === "others" ? (
@@ -392,13 +399,25 @@ const TableTrips = ({ item, columns }) => {
         </TableCell>
       </TableRow>
 
-      <Modal open={isOpen || isOpenAction} onClose={onClose}>
+      <Modal
+        open={isOpen || isOpenAction || isOpenDoneOdo}
+        onClose={() => {
+          onClose();
+          onCloseDoneOdo();
+        }}
+      >
         <Box className="table__modal">
           {isOpen ? (
             <ImageViewer
               alt="Odometer Image"
               onClose={onClose}
               img={`${process.env.BASEURL}/${item.odometer_image_path}`}
+            />
+          ) : isOpenDoneOdo ? (
+            <ImageViewer
+              alt="Done Odometer Image"
+              onClose={onCloseDoneOdo}
+              img={`${process.env.BASEURL}/${item.odometer_done_image_path}`}
             />
           ) : (
             <>
