@@ -207,7 +207,6 @@ const TripTypeDrawer = () => {
                     />
                   )}
                   onChange={(e, value) => {
-                    console.log(value);
                     onChange(value);
                   }}
                   sx={{

@@ -276,7 +276,6 @@ const DestinationDrawer = () => {
                     />
                   )}
                   onChange={(e, value) => {
-                    console.log(value);
                     onChange(value);
                   }}
                   sx={{

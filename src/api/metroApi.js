@@ -26,6 +26,7 @@ export const metroApi = createApi({
     "Trip Type",
     "Destination",
     "Trip Template",
+    "Trip Live",
   ],
   endpoints: (builder) => ({
     // T R I P S
@@ -342,6 +343,20 @@ export const metroApi = createApi({
       }),
       invalidatesTags: ["Trip Delivery"],
     }),
+    // LIVE
+    getAllLive: builder.query({
+      query: (params) =>
+        `/live/trips-live?page=${params?.page}&limit=${params?.limit}&search=${params?.search}&searchBy=${params?.searchBy}&date=${params?.date}`,
+      providesTags: ["Trip Live"],
+    }),
+    updateLive: builder.mutation({
+      query: (payload) => ({
+        url: `/live/trip-live/${payload.id}`,
+        method: "PUT",
+        body: payload.obj,
+      }),
+      invalidatesTags: ["Trip Live"],
+    }),
   }),
 });
 
@@ -400,4 +415,7 @@ export const {
   // DELIVERY
   useGetAllDeliveryQuery,
   useUpdateDeliveryMutation,
+  // LIVE
+  useGetAllLiveQuery,
+  useUpdateLiveMutation,
 } = metroApi;

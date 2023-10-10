@@ -25,6 +25,7 @@ import TripCategory from "../containers/masterlist/TripCategory";
 import TripType from "../containers/masterlist/TripType";
 import Destination from "../containers/masterlist/Destination";
 import TripTemplate from "../containers/masterlist/TripTemplate";
+import TripLive from "../containers/masterlist/TripLive";
 
 const Routing = () => {
   const token = useSelector((state) => state.token.value);
@@ -174,7 +175,7 @@ const Routing = () => {
           path: "/reports/trips-depot",
           element:
             validUser &&
-            user.permission?.some((el) => el?.id === "trips_sg") ? (
+            user.permission?.some((el) => el?.id === "trips_depot") ? (
               <TripDepot />
             ) : (
               <NotFound />
@@ -185,7 +186,9 @@ const Routing = () => {
           path: "/reports/trips-live",
           element:
             validUser &&
-            user.permission?.some((el) => el?.id === "trips_sg") ? null : (
+            user.permission?.some((el) => el?.id === "trips_live") ? (
+              <TripLive />
+            ) : (
               <NotFound />
             ),
           errorElement: <ErrorElement />,

@@ -185,3 +185,24 @@ export const destinationSchema = Yup.object().shape({
     .required("Trip Template is required field")
     .label("Trip Template"),
 });
+
+// LIVE
+
+export const liveDrawerSchema = Yup.object().shape({
+  odometer: Yup.number()
+    .required("Odometer is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Odometer"),
+  odometer_done: Yup.number()
+    .required("Odometer done is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Odometer Done"),
+  total_bags: Yup.number()
+    .nullable()
+    .typeError("Text/Special character are not allowed")
+    .label("Total Bags"),
+  total_bags_delivered: Yup.number()
+    .required("Gross Weight is required field")
+    .typeError("Text/Special character are not allowed")
+    .label("Total Bags Delivered"),
+});

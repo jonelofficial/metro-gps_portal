@@ -1,19 +1,18 @@
 import React, { useEffect } from "react";
-import DrawerWrapper from "../../drawer/DrawerWrapper";
+import { useUpdateLiveMutation } from "../../../api/metroApi";
 import { useGetDepartmentsQuery } from "../../../api/sedarApi";
-import InputField from "../../form/InputField";
-import { Controller, useForm } from "react-hook-form";
-import { Autocomplete, Drawer, TextField, Typography } from "@mui/material";
-import { useUpdateTripHaulingMutation } from "../../../api/metroApi";
 import useToast from "../../../hook/useToast";
 import { useDispatch, useSelector } from "react-redux";
-import { onClose } from "../../../redux-toolkit/counter/drawerDisclosure";
+import { Controller, useForm } from "react-hook-form";
+import { liveDrawerSchema } from "../../../utility/schema";
+import { Autocomplete, Drawer, TextField, Typography } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { haulingDrawerSchema } from "../../../utility/schema";
+import DrawerWrapper from "../../drawer/DrawerWrapper";
+import InputField from "../../form/InputField";
+import { onClose } from "../../../redux-toolkit/counter/drawerDisclosure";
 
-const HaulingDrawer = () => {
-  const [updateTripHauling, { isLoading: isUpdating }] =
-    useUpdateTripHaulingMutation();
+const LiveDrawer = () => {
+  const [updateLive, { isLoading: isUpdating }] = useUpdateLiveMutation();
   const {
     data: departments = [],
     isLoading,
@@ -35,7 +34,7 @@ const HaulingDrawer = () => {
     setValue: setFormValue,
     clearErrors,
   } = useForm({
-    resolver: yupResolver(haulingDrawerSchema),
+    resolver: yupResolver(liveDrawerSchema),
     mode: "onSubmit",
     defaultValues: {
       department: null,
@@ -43,17 +42,14 @@ const HaulingDrawer = () => {
   });
 
   useEffect(() => {
-    departments &&
-      item?.charging &&
-      setFormValue("department", { department_name: item?.charging });
+    if (departments && item?.charging) {
+      setFormValue("department", { department_name: item.charging });
+    }
 
-    setFormValue("odometer", item?.odometer);
-    setFormValue("odometer_done", item?.odometer_done);
-    setFormValue("tare_weight", item?.tare_weight);
-    setFormValue("net_weight", item?.net_weight);
-    setFormValue("gross_weight", item?.gross_weight);
-    setFormValue("item_count", item?.item_count);
-    setFormValue("doa_count", item?.doa_count);
+    setFormValue("odometer", item.odometer);
+    setFormValue("odometer_done", item.odometer_done);
+    setFormValue("total_bags", item.total_bags);
+    setFormValue("total_bags_delivered", item.total_bags_delivered);
 
     return () => {
       clearErrors();
@@ -67,7 +63,7 @@ const HaulingDrawer = () => {
       const newObj = { ...data, charging: data?.department?.department_name };
 
       if (item) {
-        res = await updateTripHauling({ id: item._id, obj: newObj });
+        res = await updateLive({ id: item._id, obj: newObj });
         !res?.error &&
           toast({
             severity: "success",
@@ -81,7 +77,7 @@ const HaulingDrawer = () => {
         dispatch(onClose());
       }
     } catch (error) {
-      toast({ severity: "error", message: error });
+      toast({ severity: "error", message: error.message });
     }
   };
   return (
@@ -138,9 +134,9 @@ const HaulingDrawer = () => {
         />
 
         <InputField
-          {...register("tare_weight")}
-          id="tare_weight"
-          label="Tare Weight"
+          {...register("total_bags")}
+          id="total_bags"
+          label="Total Bags"
           autoComplete="off"
           errors={errors}
           sx={{ width: "100%" }}
@@ -154,57 +150,9 @@ const HaulingDrawer = () => {
         />
 
         <InputField
-          {...register("gross_weight")}
-          id="gross_weight"
-          label="Gross Weight"
-          autoComplete="off"
-          errors={errors}
-          sx={{ width: "100%" }}
-          InputProps={{
-            inputProps: {
-              style: {
-                textTransform: "uppercase",
-              },
-            },
-          }}
-        />
-
-        <InputField
-          {...register("net_weight")}
-          id="net_weight"
-          label="Net Weight"
-          autoComplete="off"
-          errors={errors}
-          sx={{ width: "100%" }}
-          InputProps={{
-            inputProps: {
-              style: {
-                textTransform: "uppercase",
-              },
-            },
-          }}
-        />
-
-        <InputField
-          {...register("item_count")}
-          id="item_count"
-          label="Item Count"
-          autoComplete="off"
-          errors={errors}
-          sx={{ width: "100%" }}
-          InputProps={{
-            inputProps: {
-              style: {
-                textTransform: "uppercase",
-              },
-            },
-          }}
-        />
-
-        <InputField
-          {...register("doa_count")}
-          id="doa_count"
-          label="DOA Count"
+          {...register("total_bags_delivered")}
+          id="total_bags_delivered"
+          label="Total Bags Delivered"
           autoComplete="off"
           errors={errors}
           sx={{ width: "100%" }}
@@ -259,7 +207,7 @@ const HaulingDrawer = () => {
                       color: "custom.danger",
                     }}
                   >
-                    {errors["department"].message}
+                    {errors["department"]?.message}
                   </Typography>
                 )}
               </>
@@ -276,4 +224,4 @@ const HaulingDrawer = () => {
   );
 };
 
-export default HaulingDrawer;
+export default LiveDrawer;
