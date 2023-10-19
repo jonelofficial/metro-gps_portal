@@ -75,14 +75,14 @@ const Header = () => {
               <Box
                 component="img"
                 sx={{ width: 45, height: 45, borderRadius: "50%" }}
-                crossorigin="anonymous"
+                crossOrigin="anonymous"
                 src={profile}
               />
             ) : (
               <Avatar
                 alt="Profile"
                 src={user?.profile && profile}
-                crossorigin="anonymous"
+                crossOrigin="anonymous"
                 sx={{ width: 45, height: 45 }}
               />
             )}

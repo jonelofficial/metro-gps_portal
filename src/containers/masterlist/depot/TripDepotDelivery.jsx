@@ -118,11 +118,51 @@ const TripDepotDelivery = () => {
     onToggleExport();
 
     let newReports = [];
+    let cratesReport = [];
 
     const newObj = await data?.data?.map((item) => {
       // const newLocations = item?.locations?.filter(
       //   (location) => location.status == "left" || location.status == "arrived"
       // );
+
+      // CRATES REPORT
+      const transaction = item.crates_transaction;
+
+      transaction?.map((crates, i) => {
+        const destination = crates.destination;
+
+        if (!cratesReport[destination] && destination !== "OTHER LOCATION") {
+          cratesReport[destination] = {
+            ...crates,
+            crates_dropped: parseInt(crates.crates_dropped),
+            crates_collected: parseInt(crates.crates_collected),
+            crates_borrowed: parseInt(crates.crates_borrowed),
+          };
+        }
+        if (!cratesReport[destination] && destination === "OTHER LOCATION") {
+          cratesReport[crates.destination_name] = {
+            ...crates,
+            crates_dropped: parseInt(crates.crates_dropped),
+            crates_collected: parseInt(crates.crates_collected),
+            crates_borrowed: parseInt(crates.crates_borrowed),
+          };
+        }
+
+        if (destination !== "OTHER LOCATION") {
+          cratesReport[destination]?.crates_dropped + crates?.crates_dropped;
+          cratesReport[destination]?.crates_collected +
+            crates?.crates_collected;
+          cratesReport[destination]?.crates_borrowed + crates?.crates_borrowed;
+        } else {
+          cratesReport[crates.destination_name]?.crates_dropped +
+            crates?.crates_dropped;
+          cratesReport[crates.destination_name]?.crates_collected +
+            crates?.crates_collected;
+          cratesReport[crates.destination_name]?.crates_borrowed +
+            crates?.crates_borrowed;
+        }
+      });
+      // CRATES REPORT
 
       const newLocations = item.locations
         .filter(
@@ -156,7 +196,7 @@ const TripDepotDelivery = () => {
       });
 
       let counter = 1;
-      const perStatus = newLocations.map((loc, i) => {
+      const perStatus = newLocations?.map((loc, i) => {
         const title = `${loc.status.toUpperCase().at(0)}${loc.status.slice(
           1
         )} ${i % 2 === 0 ? counter : [Math.floor(i / 2) + 1]}`;
@@ -230,7 +270,7 @@ const TripDepotDelivery = () => {
       const totalKm = item?.odometer_done - item?.odometer;
       const estimatedTotalKm = getPathLength(item.points) / 1000;
 
-      newLocations.map((location, i) => {
+      newLocations?.map((location, i) => {
         if (i % 2 == 0) {
           newReports.push({
             "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY h:mm a"),
@@ -342,7 +382,7 @@ const TripDepotDelivery = () => {
       // };
     });
 
-    const dailyDuration = obj.map((item) => {
+    const dailyDuration = obj?.map((item) => {
       const totalMinutes = Math.floor(item.totalDuration / (1000 * 60));
       const hours = Math.floor(totalMinutes / 60);
       const minutes = totalMinutes % 60;
@@ -361,9 +401,21 @@ const TripDepotDelivery = () => {
         }`,
       };
     });
+    console.log(Object.values(cratesReport));
+    const cratesReportCSV = Object.values(cratesReport)?.map((item) => {
+      return {
+        Destination: item.destination,
+        "OTHER LOCATION": item.destination_name,
+        "Crates Dropped": item.crates_dropped,
+        "Crates Collected": item.crates_collected,
+        "Crates Borrowed": item.crates_borrowed,
+      };
+    });
+    console.log(cratesReportCSV);
 
     await excelExport(newReports, "METRO-DELIVERY-REPORT");
     await excelExport(dailyDuration, "METRO-DELIVERY-USER-DURATION-REPORT");
+    await excelExport(cratesReportCSV, "METRO-DELIVERY-CRATES-REPORT");
 
     onCloseExport();
   };
@@ -420,7 +472,7 @@ const TripDepotDelivery = () => {
           isFetching={isFetching}
           data={data}
           columns={columns}
-          rows={data.data.map((item, i) => {
+          rows={data?.data?.map((item, i) => {
             return <TableDelivery key={i} item={item} columns={columns} />;
           })}
         />
