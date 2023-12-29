@@ -87,8 +87,8 @@ const TripDepotDelivery = () => {
         };
       }
 
-      const startDate = dayjs(newLocations[0].date);
-      const endDate = dayjs(newLocations[newLocations.length - 1].date);
+      const startDate = dayjs(newLocations[0]?.date);
+      const endDate = dayjs(newLocations[newLocations.length - 1]?.date);
       const duration = endDate.diff(startDate);
       users[user].totalDuration += duration;
     });
@@ -109,7 +109,7 @@ const TripDepotDelivery = () => {
   } = useDisclosure();
 
   const handleSearch = (data) => {
-    setDate(dayjs(data.date).format("YYYY-MM-DD"));
+    setDate(dayjs(data?.date).format("YYYY-MM-DD"));
     dispatch(setSearch(data.search));
     dispatch(setSearchBy(data.search_by?.id || null));
   };
@@ -126,42 +126,96 @@ const TripDepotDelivery = () => {
       // );
 
       // CRATES REPORT
-      const transaction = item.crates_transaction;
+      // const transaction = item.crates_transaction;
+      // console.log("transaction: ", transaction);
 
-      transaction?.map((crates, i) => {
-        const destination = crates.destination;
+      // transaction?.map((crates, i) => {
+      //   console.log("crates : ", crates);
+      //   const destination = crates.destination;
 
-        if (!cratesReport[destination] && destination !== "OTHER LOCATION") {
-          cratesReport[destination] = {
-            ...crates,
-            crates_dropped: parseInt(crates.crates_dropped),
-            crates_collected: parseInt(crates.crates_collected),
-            crates_borrowed: parseInt(crates.crates_borrowed),
-          };
-        }
-        if (!cratesReport[destination] && destination === "OTHER LOCATION") {
-          cratesReport[crates.destination_name] = {
-            ...crates,
-            crates_dropped: parseInt(crates.crates_dropped),
-            crates_collected: parseInt(crates.crates_collected),
-            crates_borrowed: parseInt(crates.crates_borrowed),
-          };
-        }
+      //   if (!cratesReport[destination] && destination !== "OTHER LOCATION") {
+      //     cratesReport[destination] = {
+      //       ...crates,
+      //       crates_dropped: parseInt(crates.crates_dropped),
+      //       crates_collected: parseInt(crates.crates_collected),
+      //       crates_borrowed: parseInt(crates.crates_borrowed),
+      //     };
+      //   }
+      //   if (!cratesReport[destination] && destination === "OTHER LOCATION") {
+      //     cratesReport[crates.destination_name] = {
+      //       ...crates,
+      //       crates_dropped: parseInt(crates.crates_dropped),
+      //       crates_collected: parseInt(crates.crates_collected),
+      //       crates_borrowed: parseInt(crates.crates_borrowed),
+      //     };
+      //   }
 
-        if (destination !== "OTHER LOCATION") {
-          cratesReport[destination]?.crates_dropped + crates?.crates_dropped;
-          cratesReport[destination]?.crates_collected +
-            crates?.crates_collected;
-          cratesReport[destination]?.crates_borrowed + crates?.crates_borrowed;
-        } else {
-          cratesReport[crates.destination_name]?.crates_dropped +
-            crates?.crates_dropped;
-          cratesReport[crates.destination_name]?.crates_collected +
-            crates?.crates_collected;
-          cratesReport[crates.destination_name]?.crates_borrowed +
-            crates?.crates_borrowed;
-        }
-      });
+      //   if (destination !== "OTHER LOCATION") {
+      //     cratesReport[destination]?.crates_dropped + crates?.crates_dropped;
+      //     cratesReport[destination]?.crates_collected +
+      //       crates?.crates_collected;
+      //     cratesReport[destination]?.crates_borrowed + crates?.crates_borrowed;
+      //   } else {
+      //     cratesReport[crates.destination_name]?.crates_dropped +
+      //       crates?.crates_dropped;
+      //     cratesReport[crates.destination_name]?.crates_collected +
+      //       crates?.crates_collected;
+      //     cratesReport[crates.destination_name]?.crates_borrowed +
+      //       crates?.crates_borrowed;
+      //   }
+      //   // const destination = item?.crates_transaction?.destination;
+
+      //   // if (!cratesReport[destination] && destination !== "OTHER LOCATION") {
+      //   //   cratesReport[destination] = {
+      //   //     ...crates,
+      //   //     crates_dropped: parseInt(
+      //   //       item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped || "0"
+      //   //     ),
+      //   //     crates_collected: parseInt(
+      //   //       item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+      //   //         "0"
+      //   //     ),
+      //   //     crates_borrowed: parseInt(
+      //   //       item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed ||
+      //   //         "0"
+      //   //     ),
+      //   //   };
+      //   // }
+      //   // if (!cratesReport[destination] && destination === "OTHER LOCATION") {
+      //   //   cratesReport[crates.destination_name] = {
+      //   //     ...crates,
+      //   //     crates_dropped: parseInt(
+      //   //       item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped || "0"
+      //   //     ),
+      //   //     crates_collected: parseInt(
+      //   //       item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+      //   //         "0"
+      //   //     ),
+      //   //     crates_borrowed: parseInt(
+      //   //       item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed ||
+      //   //         "0"
+      //   //     ),
+      //   //   };
+      //   // }
+
+      //   // if (destination !== "OTHER LOCATION") {
+      //   //   cratesReport[destination]?.crates_dropped +
+      //   //     item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped || "0";
+      //   //   cratesReport[destination]?.crates_collected +
+      //   //     item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+      //   //     "0";
+      //   //   cratesReport[destination]?.crates_borrowed +
+      //   //     item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed || "0";
+      //   // } else {
+      //   //   cratesReport[crates.destination_name]?.crates_dropped +
+      //   //     item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped || "0";
+      //   //   cratesReport[crates.destination_name]?.crates_collected +
+      //   //     item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+      //   //     "0";
+      //   //   cratesReport[crates.destination_name]?.crates_borrowed +
+      //   //     item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed || "0";
+      //   // }
+      // });
       // CRATES REPORT
 
       const newLocations = item.locations
@@ -170,7 +224,7 @@ const TripDepotDelivery = () => {
             location.status == "left" || location.status == "arrived"
         )
         .sort((a, b) => {
-          return new Date(a.date) - new Date(b.date);
+          return new Date(a?.date) - new Date(b?.date);
         });
 
       const destination = newLocations?.map((loc, i) => {
@@ -260,8 +314,8 @@ const TripDepotDelivery = () => {
         return `${Object.values(com)[0]}`;
       });
 
-      const startDate = dayjs(newLocations.at(0).date);
-      const endDate = dayjs(newLocations.at(-1).date);
+      const startDate = dayjs(newLocations.at(0)?.date);
+      const endDate = dayjs(newLocations.at(-1)?.date);
       const duration = endDate.diff(startDate);
       const totalMinutes = Math.floor(duration / (1000 * 60));
       const hours = Math.floor(totalMinutes / 60);
@@ -272,6 +326,75 @@ const TripDepotDelivery = () => {
 
       newLocations?.map((location, i) => {
         if (i % 2 == 0) {
+          const destination = newLocations[i]?.destination;
+
+          if (!cratesReport[destination]) {
+            cratesReport[destination] = {
+              destination,
+              crates_dropped: parseInt(
+                item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped ||
+                  "0"
+              ),
+              crates_collected: parseInt(
+                item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+                  "0"
+              ),
+              crates_borrowed: parseInt(
+                item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed ||
+                  "0"
+              ),
+            };
+          } else {
+            cratesReport[destination]?.crates_dropped +
+              item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped ||
+              "0";
+            cratesReport[destination]?.crates_collected +
+              item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+              "0";
+            cratesReport[destination]?.crates_borrowed +
+              item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed ||
+              "0";
+          }
+          // if (!cratesReport[destination] && destination === "OTHER LOCATION") {
+          //   cratesReport[crates.destination_name] = {
+          //     destination,
+          //     crates_dropped: parseInt(
+          //       item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped ||
+          //         "0"
+          //     ),
+          //     crates_collected: parseInt(
+          //       item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+          //         "0"
+          //     ),
+          //     crates_borrowed: parseInt(
+          //       item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed ||
+          //         "0"
+          //     ),
+          //   };
+          // }
+
+          // if (destination !== "OTHER LOCATION") {
+          //   cratesReport[destination]?.crates_dropped +
+          //     item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped ||
+          //     "0";
+          //   cratesReport[destination]?.crates_collected +
+          //     item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+          //     "0";
+          //   cratesReport[destination]?.crates_borrowed +
+          //     item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed ||
+          //     "0";
+          // } else {
+          //   cratesReport[crates.destination_name]?.crates_dropped +
+          //     item?.crates_transaction[Math.floor(i / 2)]?.crates_dropped ||
+          //     "0";
+          //   cratesReport[crates.destination_name]?.crates_collected +
+          //     item?.crates_transaction[Math.floor(i / 2)]?.crates_collected ||
+          //     "0";
+          //   cratesReport[crates.destination_name]?.crates_borrowed +
+          //     item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed ||
+          //     "0";
+          // }
+
           newReports.push({
             "Trip Date": dayjs(item?.trip_date).format("MMM-DD-YYYY h:mm a"),
             "Sync Date": dayjs(item?.createdAt).format("MMM-DD-YYYY  h:mm a"),
@@ -307,25 +430,41 @@ const TripDepotDelivery = () => {
             "Crates Borrowed":
               item?.crates_transaction[Math.floor(i / 2)]?.crates_borrowed ||
               "0",
+            ////// 2
+            // Origin:
+            //   i === 0
+            //     ? "Depot"
+            //     : newLocations[i - 1]?.destination ||
+            //       `${location?.address[0]?.name || "(No Name)"}  ${
+            //         location?.address[0]?.district || "(No District)"
+            //       } ${location?.address[0]?.city || "(No City)"}  ${
+            //         location?.address[0]?.subregion || "(No Subregion)"
+            //       }`,
+            // Destination:
+            //   newLocations.length - 1 === i + 1
+            //     ? "Depot"
+            //     : newLocations[i + 1]?.destination ||
+            //       `${newLocations[i + 1].address[0]?.name || "(No Name)"}  ${
+            //         newLocations[i + 1].address[0]?.district || "(No District)"
+            //       } ${newLocations[i + 1].address[0]?.city || "(No City)"}  ${
+            //         newLocations[i + 1].address[0]?.subregion ||
+            //         "(No Subregion)"
+            //       }`,
             Origin:
-              i === 0
-                ? "Depot"
-                : newLocations[i - 1]?.destination ||
-                  `${location?.address[0]?.name || "(No Name)"}  ${
-                    location?.address[0]?.district || "(No District)"
-                  } ${location?.address[0]?.city || "(No City)"}  ${
-                    location?.address[0]?.subregion || "(No Subregion)"
-                  }`,
+              newLocations[i]?.destination ||
+              `${location?.address[0]?.name || "(No Name)"}  ${
+                location?.address[0]?.district || "(No District)"
+              } ${location?.address[0]?.city || "(No City)"}  ${
+                location?.address[0]?.subregion || "(No Subregion)"
+              }`,
             Destination:
-              newLocations.length - 1 === i + 1
-                ? "Depot"
-                : newLocations[i + 1]?.destination ||
-                  `${newLocations[i + 1].address[0]?.name || "(No Name)"}  ${
-                    newLocations[i + 1].address[0]?.district || "(No District)"
-                  } ${newLocations[i + 1].address[0]?.city || "(No City)"}  ${
-                    newLocations[i + 1].address[0]?.subregion ||
-                    "(No Subregion)"
-                  }`,
+              newLocations[i + 1]?.destination ||
+              `${newLocations[i + 1].address[0]?.name || "(No Name)"}  ${
+                newLocations[i + 1].address[0]?.district || "(No District)"
+              } ${newLocations[i + 1].address[0]?.city || "(No City)"}  ${
+                newLocations[i + 1].address[0]?.subregion || "(No Subregion)"
+              }`,
+            ///// 1
             // Origin:
             //   i === 0
             //     ? "Depot"
@@ -401,17 +540,17 @@ const TripDepotDelivery = () => {
         }`,
       };
     });
-    console.log(Object.values(cratesReport));
+    // console.log(Object.values(cratesReport));
     const cratesReportCSV = Object.values(cratesReport)?.map((item) => {
       return {
         Destination: item.destination,
-        "OTHER LOCATION": item.destination_name,
+        // "OTHER LOCATION": item.destination_name,
         "Crates Dropped": item.crates_dropped,
         "Crates Collected": item.crates_collected,
         "Crates Borrowed": item.crates_borrowed,
       };
     });
-    console.log(cratesReportCSV);
+    // console.log(cratesReportCSV);
 
     await excelExport(newReports, "METRO-DELIVERY-REPORT");
     await excelExport(dailyDuration, "METRO-DELIVERY-USER-DURATION-REPORT");
