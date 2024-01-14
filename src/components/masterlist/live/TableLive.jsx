@@ -79,6 +79,9 @@ const TableLive = ({ item, columns }) => {
 
   const estimatedOdoOver = estimatedTotalKm - totalKm > 1;
 
+  const handleNavigate = () => {
+    navigate(`/map/${item._id}/live`);
+  };
   return (
     <>
       <StyledTableRow
@@ -138,11 +141,7 @@ const TableLive = ({ item, columns }) => {
                 <Button
                   variant="outlined"
                   sx={{ textTransform: "none" }}
-                  onClick={() =>
-                    navigate(
-                      `/map/${item._id}/${item?.trip_category.toLowerCase()}`
-                    )
-                  }
+                  onClick={handleNavigate}
                 >
                   {`${value.slice(20)}`}
                 </Button>

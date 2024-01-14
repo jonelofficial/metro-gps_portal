@@ -99,7 +99,15 @@ export const tripDrawerSchema = Yup.object().shape({
   odometer_done: Yup.number()
     .required("Odometer done is required field")
     .typeError("Text/Special character are not allowed")
-    .label("Odometer Done"),
+    .label("Odometer Done")
+    .test(
+      "is-greater",
+      "Odometer Done must be greater than or equal to Odometer",
+      function (value) {
+        const { odometer } = this.parent;
+        return value >= odometer;
+      }
+    ),
 });
 
 export const haulingDrawerSchema = Yup.object().shape({

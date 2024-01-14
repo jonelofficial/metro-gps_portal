@@ -5,6 +5,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetAllDeliveryQuery,
+  useGetAllLiveQuery,
   useGetAllTripsHaulingQuery,
   useGetAllTripsQuery,
 } from "../api/metroApi";
@@ -38,8 +39,10 @@ const Map = () => {
       ? useGetAllTripsQuery(opt1, opt2)
       : category.toLocaleLowerCase() === "hauling"
       ? useGetAllTripsHaulingQuery(opt1, opt2)
-      : category.toLocaleLowerCase() === "delivery" &&
-        useGetAllDeliveryQuery(opt1, opt2);
+      : category.toLocaleLowerCase() === "delivery"
+      ? useGetAllDeliveryQuery(opt1, opt2)
+      : category.toLocaleLowerCase() === "live" &&
+        useGetAllLiveQuery(opt1, opt2);
 
   if (isLoading || isFetching) {
     return (
@@ -142,8 +145,10 @@ const Map = () => {
             ? navigate("/reports/trips-sg")
             : category.toLocaleLowerCase() === "hauling"
             ? navigate("/reports/trips-depot", { state: "hauling" })
-            : category.toLocaleLowerCase() === "delivery" &&
-              navigate("/reports/trips-depot", { state: "delivery" });
+            : category.toLocaleLowerCase() === "delivery"
+            ? navigate("/reports/trips-depot", { state: "delivery" })
+            : category.toLocaleLowerCase() === "live" &&
+              navigate("/reports/trips-live", { state: "live" });
         }}
       >
         Back
@@ -248,6 +253,14 @@ const Map = () => {
                       </Box>
                     </>
                   )}
+                  {category.toLocaleLowerCase() === "live" && (
+                    <Box className="map__first-label">
+                      Total Bags Delivered:
+                      <Box className="map__first-data">
+                        {`${data.data[0]?.total_bags_delivered}`}
+                      </Box>
+                    </Box>
+                  )}
 
                   <Box className="map__first-label">
                     Locations:
@@ -343,6 +356,21 @@ const Map = () => {
                                         }
                                       </Box>
                                     </Box>
+                                  )}
+                                {category.toLocaleLowerCase() === "live" &&
+                                  item.status == "left" &&
+                                  data.data[0]?.locations.length !== i + 1 &&
+                                  i != 0 && (
+                                    <>
+                                      <Box>
+                                        Total Bags Delivered:{" "}
+                                        {
+                                          data.data[0]?.transactions[
+                                            Math.floor(i / 2)
+                                          ]?.total_bags_delivered
+                                        }
+                                      </Box>
+                                    </>
                                   )}
                                 <br />
                                 <br />
